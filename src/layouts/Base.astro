@@ -1,0 +1,62 @@
+---
+import '../styles/global.css';
+import { site } from '../config/site.mjs';
+import { href } from '../lib/url.mjs';
+
+interface Props { title?: string; description?: string }
+const { title, description } = Astro.props;
+const b = site.business;
+const regDigits = b.regNo.replace(/\D/g, '');
+---
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>{title ? `${title} | ${site.serviceName}` : site.serviceName}</title>
+  {description && <meta name="description" content={description}>}
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="logo" href={href('/')}>{site.serviceName}</a>
+      <nav aria-label="주 메뉴">
+        <a href={href('/')}>서비스 소개</a>
+        <a href={href('/support/')}>고객센터</a>
+        <a class="button" href={href('/#download')}>앱 다운로드</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap"><slot /></main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <nav aria-label="정책">
+        <ul>
+          <li><a href={href('/legal/terms/')}>이용약관</a></li>
+          <li><a href={href('/legal/privacy/')}><strong>개인정보 처리방침</strong></a></li>
+          <li><a href={href('/legal/location/')}>위치기반서비스 이용약관</a></li>
+          <li><a href={href('/legal/community/')}>커뮤니티 운영정책</a></li>
+          <li><a href={href('/account/delete/')}>계정 삭제 안내</a></li>
+          <li><a href={href('/support/')}>고객센터</a></li>
+        </ul>
+      </nav>
+      <ul class="biz">
+        <li>상호: {b.name}</li>
+        <li>대표자: {b.ceo}</li>
+        <li>사업자등록번호: {b.regNo}
+          {regDigits.length === 10 && <> (<a href={`https://www.ftc.go.kr/bizCommPop.do?wrkr_no=${regDigits}`}>사업자정보 확인</a>)</>}
+        </li>
+        <li>통신판매업 신고번호: {b.mailOrderNo}</li>
+        <li>위치기반서비스사업 신고번호: {b.lbsNo}</li>
+        {b.address && <li>주소: {b.address}</li>}
+        <li>전화: {b.phone}</li>
+        <li>이메일: {site.contactEmail}</li>
+      </ul>
+      <p>© {new Date().getFullYear()} {b.name}</p>
+    </div>
+  </footer>
+</body>
+</html>

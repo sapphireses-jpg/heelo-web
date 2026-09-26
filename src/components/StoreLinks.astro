@@ -1,0 +1,12 @@
+---
+import { site } from '../config/site.mjs';
+import { href } from '../lib/url.mjs';
+---
+{site.launchStatus === 'live' ? (
+  <p>
+    <a href={site.storeLinks.appStore}><img src={href('/badges/app-store.svg')} alt="App Store에서 다운로드" height="48"></a>
+    <a href={site.storeLinks.googlePlay}><img src={href('/badges/google-play.png')} alt="Google Play에서 다운로드" height="48"></a>
+  </p>
+) : (
+  <p><strong>지금 출시를 준비하고 있어요.</strong></p>
+)}

@@ -1,0 +1,9 @@
+---
+import Base from '../layouts/Base.astro';
+import { href } from '../lib/url.mjs';
+---
+<Base title="찾는 페이지가 없어요">
+  <h1>찾는 페이지가 없어요.</h1>
+  <p>주소가 바뀌었거나 삭제된 페이지일 수 있어요.</p>
+  <p><a class="button" href={href('/')}>서비스 소개로 가기</a> <a class="button" href={href('/support/')}>고객센터</a></p>
+</Base>

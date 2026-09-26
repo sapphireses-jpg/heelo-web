@@ -1,0 +1,24 @@
+---
+import Base from '../../../layouts/Base.astro';
+import LegalDoc from '../../../components/LegalDoc.astro';
+import { DOCS, currentVersion, upcomingVersion, todayKST } from '../../../lib/legal.mjs';
+import { legalByDoc } from '../../../lib/legal-data';
+import { href } from '../../../lib/url.mjs';
+
+export function getStaticPaths() {
+  return Object.keys(DOCS).map((doc) => ({ params: { doc } }));
+}
+
+const { doc } = Astro.params;
+const versions = (await legalByDoc())[doc];
+const today = todayKST();
+const current = currentVersion(versions, today);
+const next = upcomingVersion(versions, today);
+---
+<Base title={DOCS[doc]}>
+  <LegalDoc doc={doc} versions={versions} shown={current}>
+    {next && (
+      <p class="notice">{next.effective}부터 새 버전이 시행돼요. <a href={href(`/legal/${doc}/${next.version}/`)}>새 버전 미리 보기</a></p>
+    )}
+  </LegalDoc>
+</Base>

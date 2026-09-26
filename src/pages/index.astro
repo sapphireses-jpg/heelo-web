@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import StoreLinks from '../components/StoreLinks.astro';
+import { site } from '../config/site.mjs';
+import { href } from '../lib/url.mjs';
+const s = site.serviceName;
+---
+<Base description={`오늘 걸은 산책부터 처음 가 본 길, 함께 찾은 장소와 추억까지. ${s}이 우리 아이가 걸어온 모든 길을 한 지도에 모아 드려요.`}>
+  <section>
+    <h1>강아지와 함께 걸은 길을, 평생 남겨요.</h1>
+    <p>오늘 걸은 산책부터 처음 가 본 길, 함께 찾은 장소와 추억까지. {s}이 우리 아이가 걸어온 모든 길을 한 지도에 모아 드려요.</p>
+    <StoreLinks />
+  </section>
+
+  <section>
+    <h2>이런 걸 할 수 있어요</h2>
+    <ol>
+      <li><strong>산책 기록</strong> — 산책을 시작하면 걸은 길과 시간, 거리를 기록해요. Apple Watch에서도 산책을 시작하고 끝낼 수 있어요.</li>
+      <li><strong>새로운 길</strong> — 처음 걸어 본 길은 따로 모아 보여 드려요. 새로운 길은 한국에서 걸은 산책에서 확정돼요.</li>
+      <li><strong>장소 발견</strong> — 산책하며 지나간 공원과 장소가 차곡차곡 쌓여요.</li>
+      <li><strong>생애지도</strong> — 지금까지 함께 걸은 길을 한 지도에서 봐요. 동네 보기는 누구나, 도시·국가·세계 보기는 Plus에서 할 수 있어요.</li>
+      <li><strong>추억</strong> — 사진 최대 10장과 글로 그날을 남겨요. 전체·팔로워·나만 보기 중에서 공개 범위를 골라요.</li>
+      <li><strong>가족과 함께</strong> — Plus 이용자가 대표가 되어 가족을 최대 4명까지 초대하고, 같은 강아지를 함께 기록해요.</li>
+      <li><strong>언제까지나</strong> — 강아지가 곁을 떠난 뒤에도 함께한 기록은 추모 프로필로 그대로 간직할 수 있어요.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>위치와 기록을 이렇게 지켜요</h2>
+    <ul>
+      <li>위치는 산책을 시작해서 끝낼 때까지만 기록해요.</li>
+      <li>산책 경로는 나와, 경로 열람에 동의한 가족만 볼 수 있어요. 다른 이용자에게 실시간 위치나 경로는 보이지 않아요.</li>
+      <li>추억 사진은 촬영 위치 정보를 지운 뒤 올려요.</li>
+      <li>광고용 추적을 하지 않아요. 앱과 이 홈페이지 모두 분석 도구를 쓰지 않아요.</li>
+    </ul>
+    <p><a href={href('/legal/privacy/')}>개인정보 처리방침 보기</a> · <a href={href('/legal/location/')}>위치기반서비스 이용약관 보기</a></p>
+  </section>
+
+  <section>
+    <h2>요금</h2>
+    <div class="card">
+      <h3>무료</h3>
+      <p>산책 기록, 새로운 길, 장소 발견, 생애지도 동네 보기, 추억 100개까지</p>
+    </div>
+    <div class="card">
+      <h3>{s} Plus</h3>
+      <p>월 {site.priceMonthly} · 연 {site.priceYearly} (부가세 포함)</p>
+      <ul>
+        <li>추억 개수 제한 없음</li>
+        <li>생애지도 도시·국가·세계 보기</li>
+        <li>가족 대표가 되어 최대 4명 초대</li>
+      </ul>
+    </div>
+    <ul>
+      <li>App Store·Google Play에서 결제하고, 해지하기 전까지 같은 주기로 자동 갱신돼요. 무료 체험은 없어요.</li>
+      <li>해지는 각 앱마켓의 구독 관리에서 언제든 할 수 있어요. 해지해도 지금까지의 기록은 그대로 남아요.</li>
+      <li>청약철회와 환불 조건은 <a href={href('/legal/terms/')}>이용약관</a> 제11조에서 확인하세요.</li>
+    </ul>
+  </section>
+
+  <section id="download">
+    <h2>오늘 산책부터 기록해 보세요.</h2>
+    <StoreLinks />
+    <p>iPhone·Android에서 쓸 수 있고, Apple Watch를 지원해요. 만 14세 이상 가입할 수 있어요.</p>
+  </section>
+</Base>

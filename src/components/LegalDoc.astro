@@ -1,0 +1,35 @@
+---
+import { render } from 'astro:content';
+import { DOCS } from '../lib/legal.mjs';
+import { href } from '../lib/url.mjs';
+
+interface Props { doc: string; versions: any[]; shown?: any }
+const { doc, versions, shown } = Astro.props;
+const Content = shown ? (await render(shown.entry)).Content : null;
+---
+<h1>{shown?.title ?? DOCS[doc]}</h1>
+{shown && <p class="muted">버전 {shown.version} · 시행일 {shown.effective} · 공고일 {shown.announced}</p>}
+<slot />
+{Content ? <Content /> : <p>법률 검토 후 게시합니다.</p>}
+
+{versions.length > 0 && (
+  <>
+    <h2>변경 이력</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th scope="col">버전</th><th scope="col">공고일</th><th scope="col">시행일</th><th scope="col">주요 변경</th><th scope="col">보기</th></tr></thead>
+        <tbody>
+          {versions.map((v) => (
+            <tr>
+              <td>{v.version}{v.status === 'draft' && ' (초안)'}</td>
+              <td>{v.announced}</td>
+              <td>{v.effective}</td>
+              <td>{v.summary}</td>
+              <td>{v === shown ? '보는 중' : <a href={href(`/legal/${doc}/${v.version}/`)}>보기</a>}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </>
+)}

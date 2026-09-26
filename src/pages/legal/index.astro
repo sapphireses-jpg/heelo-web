@@ -1,0 +1,29 @@
+---
+import Base from '../../layouts/Base.astro';
+import { DOCS, currentVersion, todayKST } from '../../lib/legal.mjs';
+import { legalByDoc } from '../../lib/legal-data';
+import { href } from '../../lib/url.mjs';
+
+const byDoc = await legalByDoc();
+const today = todayKST();
+const rows = Object.entries(DOCS).map(([doc, name]) => ({ doc, name, current: currentVersion(byDoc[doc], today) }));
+---
+<Base title="약관 및 정책">
+  <h1>약관 및 정책</h1>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th scope="col">문서명</th><th scope="col">현재 버전</th><th scope="col">시행일</th><th scope="col">보기</th></tr></thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr>
+            <td>{r.name}</td>
+            {r.current
+              ? <><td>{r.current.version}</td><td>{r.current.effective}</td></>
+              : <td colspan="2">법률 검토 후 게시합니다.</td>}
+            <td><a href={href(`/legal/${r.doc}/`)}>보기</a></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</Base>

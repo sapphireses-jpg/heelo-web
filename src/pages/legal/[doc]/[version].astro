@@ -1,0 +1,31 @@
+---
+import Base from '../../../layouts/Base.astro';
+import LegalDoc from '../../../components/LegalDoc.astro';
+import { DOCS, currentVersion, todayKST } from '../../../lib/legal.mjs';
+import { legalByDoc } from '../../../lib/legal-data';
+import { href } from '../../../lib/url.mjs';
+
+export async function getStaticPaths() {
+  const byDoc = await legalByDoc();
+  return Object.entries(byDoc).flatMap(([doc, versions]) =>
+    versions.map((v) => ({ params: { doc, version: v.version } })),
+  );
+}
+
+const { doc, version } = Astro.params;
+const versions = (await legalByDoc())[doc];
+const shown = versions.find((v) => v.version === version);
+const today = todayKST();
+const current = currentVersion(versions, today);
+---
+<Base title={`${DOCS[doc]} ${version}`}>
+  <LegalDoc doc={doc} versions={versions} shown={shown}>
+    {shown.status === 'draft' ? (
+      <p class="notice">초안이에요. 로컬 미리 보기에서만 보이고 배포되지 않아요.</p>
+    ) : shown.effective > today ? (
+      <p class="notice">{shown.effective}부터 새 버전이 시행돼요.</p>
+    ) : shown !== current && (
+      <p class="notice">이 문서는 이전 버전이에요. <a href={href(`/legal/${doc}/`)}>최신 버전 보기</a></p>
+    )}
+  </LegalDoc>
+</Base>

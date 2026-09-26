@@ -1,0 +1,58 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { site } from '../../../config/site.mjs';
+import { href } from '../../../lib/url.mjs';
+const s = site.serviceName;
+const mail = site.contactEmail;
+const body = [
+  '가입한 로그인 방식(카카오 / 구글 / 애플):',
+  '앱에서 쓰던 닉네임:',
+  '등록한 강아지 이름:',
+  '구글이나 애플로 가입했다면, 가입한 이메일 주소(알고 있다면):',
+].join('\n');
+const mailto = `mailto:${mail}?subject=${encodeURIComponent('계정 삭제 요청')}&body=${encodeURIComponent(body)}`;
+---
+<Base title="계정 삭제 안내">
+  <h1>{s} 계정 삭제 안내</h1>
+  <p>{s} 앱(운영: {site.business.name})의 계정과 데이터를 삭제하는 방법이에요.</p>
+
+  <h2>방법 1. 앱에서 삭제하기</h2>
+  <p>{site.appDeletePath}에서 요청해요. 가장 빠른 방법이에요.</p>
+
+  <h2>방법 2. 앱 없이 메일로 요청하기</h2>
+  <p>앱을 지웠거나 쓸 수 없다면 {mail}로 요청해 주세요.</p>
+  <p><a class="button" href={mailto}>삭제 요청 메일 쓰기</a></p>
+  <h3>메일에 적어 주세요</h3>
+  <ul>
+    <li>가입한 로그인 방식: 카카오 / 구글 / 애플</li>
+    <li>앱에서 쓰던 닉네임</li>
+    <li>등록한 강아지 이름</li>
+    <li>구글이나 애플로 가입했다면, 가입한 이메일 주소(알고 있다면)</li>
+  </ul>
+
+  <h2>요청 후에는 이렇게 진행돼요</h2>
+  <ol>
+    <li><strong>계정 확인</strong>: 적어 주신 정보로 계정을 찾아요. 구글·애플로 가입했다면 가입한 이메일로 확인 메일을 보내 드리니, 회신해 주세요.</li>
+    <li><strong>탈퇴 처리</strong>: 확인되면 요청을 받은 날부터 10일 안에 탈퇴를 처리하고, 삭제 예정일을 메일로 알려 드려요.</li>
+    <li><strong>30일 유예</strong>: 처리한 날부터 30일 동안은 모든 기기에서 로그아웃되고 다른 사람에게 보이지 않아요. 이 기간에 다시 로그인해 「계정 복구하기」를 누르면 탈퇴를 취소할 수 있어요.</li>
+    <li><strong>삭제</strong>: 30일이 지나면 계정과 기록이 삭제되며 복구할 수 없어요. 서버 백업에 남은 정보도 그 뒤 7일 안에 지워져요.</li>
+  </ol>
+
+  <h2>요청하기 전에 확인해 주세요</h2>
+  <ul>
+    <li><strong>구독은 따로 해지해야 해요.</strong> 계정을 삭제해도 App Store·Google Play의 {s} Plus 구독은 자동으로 해지되지 않아요.
+      <a href={site.subscriptionLinks.apple}>App Store 구독 관리</a> · <a href={site.subscriptionLinks.google}>Google Play 구독 관리</a></li>
+    <li><strong>가족 대표라면</strong> 가족을 해체하거나 대표를 다른 구성원에게 넘긴 뒤 탈퇴할 수 있어요. 앱을 쓸 수 없다면 메일에 함께 적어 주세요.</li>
+  </ul>
+
+  <h2>삭제되는 정보</h2>
+  <p>계정과 로그인 정보, 강아지 프로필, 산책 기록과 경로·방문 장소, 추억과 사진·댓글, 팔로우·좋아요, 알림 기록, 푸시 알림 정보</p>
+
+  <h2>삭제 후에도 남는 정보</h2>
+  <ul>
+    <li><strong>가족 공유 강아지의 산책 기록</strong>: 그 강아지의 기록으로 남고 기록한 사람 표시만 지워져요. 경로 삭제를 원하면 메일로 요청해 주세요.</li>
+    <li><strong>법령에 따라 보관하는 정보</strong>: 계약·청약철회 기록과 대금 결제 기록 5년, 소비자 불만·분쟁 처리 기록 3년, 접속 기록 3개월, 위치정보 수집·이용·제공사실 확인자료 6개월 이상. 따로 분리해 보관하고 기간이 지나면 파기해요.</li>
+    <li><strong>앱 밖으로 공유한 이미지</strong>: 이미 공유한 이미지 카드는 회수할 수 없어요.</li>
+  </ul>
+  <p>자세한 내용은 <a href={href('/legal/privacy/')}>개인정보 처리방침</a> 5항(개인정보의 파기)을 확인하세요.</p>
+</Base>

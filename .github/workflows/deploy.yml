@@ -1,0 +1,48 @@
+name: 배포
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '5 15 * * *' # 매일 00:05 KST: 시행일이 지난 약관을 현재본으로 바꾸려고 다시 빌드
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # 버전 불변 검사가 이전 커밋을 봅니다
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - run: npm run check
+        env:
+          BASE_SHA: ${{ github.event.before }}
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

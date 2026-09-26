@@ -1,0 +1,9 @@
+.env
+.env.*
+.DS_Store
+.playwright-mcp/
+.serena/
+node_modules/
+dist/
+.astro/
+.claude/
