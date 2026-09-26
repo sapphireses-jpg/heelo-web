@@ -16,7 +16,7 @@ npm run build && npm run check   # 배포와 같은 빌드 + 자동 검사
 
 ## 배포
 `main`에 push하면 빌드 → 검사 → 배포합니다. 매일 00:05(KST)에도 다시 빌드해, 시행일이 된 약관이 현재본으로 바뀝니다.
-검사(`scripts/check.mjs`): 외부 리소스·브라우저 JS 0, published 약관의 검토 흔적, 자리표시(`launchReady: true`일 때만 실패), published 약관 파일 수정·삭제.
+검사(`scripts/check.mjs`): 외부 리소스·브라우저 JS 0, published 약관의 검토 흔적, 서비스명 뒤 조사(이/가·은/는·을/를·와/과), 자리표시(`launchReady: true`일 때만 실패), published 약관 파일 수정·삭제.
 
 도메인을 연결하면 `src/config/site.mjs`의 `url`을 새 주소로, `base`를 `'/'`로 바꿉니다. 그 아래 경로는 그대로입니다.
 

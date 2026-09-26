@@ -49,6 +49,13 @@ for (const f of files('dist').filter((f) => f.endsWith('.html'))) {
 }
 if (found.size) (site.launchReady ? errors : warnings).push(`남은 자리표시: ${[...found.keys()].join(', ')}`);
 
+// 3-1. 서비스명 조사 검사: 서비스명 바로 뒤에 받침 따라 달라지는 조사(이/가, 은/는, 을/를, 와/과)가 붙으면 실패.
+// 페이지 제목·메타 태그도 보도록 태그를 지우지 않은 원문을 봅니다.
+const name = site.serviceName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const particle = new RegExp(`${name}(이|가|은|는|을|를|와|과)(?![가-힣])`, 'g');
+for (const f of files('dist').filter((f) => f.endsWith('.html')))
+  for (const [m] of readFileSync(f, 'utf8').matchAll(particle)) errors.push(`서비스명 조사: ${f} → "${m}"`);
+
 // 4. 버전 불변 검사: 기준 커밋에서 published였던 약관 파일이 바뀌거나 지워지면 실패.
 const git = (...a) => execFileSync('git', a, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
 let base = process.env.BASE_SHA;
