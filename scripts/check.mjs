@@ -33,10 +33,9 @@ for (const f of files('dist')) {
 }
 if (files('dist').some((f) => f.endsWith('.js'))) errors.push('브라우저 자바스크립트: dist에 .js 파일이 있습니다');
 
-// 2. 검토 흔적 검사: published 약관에 [자리표시], 「검토」「개발 확인」「DPA 확인」, HTML 주석이 남아 있으면 실패.
-// 마크다운 링크 [글자](주소)는 자리표시로 보지 않습니다.
-// ponytail: 「검토」는 낱말 그대로 찾으므로, 본문에 보통 낱말로 쓰이면 이 검사가 막습니다. 그때 규칙을 다시 정합니다.
-const marks = [/\[[^\]\n]*\](?!\()/g, /검토/g, /개발 확인/g, /DPA 확인/g, /<!--/g];
+// 2. 검토 흔적 검사: published 약관에 [자리표시], 「검토용 주석」「법률 검토 쟁점」「개발 확인」「DPA 확인」, HTML 주석이 남아 있으면 실패.
+// 마크다운 링크 [글자](주소)는 자리표시로 보지 않습니다. [검토: …]는 [ 검사로 잡힙니다.
+const marks = [/\[[^\]\n]*\](?!\()/g, /검토용 주석/g, /법률 검토 쟁점/g, /개발 확인/g, /DPA 확인/g, /<!--/g];
 for (const f of files('src/content/legal').filter((f) => f.endsWith('.md'))) {
   const text = readFileSync(f, 'utf8');
   if (!isPublished(text)) continue;
