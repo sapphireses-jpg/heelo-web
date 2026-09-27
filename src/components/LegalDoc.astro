@@ -10,7 +10,7 @@ const Content = shown ? (await render(shown.entry)).Content : null;
 <h1>{shown?.title ?? DOCS[doc]}</h1>
 {shown && <p class="muted">버전 {shown.version} · 시행일 {shown.effective} · 공고일 {shown.announced}</p>}
 <slot />
-{Content ? <Content /> : <p>법률 검토 후 게시합니다.</p>}
+{Content ? <Content /> : <p>약관을 준비하고 있어요.</p>}
 
 {versions.length > 0 && (
   <>
