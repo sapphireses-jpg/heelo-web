@@ -3,12 +3,13 @@
 ## 1. 방향
 - 기능 없는 **안내 전용 정적 사이트**입니다. 로그인·폼·서버 연결은 없습니다.
 - 앱 없이 하는 탈퇴 요청은 **메일(mailto)** 로만 받습니다. 예전의 웹 로그인 탈퇴 페이지(`/delete/`)는 지웠습니다.
-- 규칙은 `docs/HOMEPAGE_RULES.md`, 문안은 `docs/CONTENT.md`(v0.6)를 따릅니다.
+- 규칙은 `docs/HOMEPAGE_RULES.md`, 문안은 `docs/CONTENT.md`(v0.7)를 따릅니다.
 
 ## 2. 구성
 - Astro 정적 출력, 브라우저 JS 0. 설정은 `src/config/site.mjs` 한 곳에 있습니다.
 - 페이지: `/`, `/support/`, `/account/delete/`, `/legal/`, `/legal/<문서>/`, `/legal/<문서>/<버전>/`, 404
-- 약관: 게시한 파일이 아직 없어 `/legal/*`에는 "약관을 준비하고 있어요."만 나옵니다. 원본은 앱 저장소 `docs/legal/public/`이고, 법률 검토가 끝나 오너가 알려 주면 「법률 검토 쟁점」 절과 검토용 주석을 뺀 본문으로 `src/content/legal/<문서>/v1.0.md`를 만듭니다.
+- 약관: 정식 버전이 없어, 이용약관·개인정보 처리방침·위치기반서비스 이용약관 세 문서는 앱 테스트용 **임시 초안**(`src/content/legal/<문서>/preview.md`)을 보여 줍니다(맨 위 초안 안내, noindex). 원본은 앱 저장소 `docs/legal/public/`이고 `npm run sync-legal-preview`로 다시 가져옵니다. 법률 검토가 끝나 오너가 알려 주면 「법률 검토 쟁점」 절과 검토용 주석을 뺀 본문으로 `v1.0.md`(published)를 만들고 preview는 지웁니다.
+- 출시 전(`launchReady: false`)에는 모든 페이지에 `noindex, nofollow`가 붙습니다.
 - 배포: GitHub Actions → Pages. push할 때와 매일 00:05 KST에 다시 빌드합니다.
 - 임시 주소: `https://sapphireses-jpg.github.io/tailory-web/` (base `/tailory-web/`)
 

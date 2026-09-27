@@ -16,9 +16,18 @@ npm run build && npm run check   # 배포와 같은 빌드 + 자동 검사
 
 ## 배포
 `main`에 push하면 빌드 → 검사 → 배포합니다. 매일 00:05(KST)에도 다시 빌드해, 시행일이 된 약관이 현재본으로 바뀝니다.
-검사(`scripts/check.mjs`): 외부 리소스·브라우저 JS 0, published 약관의 검토 흔적(`[`로 시작하는 자리표시, 「검토용 주석」「법률 검토 쟁점」「개발 확인」「DPA 확인」, HTML 주석), 서비스명 뒤 조사(이/가·은/는·을/를·와/과), 자리표시(`launchReady: true`일 때만 실패), published 약관 파일 수정·삭제.
+검사(`scripts/check.mjs`): 외부 리소스·브라우저 JS 0, published 약관의 검토 흔적(`[`로 시작하는 자리표시, 「검토용 주석」「법률 검토 쟁점」「개발 확인」「DPA 확인」, HTML 주석), 서비스명 뒤 조사(이/가·은/는·을/를·와/과), 자리표시(`launchReady: true`일 때만 실패), published 약관 파일 수정·삭제, 임시 초안(published와 공존·launchReady인데 남음·noindex 없음).
 
 도메인을 연결하면 `src/config/site.mjs`의 `url`을 새 주소로, `base`를 `'/'`로 바꿉니다. 그 아래 경로는 그대로입니다.
+
+## 약관 임시 초안 가져오기 (정식 버전 전, 로컬)
+```bash
+npm run sync-legal-preview   # 앱 저장소 docs/legal/public/의 terms·privacy·location → src/content/legal/<문서>/preview.md
+```
+- 앱 저장소 위치는 `src/config/site.mjs`의 `appRepoPath`(기본 `~/projects/tailory`)입니다. 앱 저장소는 읽기만 하고 git 명령은 쓰지 않습니다.
+- 변환: 첫 줄 HTML 주석과 「법률 검토 쟁점」 절 삭제, `(검토용 주석 …)` 삭제, `[검토: …]` → (검토 중), `[개발 확인: …]`·`[DPA 확인…]` → (확인 중). `[시행일]`, `[사업자 정보: …]` 같은 자리표시와 나머지 문장은 그대로 둡니다. 변환 뒤 검토 표지가 남으면 멈춥니다.
+- 머리 정보 `source`에 원문 경로, 원문 파일 SHA-256, 가져온 날짜가 적힙니다. 가져온 뒤 `npm run dev`로 확인하고 커밋·push합니다.
+- 초안은 현재본 주소에 「초안·테스트용」 안내와 noindex를 붙여 보여 주고, 버전 목록·변경 이력에는 넣지 않습니다. 정식 버전(published)을 올리면 그 문서의 `preview.md`는 지웁니다(검사가 막습니다).
 
 ## 약관 새 버전 올리는 법
 원본은 앱 저장소 `docs/legal/public/`입니다. 법률 검토가 끝나고 오너가 알려 주면 옮기며, 「법률 검토 쟁점」 절과 검토용 주석은 빼고 본문 문장만 옮깁니다. 게시한 버전이 없는 동안 `/legal/*`에는 "약관을 준비하고 있어요."만 나옵니다.

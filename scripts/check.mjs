@@ -42,6 +42,18 @@ for (const f of files('src/content/legal').filter((f) => f.endsWith('.md'))) {
   for (const re of marks) for (const [m] of text.matchAll(re)) errors.push(`검토 흔적: ${f} 에 "${m}"`);
 }
 
+// 2-1. 임시 초안(preview.md) 검사: ① 같은 문서에 published와 함께 있으면 실패 ② launchReady인데 남아 있으면 실패
+// ③ 초안을 보여 주는 페이지에 noindex가 없으면 실패
+for (const doc of readdirSync('src/content/legal', { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name)) {
+  const dir = `src/content/legal/${doc}`;
+  if (!existsSync(`${dir}/preview.md`)) continue;
+  const published = readdirSync(dir).filter((f) => /^v.*\.md$/.test(f) && isPublished(readFileSync(`${dir}/${f}`, 'utf8')));
+  if (published.length) errors.push(`임시 초안: ${dir}/preview.md 와 published(${published.join(', ')})가 함께 있습니다. preview를 지우세요`);
+  if (site.launchReady) errors.push(`임시 초안: launchReady인데 ${dir}/preview.md 가 남아 있습니다`);
+  const page = `dist/legal/${doc}/index.html`;
+  if (!published.length && !/<meta name="robots" content="noindex[^"]*">/.test(readFileSync(page, 'utf8'))) errors.push(`임시 초안: ${page} 에 noindex가 없습니다`);
+}
+
 // 3. 출시 자리표시 검사: 결과물 화면 글자에 [한글…] 자리표시가 남아 있으면 launchReady면 실패, 아니면 경고.
 const found = new Map();
 for (const f of files('dist').filter((f) => f.endsWith('.html'))) {

@@ -1,12 +1,13 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { DOCS, currentVersion, todayKST } from '../../lib/legal.mjs';
-import { legalByDoc } from '../../lib/legal-data';
+import { legalByDoc, previewByDoc } from '../../lib/legal-data';
 import { href } from '../../lib/url.mjs';
 
 const byDoc = await legalByDoc();
+const previews = await previewByDoc();
 const today = todayKST();
-const rows = Object.entries(DOCS).map(([doc, name]) => ({ doc, name, current: currentVersion(byDoc[doc], today) }));
+const rows = Object.entries(DOCS).map(([doc, name]) => ({ doc, name, current: currentVersion(byDoc[doc], today), preview: !!previews[doc] }));
 ---
 <Base title="약관 및 정책">
   <h1>약관 및 정책</h1>
@@ -16,7 +17,7 @@ const rows = Object.entries(DOCS).map(([doc, name]) => ({ doc, name, current: cu
       <tbody>
         {rows.map((r) => (
           <tr>
-            <td>{r.name}</td>
+            <td>{r.name}{!r.current && r.preview && <> <strong>초안</strong></>}</td>
             {r.current
               ? <><td>{r.current.version}</td><td>{r.current.effective}</td></>
               : <td colspan="2">약관을 준비하고 있어요.</td>}

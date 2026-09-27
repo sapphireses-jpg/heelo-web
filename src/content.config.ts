@@ -3,20 +3,28 @@ import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 // src/content/legal/<문서>/<버전>.md → id "<문서>/<버전>" (기본 slug는 "v1.0"의 점을 지우므로 직접 만듭니다)
+// src/content/legal/<문서>/preview.md → 임시 초안(status: preview). 버전 머리 정보 대신 source를 적습니다.
+const version = z.object({
+  title: z.string(),
+  version: z.string().regex(/^v\d+(\.\d+)*$/),
+  announced: z.coerce.date(),
+  effective: z.coerce.date(),
+  summary: z.string(),
+  status: z.enum(['draft', 'published']),
+});
+const preview = z.object({
+  title: z.string(),
+  status: z.literal('preview'),
+  source: z.object({ path: z.string(), sha256: z.string().regex(/^[0-9a-f]{64}$/), fetched: z.string() }),
+});
+
 const legal = defineCollection({
   loader: glob({
-    pattern: '*/v*.md',
+    pattern: ['*/v*.md', '*/preview.md'],
     base: './src/content/legal',
     generateId: ({ entry }) => entry.replace(/\.md$/, ''),
   }),
-  schema: z.object({
-    title: z.string(),
-    version: z.string().regex(/^v\d+(\.\d+)*$/),
-    announced: z.coerce.date(),
-    effective: z.coerce.date(),
-    summary: z.string(),
-    status: z.enum(['draft', 'published']),
-  }),
+  schema: z.union([version, preview]),
 });
 
 export const collections = { legal };
