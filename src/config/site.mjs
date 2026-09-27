@@ -10,7 +10,7 @@ export const site = {
 
   serviceName: '[서비스명]',
   contactEmail: '[문의 메일]',
-  replyTime: '[답변 기간]',
+  replyTime: '3영업일', // 이용약관 제18조
   appDeletePath: '홈 화면 오른쪽 위 설정 아이콘 › 설정 › 회원 탈퇴',
   priceMonthly: '2,900원',
   priceYearly: '29,000원',
