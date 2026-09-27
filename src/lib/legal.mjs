@@ -4,7 +4,6 @@ export const DOCS = {
   terms: '서비스 이용약관',
   privacy: '개인정보 처리방침',
   location: '위치기반서비스 이용약관',
-  community: '커뮤니티 운영정책',
 };
 
 // 오늘 날짜(KST) 'YYYY-MM-DD'

@@ -3,7 +3,7 @@
 ## 1. 방향
 - 기능 없는 **안내 전용 정적 사이트**입니다. 로그인·폼·서버 연결은 없습니다.
 - 앱 없이 하는 탈퇴 요청은 **메일(mailto)** 로만 받습니다. 예전의 웹 로그인 탈퇴 페이지(`/delete/`)는 지웠습니다.
-- 규칙은 `docs/HOMEPAGE_RULES.md`, 문안은 `docs/CONTENT.md`(v0.5)를 따릅니다.
+- 규칙은 `docs/HOMEPAGE_RULES.md`, 문안은 `docs/CONTENT.md`(v0.6)를 따릅니다.
 
 ## 2. 구성
 - Astro 정적 출력, 브라우저 JS 0. 설정은 `src/config/site.mjs` 한 곳에 있습니다.

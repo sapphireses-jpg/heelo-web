@@ -23,7 +23,7 @@ npm run build && npm run check   # 배포와 같은 빌드 + 자동 검사
 ## 약관 새 버전 올리는 법
 원본은 앱 저장소 `docs/legal/public/`입니다. 법률 검토가 끝나고 오너가 알려 주면 옮기며, 「법률 검토 쟁점」 절과 검토용 주석은 빼고 본문 문장만 옮깁니다. 게시한 버전이 없는 동안 `/legal/*`에는 "약관을 준비하고 있어요."만 나옵니다.
 
-1. `src/content/legal/<문서>/<새 버전>.md` 파일을 새로 만듭니다. 문서: `terms`, `privacy`, `location`, `community`. 버전: `v1.0`, `v1.1` …
+1. `src/content/legal/<문서>/<새 버전>.md` 파일을 새로 만듭니다. 문서: `terms`, `privacy`, `location`. 버전: `v1.0`, `v1.1` …
    ```markdown
    ---
    title: 서비스 이용약관
