@@ -34,7 +34,7 @@ export const site = {
   },
 
   business: {
-    name: 'SOJAEHA Studio',
+    name: '소재하 스튜디오(SOJAEHA Studio)', // 등록 상호. 하단 상호·저작권 표기에 씁니다
     ceo: '[대표자]',
     regNo: '[사업자등록번호]',
     mailOrderNo: '[통신판매업 신고번호]',
