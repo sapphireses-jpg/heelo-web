@@ -23,7 +23,9 @@ npm run build && npm run check   # 배포와 같은 빌드 + 자동 검사
 ## 약관 임시 초안 가져오기 (정식 버전 전, 로컬)
 ```bash
 npm run sync-legal-preview   # 앱 저장소 docs/legal/public/의 terms·privacy·location → src/content/legal/<문서>/preview.md
+                             # docs/legal/beta/<문서>-beta.md가 있으면 → src/content/legal/beta/<문서>.md (draft)
 ```
+- 베타 적용판(`/legal/beta/<문서>/`): 가져올 때는 늘 draft입니다. 자리표시(시행일·신고번호 등)가 모두 채워지면 `status: published`로 바꾸고 `announced`·`effective`를 적어 push합니다. 자리표시가 남아 있으면 검사가 막습니다. published가 된 파일은 sync가 덮어쓰지 않습니다.
 - 앱 저장소 위치는 `src/config/site.mjs`의 `appRepoPath`(기본 `~/projects/tailory`)입니다. 앱 저장소는 읽기만 하고 git 명령은 쓰지 않습니다.
 - 변환: 첫 줄 HTML 주석과 「법률 검토 쟁점」 절 삭제, `(검토용 주석 …)` 삭제, `[검토: …]` → (검토 중), `[개발 확인: …]`·`[DPA 확인…]` → (확인 중). `[시행일]`, `[사업자 정보: …]` 같은 자리표시와 나머지 문장은 그대로 둡니다. 변환 뒤 검토 표지가 남으면 멈춥니다.
 - 머리 정보 `source`에 원문 경로, 원문 파일 SHA-256, 가져온 날짜가 적힙니다. 가져온 뒤 `npm run dev`로 확인하고 커밋·push합니다.

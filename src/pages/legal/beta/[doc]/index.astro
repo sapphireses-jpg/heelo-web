@@ -1,0 +1,23 @@
+---
+import { render } from 'astro:content';
+import Base from '../../../../layouts/Base.astro';
+import { DOCS, ymd } from '../../../../lib/legal.mjs';
+import { betaByDoc } from '../../../../lib/legal-data';
+import { site } from '../../../../config/site.mjs';
+
+// 베타 적용판(앱 링크가 이 주소). published만 배포되고, draft는 astro dev에서만 보입니다.
+export async function getStaticPaths() {
+  return Object.keys(await betaByDoc()).map((doc) => ({ params: { doc } }));
+}
+
+const { doc } = Astro.params;
+const entry = (await betaByDoc())[doc];
+const { Content } = await render(entry);
+const d = entry.data;
+---
+<Base title={`${DOCS[doc]} (비공개 베타)`}>
+  <p class="notice">지금 보시는 문서는 {site.serviceName} 비공개 베타 기간에 적용돼요({d.version} 베타). 정식 출시 때 바뀐 문서를 다시 알리고 동의를 받아요.</p>
+  {d.status === 'draft' && <p class="notice">초안(draft)이에요. 로컬 미리 보기에서만 보이고 배포되지 않아요.</p>}
+  {d.effective && <p class="muted">버전 {d.version} · 시행일 {ymd(d.effective)}{d.announced && ` · 공고일 ${ymd(d.announced)}`}</p>}
+  <div class="legal-body"><Content /></div>
+</Base>
