@@ -8,8 +8,8 @@ export const site = {
   url: 'https://sapphireses-jpg.github.io',
   base: '/tailory-web/',
 
-  serviceName: '[서비스명]',
-  contactEmail: '[문의 메일]',
+  serviceName: 'walklog', // 앱 Brand.name과 같은 값. 약관 본문의 {서비스명}도 이 값으로 채웁니다
+  contactEmail: 'support@sojaeha.studio',
   replyTime: '3영업일', // 이용약관 제18조
   appDeletePath: '홈 화면 오른쪽 위 설정 아이콘 › 설정 › 회원 탈퇴',
   priceMonthly: '2,900원',
@@ -34,7 +34,7 @@ export const site = {
   },
 
   business: {
-    name: '[상호]',
+    name: 'SOJAEHA Studio',
     ceo: '[대표자]',
     regNo: '[사업자등록번호]',
     mailOrderNo: '[통신판매업 신고번호]',
