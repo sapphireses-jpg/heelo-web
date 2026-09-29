@@ -1,5 +1,5 @@
 // 사이트 설정값은 여기 한 곳에만 둡니다. 페이지에 직접 쓰지 않습니다.
-// 대괄호 값은 자리표시입니다(docs/CONTENT.md 끝 목록). launchReady: false면 CI가 남은 자리표시를 실패로 막습니다.
+// 대괄호 값은 자리표시입니다(docs/CONTENT.md 끝 목록). launchReady: true면 CI가 남은 자리표시를 실패로 막습니다(false일 때는 경고만).
 
 const androidPackage = 'com.sojaeha.walklog'; // 서비스명과 분리된 값, 바꾸지 않습니다
 
@@ -12,8 +12,8 @@ export const site = {
   contactEmail: 'support@sojaeha.studio',
   replyTime: '3영업일', // 이용약관 제18조
   appDeletePath: '홈 화면 오른쪽 위 설정 아이콘 › 설정 › 회원 탈퇴',
-  priceMonthly: '2,900원',
-  priceYearly: '29,000원',
+  priceMonthly: '4,900원',
+  priceYearly: '39,000원',
 
   // 약관 초안을 가져오는 sync 스크립트만 씁니다(로컬). 앱 저장소는 읽기만 합니다.
   appRepoPath: '~/projects/tailory',
