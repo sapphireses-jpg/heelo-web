@@ -6,9 +6,9 @@ const androidPackage = 'com.sojaeha.walklog'; // 서비스명과 분리된 값, 
 export const site = {
   // 주소: 임시로 github.io 프로젝트 주소. 도메인을 연결하면 url을 바꾸고 base를 '/'로.
   url: 'https://sapphireses-jpg.github.io',
-  base: '/walklog-web/',
+  base: '/heelo-web/',
 
-  serviceName: 'walklog', // 앱 Brand.name과 같은 값. 약관 본문의 {서비스명}도 이 값으로 채웁니다
+  serviceName: '힐로', // 영문 HEELO. 앱 Brand.name과 같은 값. 약관 본문의 {서비스명}도 이 값으로 채웁니다
   contactEmail: 'support@sojaeha.studio',
   replyTime: '3영업일', // 이용약관 제18조
   appDeletePath: '홈 화면 오른쪽 위 설정 아이콘 › 설정 › 회원 탈퇴',

@@ -9,7 +9,7 @@
 ## 로컬에서 보기
 ```bash
 npm ci
-npm run dev        # http://localhost:4321/walklog-web/ — draft 약관도 보입니다
+npm run dev        # http://localhost:4321/heelo-web/ — draft 약관도 보입니다
 npm test           # 약관 버전 고르기 확인
 npm run build && npm run check   # 배포와 같은 빌드 + 자동 검사
 ```
