@@ -6,7 +6,7 @@ const androidPackage = 'com.sojaeha.walklog'; // 서비스명과 분리된 값, 
 export const site = {
   // 주소: 임시로 github.io 프로젝트 주소. 도메인을 연결하면 url을 바꾸고 base를 '/'로.
   url: 'https://sapphireses-jpg.github.io',
-  base: '/tailory-web/',
+  base: '/walklog-web/',
 
   serviceName: 'walklog', // 앱 Brand.name과 같은 값. 약관 본문의 {서비스명}도 이 값으로 채웁니다
   contactEmail: 'support@sojaeha.studio',
@@ -35,6 +35,7 @@ export const site = {
 
   business: {
     name: '소재하 스튜디오(SOJAEHA Studio)', // 등록 상호. 하단 상호·저작권 표기에 씁니다
+    shortName: '소재하 스튜디오', // 괄호 안에 넣을 때(계정 삭제 안내의 「운영: …」)
     ceo: '[대표자]',
     regNo: '[사업자등록번호]',
     mailOrderNo: '[통신판매업 신고번호]',

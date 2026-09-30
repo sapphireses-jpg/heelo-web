@@ -69,7 +69,7 @@ const particle = new RegExp(`${name}(이|가|은|는|을|를|와|과)(?![가-힣
 for (const f of files('dist').filter((f) => f.endsWith('.html')))
   for (const [m] of readFileSync(f, 'utf8').matchAll(particle)) errors.push(`서비스명 조사: ${f} → "${m}"`);
 
-// 3-2. 남의 상표 검사: 결과물에 「TAILORY」가 남아 있으면 실패(대소문자 그대로. 저장소 주소 /tailory-web/은 해당 없음).
+// 3-2. 남의 상표 검사: 결과물에 「TAILORY」가 남아 있으면 실패(대소문자 그대로. 소문자 주소 등은 해당 없음).
 for (const f of files('dist').filter((f) => f.endsWith('.html')))
   if (readFileSync(f, 'utf8').includes('TAILORY')) errors.push(`남의 상표: ${f} 에 "TAILORY"가 있습니다`);
 
