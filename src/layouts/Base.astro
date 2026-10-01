@@ -51,7 +51,7 @@ const regDigits = b.regNo.replace(/\D/g, '');
           {regDigits.length === 10 && <> (<a href={`https://www.ftc.go.kr/bizCommPop.do?wrkr_no=${regDigits}`}>사업자정보 확인</a>)</>}
         </li>
         <li>통신판매업 신고번호: {b.mailOrderNo}</li>
-        <li>위치기반서비스사업 신고번호: {b.lbsNo}</li>
+        <li>{b.lbsNo ? `위치기반서비스사업 신고번호: ${b.lbsNo}` : `위치기반서비스사업 신고: ${b.lbsPending}`}</li>
         {b.address && <li>주소: {b.address}</li>}
         <li>전화: {b.phone}</li>
         <li>이메일: {site.contactEmail}</li>
