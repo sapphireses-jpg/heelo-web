@@ -1,7 +1,9 @@
 ---
 title: 위치기반서비스 이용약관
 version: v0.9
-status: draft
+status: published
+announced: 2026-10-12
+effective: 2026-10-12
 source:
   path: "앱 저장소 docs/legal/beta/location-beta.md"
   sha256: a9d9751b1eb9d9198a5735e5449a110ca2e8e1a576e2ce8333774943f4552e40

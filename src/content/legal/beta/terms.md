@@ -1,7 +1,9 @@
 ---
 title: 서비스 이용약관
 version: v0.9
-status: draft
+status: published
+announced: 2026-10-12
+effective: 2026-10-12
 source:
   path: "앱 저장소 docs/legal/beta/terms-beta.md"
   sha256: 052f64acc778580e3b3d830ec827d856d205afa029ccf00aa63cb764721dce9a

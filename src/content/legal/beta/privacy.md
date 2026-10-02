@@ -1,7 +1,9 @@
 ---
 title: 개인정보 처리방침
 version: v0.9
-status: draft
+status: published
+announced: 2026-10-12
+effective: 2026-10-12
 source:
   path: "앱 저장소 docs/legal/beta/privacy-beta.md"
   sha256: f609a14724a3e0edcc3d6c3755756deea85b1a37ad3a796dc730e56d31f05f89
