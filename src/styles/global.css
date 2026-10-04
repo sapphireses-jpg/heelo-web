@@ -57,3 +57,8 @@ th { background: var(--color-surface); }
 .site-footer ul { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); }
 .site-footer .biz { display: block; margin: var(--space-3) 0 0; }
 .site-footer .biz li { margin: 0; }
+
+/* 가족 초대 페이지: 구조·자리만. 화면 디자인은 r12 */
+.code-box { background: var(--color-surface); border: 1px solid var(--color-line); border-radius: 8px; padding: var(--space-4); margin: var(--space-4) 0; text-align: center; }
+.code-label { color: var(--color-muted); margin: 0; }
+.code { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.08em; word-break: break-all; user-select: all; margin: var(--space-2) 0 var(--space-3); }

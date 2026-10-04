@@ -3,8 +3,9 @@ import '../styles/global.css';
 import { site } from '../config/site.mjs';
 import { href } from '../lib/url.mjs';
 
-interface Props { title?: string; description?: string; noindex?: boolean }
-const { title, description, noindex } = Astro.props;
+interface Props { title?: string; description?: string; noindex?: boolean; ogImage?: string }
+const { title, description, noindex, ogImage } = Astro.props;
+const abs = (path: string) => new URL(href(path), site.url).href;
 const b = site.business;
 const regDigits = b.regNo.replace(/\D/g, '');
 ---
@@ -18,6 +19,17 @@ const regDigits = b.regNo.replace(/\D/g, '');
   {(noindex || !site.launchReady) && <meta name="robots" content="noindex, nofollow">}
   <title>{title ? `${title} | ${site.serviceName}` : site.serviceName}</title>
   {description && <meta name="description" content={description}>}
+  {/* 공유 미리보기(카카오·문자 등). 이미지 주소는 불러오는 게 아니라 크롤러가 읽는 값입니다. */}
+  {ogImage && <>
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content={site.serviceName}>
+    <meta property="og:title" content={title ? `${title} | ${site.serviceName}` : site.serviceName}>
+    {description && <meta property="og:description" content={description}>}
+    <meta property="og:image" content={abs(ogImage)}>
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+  </>}
 </head>
 <body>
   <header class="site-header">

@@ -1,0 +1,45 @@
+---
+import Base from '../../layouts/Base.astro';
+import StoreLinks from '../../components/StoreLinks.astro';
+import { site } from '../../config/site.mjs';
+const s = site.serviceName;
+const open = site.invite.openUrlTemplate;
+---
+<Base
+  title="가족 초대"
+  description={`${s}에서 함께 산책을 기록해요. 초대 코드를 앱에 입력해 주세요.`}
+  ogImage="/og/invite.png"
+  noindex
+>
+  <section class="invite">
+    <h1>가족 초대가 도착했어요</h1>
+    <p>{s}에서 같은 강아지를 함께 기록해요. 앱을 열고 아래 초대 코드를 입력해 주세요.</p>
+
+    <div class="code-box">
+      <p class="code-label">초대 코드</p>
+      <p id="invite-code" class="code" aria-live="polite">초대 링크를 다시 열어 주세요</p>
+      {open && <p><a id="invite-open" class="button" href="#" hidden data-template={open}>앱 열기</a></p>}
+    </div>
+    <noscript><p>초대 코드는 받은 메시지에서 확인해 앱에 입력해 주세요.</p></noscript>
+
+    <h2>앱이 없다면</h2>
+    <StoreLinks />
+
+    <ul>
+      <li>초대 코드는 한 번만 쓸 수 있고, 보낸 날부터 7일 동안 유효해요.</li>
+      <li>코드가 보이지 않거나 만료되었다면 초대한 분께 새 초대를 요청해 주세요.</li>
+    </ul>
+  </section>
+
+  {/* 이 페이지의 유일한 스크립트: 링크의 코드를 읽어 화면에 보여 줍니다. 네트워크 요청·저장·추적 없음(scripts/check.mjs가 확인). */}
+  <script is:inline>
+    (function () {
+      var q = new URLSearchParams(location.search).get('code');
+      var c = (location.hash.slice(1) || q || '').replace(/[\s-]/g, '').toUpperCase();
+      if (!/^[A-Z0-9]{16}$/.test(c)) return;
+      document.getElementById('invite-code').textContent = c.match(/.{4}/g).join('-');
+      var a = document.getElementById('invite-open');
+      if (a) { a.href = a.getAttribute('data-template').replace('{code}', c); a.hidden = false; }
+    })();
+  </script>
+</Base>

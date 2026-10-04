@@ -24,6 +24,9 @@ export const site = {
   // live로 바꿀 때: 링크를 넣고, 공식 배지 파일을 public/badges/app-store.svg, google-play.png로 둡니다.
   storeLinks: { appStore: '', googlePlay: '' },
 
+  // 가족 초대 페이지(/invite/). 앱 열기 주소 형식, {code}가 초대 코드로 바뀝니다. 비워 두면 「앱 열기」 버튼을 숨깁니다(A가 주소 체계를 정하면 채움).
+  invite: { openUrlTemplate: '' },
+
   androidPackage,
   subscriptionLinks: {
     apple: 'https://apps.apple.com/account/subscriptions',
