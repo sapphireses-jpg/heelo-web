@@ -4,9 +4,9 @@
 const androidPackage = 'com.sojaeha.walklog'; // 서비스명과 분리된 값, 바꾸지 않습니다
 
 export const site = {
-  // 주소: 임시로 github.io 프로젝트 주소. 도메인을 연결하면 url을 바꾸고 base를 '/'로.
-  url: 'https://sapphireses-jpg.github.io',
-  base: '/heelo-web/',
+  // 주소: 도메인 heelo.app(루트 배포라 base '/'). 예전 임시 주소는 sapphireses-jpg.github.io/heelo-web/ (base '/heelo-web/').
+  url: 'https://heelo.app',
+  base: '/',
 
   serviceName: 'Heelo', // 앱 노출 이름(영문 통일, 오너 결정 2026-10-04). 약관 본문의 {서비스명}도 이 값으로 채웁니다
   serviceNameReading: '힐로', // 처음 소개에 「Heelo(힐로)」로 읽는 법을 보여 줍니다
