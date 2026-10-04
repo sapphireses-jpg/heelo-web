@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<!-- 초대 링크 미리보기(OG) 공통판. 원본 시안: 앱 저장소 docs/design/family-v1/screens/C-14-og-image.dc.html (mode: generic). 마스코트 확정 전이라 사진 자리는 틴트 원. -->
+<defs>
+<linearGradient id="bg" gradientUnits="userSpaceOnUse" x1="140" y1="-130" x2="1060" y2="760"><stop offset="0" stop-color="#EEF4FF"/><stop offset=".6" stop-color="#F7F1FF"/><stop offset="1" stop-color="#FDF0F4"/></linearGradient>
+<linearGradient id="a1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DCE8FF"/><stop offset="1" stop-color="#C9DDFF"/></linearGradient>
+<linearGradient id="a2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8DDFF"/><stop offset="1" stop-color="#D9C8FF"/></linearGradient>
+<linearGradient id="a3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFDCE7"/><stop offset="1" stop-color="#FFC9DA"/></linearGradient>
+<filter id="sh" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="12" stdDeviation="15" flood-color="#1B2230" flood-opacity=".14"/></filter>
+</defs>
+<rect width="1200" height="630" fill="url(#bg)"/>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M640 560 C760 560 740 380 860 360 S1000 250 1060 140" stroke="#FFFFFF" stroke-width="30"/>
+<path d="M640 560 C760 560 740 380 860 360 S1000 250 1060 140" stroke="#8360E8" stroke-width="16"/>
+<path d="M1060 140 C1100 80 1140 70 1180 60" stroke="#FFFFFF" stroke-width="30"/>
+<path d="M1060 140 C1100 80 1140 70 1180 60" stroke="#F2547F" stroke-width="16" stroke-dasharray="24 16"/>
+</g>
+<g font-family="Apple SD Gothic Neo, Pretendard, sans-serif" fill="#1B2230">
+<rect x="80" y="80" width="170" height="48" rx="24" fill="#FFFFFF"/>
+<circle cx="104" cy="104" r="16" fill="#F4EEFF"/>
+<text x="104" y="110" font-size="17" font-weight="900" fill="#1560DE" text-anchor="middle" font-family="Avenir Next, Helvetica Neue, sans-serif">H</text>
+<text x="130" y="112" font-size="24" font-weight="800">가족 초대</text>
+<text x="80" y="206" font-size="56" font-weight="900" letter-spacing="-2">가족이 Heelo로</text>
+<text x="80" y="273" font-size="56" font-weight="900" letter-spacing="-2">초대했어요</text>
+<text x="80" y="341" font-size="28" font-weight="700">함께 키우는 강아지의 산책과 추억을</text>
+<text x="80" y="382" font-size="28" font-weight="700">가족이 같이 기록해요</text>
+<rect x="81" y="503" width="54" height="54" rx="12" fill="#FFFFFF" stroke="#C3CBD8" stroke-width="2" stroke-dasharray="6 5"/>
+<text x="149" y="541" font-size="32" font-weight="900" letter-spacing="-.5" font-family="Avenir Next, Helvetica Neue, sans-serif">Heelo</text>
+</g>
+<circle cx="890" cy="300" r="126" fill="url(#a1)" stroke="#FFFFFF" stroke-width="8" filter="url(#sh)"/>
+<circle cx="1055" cy="425" r="91" fill="url(#a2)" stroke="#FFFFFF" stroke-width="8" filter="url(#sh)"/>
+<circle cx="1055" cy="205" r="71" fill="url(#a3)" stroke="#FFFFFF" stroke-width="8" filter="url(#sh)"/>
+</svg>
