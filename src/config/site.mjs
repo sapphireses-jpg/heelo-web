@@ -8,7 +8,8 @@ export const site = {
   url: 'https://sapphireses-jpg.github.io',
   base: '/heelo-web/',
 
-  serviceName: '힐로', // 영문 HEELO. 앱 Brand.name과 같은 값. 약관 본문의 {서비스명}도 이 값으로 채웁니다
+  serviceName: 'Heelo', // 앱 노출 이름(영문 통일, 오너 결정 2026-10-04). 약관 본문의 {서비스명}도 이 값으로 채웁니다
+  serviceNameReading: '힐로', // 처음 소개에 「Heelo(힐로)」로 읽는 법을 보여 줍니다
   contactEmail: 'support@sojaeha.studio',
   replyTime: '3영업일', // 이용약관 제18조
   appDeletePath: '홈 화면 오른쪽 위 설정 아이콘 › 설정 › 회원 탈퇴',
