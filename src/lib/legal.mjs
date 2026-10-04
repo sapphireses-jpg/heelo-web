@@ -32,3 +32,18 @@ export function currentVersion(versions, today) {
 export function upcomingVersion(versions, today) {
   return sortVersions(versions).filter((v) => v.status === 'published' && ymd(v.effective) > today).at(-1);
 }
+
+// 베타 버전 정렬(버전 번호가 큰 것이 앞, 첫째가 최신). 베타는 시행일로 거르지 않습니다(시행일 전에도 앱 링크가 열려야 함).
+export const sortBeta = (list, get = (x) => x.version) => [...list].sort((a, b) => cmpVer(get(b), get(a)));
+
+// sync가 베타 원문을 어디에 쓸지 정합니다. legacy = beta/<문서>.md 의 { status, version, sha256 } 또는 null.
+// 게시된 파일은 고치지 않으므로, 같은 버전이면 건너뛰고(원문이 바뀌었으면 drift), 다른 버전이면 beta/<문서>/<버전>.md 에 draft로 씁니다.
+export function pickBetaTarget(doc, version, sha256, legacy, existsPublished = () => false) {
+  const dir = `src/content/legal/beta/${doc}`;
+  if (legacy && legacy.status === 'published') {
+    if (legacy.version === version) return { path: `${dir}.md`, action: legacy.sha256 === sha256 ? 'same' : 'drift' };
+    const path = `${dir}/${version}.md`;
+    return { path, action: existsPublished(path) ? 'skip' : 'write' };
+  }
+  return { path: `${dir}.md`, action: 'write' };
+}

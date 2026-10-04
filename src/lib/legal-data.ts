@@ -1,5 +1,5 @@
 import { getCollection } from 'astro:content';
-import { DOCS, sortVersions, ymd } from './legal.mjs';
+import { DOCS, sortVersions, sortBeta, ymd } from './legal.mjs';
 
 // draft는 로컬(astro dev)에서만 보입니다. 배포 빌드에는 들어가지 않습니다. preview는 버전 목록에 넣지 않습니다.
 export async function legalByDoc() {
@@ -22,8 +22,11 @@ export async function previewByDoc() {
   return Object.fromEntries(all.map((e) => [e.id.split('/')[0], e]));
 }
 
-// 베타 적용판: { 문서: entry }. draft는 로컬(astro dev)에서만 보입니다.
+// 베타 적용판: { 문서: [entry...] } 새 버전이 앞. draft는 로컬(astro dev)에서만 보입니다.
 export async function betaByDoc() {
   const all = await getCollection('legal', (e) => e.id.startsWith('beta/') && (e.data.status === 'published' || (import.meta.env.DEV && e.data.status === 'draft')));
-  return Object.fromEntries(all.map((e) => [e.id.split('/')[1], e]));
+  const out: Record<string, typeof all> = {};
+  for (const e of all) (out[e.id.split('/')[1]] ??= []).push(e);
+  for (const doc of Object.keys(out)) out[doc] = sortBeta(out[doc], (e) => e.data.version);
+  return out;
 }

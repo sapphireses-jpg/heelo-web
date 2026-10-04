@@ -1,0 +1,21 @@
+---
+import { render } from 'astro:content';
+import { DOCS, ymd } from '../lib/legal.mjs';
+import { href } from '../lib/url.mjs';
+import { site } from '../config/site.mjs';
+
+// 베타 적용판 한 버전. entry = 보여 줄 버전, versions = 같은 문서의 베타 버전들(새것이 앞).
+const { doc, entry, versions } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const latest = versions[0].data.version;
+const verPath = (v) => href(`/legal/beta/${doc}/${v}/`);
+---
+<p class="notice">지금 보시는 문서는 {site.serviceName} 비공개 베타 기간에 적용돼요({d.version} 베타). 정식 출시 때 바뀐 문서를 다시 알리고 동의를 받아요.</p>
+{d.version !== latest && <p class="notice">이전 버전이에요. 최신 버전은 <a href={verPath(latest)}>{latest}</a>이에요.</p>}
+{d.status === 'draft' && <p class="notice">초안(draft)이에요. 로컬 미리 보기에서만 보이고 배포되지 않아요.</p>}
+{d.effective && <p class="muted">버전 {d.version} · 시행일 {ymd(d.effective)}{d.announced && ` · 공고일 ${ymd(d.announced)}`}</p>}
+{versions.length > 1 && (
+  <p class="muted">베타 버전: {versions.map((v, i) => <>{i > 0 && ' · '}{v.data.version === d.version ? <strong>{v.data.version}</strong> : <a href={verPath(v.data.version)}>{v.data.version}</a>}</>)}</p>
+)}
+<div class="legal-body"><Content /></div>

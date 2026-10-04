@@ -1,0 +1,19 @@
+---
+import Base from '../../../../layouts/Base.astro';
+import BetaDoc from '../../../../components/BetaDoc.astro';
+import { DOCS } from '../../../../lib/legal.mjs';
+import { betaByDoc } from '../../../../lib/legal-data';
+
+// 베타 버전별 고정 주소(/legal/beta/<문서>/<버전>/)
+export async function getStaticPaths() {
+  return Object.entries(await betaByDoc()).flatMap(([doc, versions]) =>
+    versions.map((entry) => ({ params: { doc, version: entry.data.version }, props: { entry, versions } })),
+  );
+}
+
+const { doc } = Astro.params;
+const { entry, versions } = Astro.props;
+---
+<Base title={`${DOCS[doc]} ${entry.data.version} (비공개 베타)`}>
+  <BetaDoc doc={doc} entry={entry} versions={versions} />
+</Base>

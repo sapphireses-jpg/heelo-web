@@ -12,7 +12,8 @@ const version = z.object({
   summary: z.string(),
   status: z.enum(['draft', 'published']),
 });
-// src/content/legal/beta/<문서>.md → 베타 적용판(/legal/beta/<문서>/). 게시(published)할 때는 공고일·시행일이 있어야 합니다.
+// src/content/legal/beta/<문서>.md(v0.9, 이미 게시돼 고정) 와 beta/<문서>/<버전>.md(v0.10~) → 베타 적용판.
+// /legal/beta/<문서>/ 는 최신 게시 버전, /legal/beta/<문서>/<버전>/ 은 버전별 고정 주소. 게시(published)할 때는 공고일·시행일이 있어야 합니다.
 const source = z.object({ path: z.string(), sha256: z.string().regex(/^[0-9a-f]{64}$/), fetched: z.string() });
 const beta = z
   .object({
@@ -33,7 +34,7 @@ const preview = z.object({
 
 const legal = defineCollection({
   loader: glob({
-    pattern: ['*/v*.md', '*/preview.md', 'beta/*.md'],
+    pattern: ['*/v*.md', '*/preview.md', 'beta/*.md', 'beta/*/v*.md'],
     base: './src/content/legal',
     generateId: ({ entry }) => entry.replace(/\.md$/, ''),
   }),

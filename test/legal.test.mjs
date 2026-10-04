@@ -1,7 +1,7 @@
 // 버전 전환 확인용 가짜 문서. 배포 결과물에는 들어가지 않습니다.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { currentVersion, upcomingVersion, sortVersions, todayKST } from '../src/lib/legal.mjs';
+import { currentVersion, upcomingVersion, sortVersions, todayKST, sortBeta, pickBetaTarget } from '../src/lib/legal.mjs';
 
 const docs = [
   { version: 'v1.0', announced: '2026-01-01', effective: '2026-01-08', status: 'published' },
@@ -39,4 +39,17 @@ test('v1.10은 v1.2보다 새 버전', () => {
 test('KST 날짜: UTC 15:00이 다음 날 0시', () => {
   assert.equal(todayKST(Date.parse('2026-09-30T14:59:59Z')), '2026-09-30');
   assert.equal(todayKST(Date.parse('2026-09-30T15:00:00Z')), '2026-10-01');
+});
+
+test('베타: 최신은 버전 번호가 큰 것(v0.10 > v0.9)', () => {
+  assert.deepEqual(sortBeta([{ version: 'v0.9' }, { version: 'v0.10' }]).map((v) => v.version), ['v0.10', 'v0.9']);
+});
+
+test('베타 sync 대상: 게시된 같은 버전은 건드리지 않고, 새 버전은 beta/<문서>/<버전>.md draft로', () => {
+  const pub = { status: 'published', version: 'v0.9', sha256: 'a' };
+  assert.deepEqual(pickBetaTarget('terms', 'v0.9', 'a', pub), { path: 'src/content/legal/beta/terms.md', action: 'same' });
+  assert.equal(pickBetaTarget('terms', 'v0.9', 'b', pub).action, 'drift');
+  assert.deepEqual(pickBetaTarget('terms', 'v0.10', 'c', pub), { path: 'src/content/legal/beta/terms/v0.10.md', action: 'write' });
+  assert.equal(pickBetaTarget('terms', 'v0.10', 'c', pub, () => true).action, 'skip');
+  assert.equal(pickBetaTarget('terms', 'v0.9', 'a', null).path, 'src/content/legal/beta/terms.md');
 });

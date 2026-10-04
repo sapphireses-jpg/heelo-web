@@ -7,7 +7,7 @@ import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { site } from '../src/config/site.mjs';
-import { DOCS, todayKST } from '../src/lib/legal.mjs';
+import { DOCS, todayKST, pickBetaTarget } from '../src/lib/legal.mjs';
 
 // 게시 규칙(docs/HOMEPAGE_RULES.md 3번 임시 초안)대로 바꿉니다. 바꾼 개수도 돌려줍니다.
 export function toPreview(md) {
@@ -49,19 +49,23 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     writeFileSync(`src/content/legal/${doc}/preview.md`, front + body);
     console.log(`${doc}: sha256 ${sha256.slice(0, 12)}… 변환 ${JSON.stringify(count)}`);
 
-    // 2) 베타 적용판: docs/legal/beta/<문서>-beta.md → src/content/legal/beta/<문서>.md (draft로만 씁니다)
+    // 2) 베타 적용판: docs/legal/beta/<문서>-beta.md → beta/<문서>.md(첫 버전) 또는 beta/<문서>/<버전>.md(게시된 버전과 다른 새 버전). draft로만 씁니다.
     const brel = `docs/legal/beta/${doc}-beta.md`;
-    const out = `src/content/legal/beta/${doc}.md`;
     if (!existsSync(join(repo, brel))) continue;
-    if (existsSync(out) && /^status:\s*published\s*$/m.test(readFileSync(out, 'utf8'))) {
-      console.log(`beta/${doc}: published라 덮어쓰지 않습니다(새 버전 파일을 만드세요)`);
-      continue;
-    }
     const b = read(brel);
     const { version, body: bbody } = toBeta(b.text);
+    const legacyPath = `src/content/legal/beta/${doc}.md`;
+    const legacyText = existsSync(legacyPath) ? readFileSync(legacyPath, 'utf8') : null;
+    const fm = (k) => legacyText?.match(new RegExp(`^\\s*${k}:\\s*"?([^"\\n]+?)"?\\s*$`, 'm'))?.[1];
+    const legacy = legacyText && { status: fm('status'), version: fm('version'), sha256: fm('sha256') };
+    const isPub = (path) => existsSync(path) && /^status:\s*published\s*$/m.test(readFileSync(path, 'utf8'));
+    const { path: out, action } = pickBetaTarget(doc, version, b.sha256, legacy, isPub);
+    if (action === 'same') { console.log(`beta/${doc}: ${version} 게시본과 같음`); continue; }
+    if (action === 'drift') { console.log(`beta/${doc}: 경고 — 원문이 게시된 ${version} 그대로 번호만 두고 바뀌었습니다. 게시 파일은 고칠 수 없어 건너뜁니다(A에게 새 버전 요청)`); continue; }
+    if (action === 'skip') { console.log(`beta/${doc}: ${version} 이미 게시됨, 건너뜀`); continue; }
     const bfront = ['---', `title: ${title}`, `version: ${version}`, 'status: draft', ...source(brel, b.sha256), '---', ''].join('\n');
-    mkdirSync('src/content/legal/beta', { recursive: true });
+    mkdirSync(out.replace(/\/[^/]+$/, ''), { recursive: true });
     writeFileSync(out, bfront + bbody);
-    console.log(`beta/${doc}: ${version} sha256 ${b.sha256.slice(0, 12)}… (draft)`);
+    console.log(`${out.replace('src/content/legal/', '')}: ${version} sha256 ${b.sha256.slice(0, 12)}… (draft)`);
   }
 }
