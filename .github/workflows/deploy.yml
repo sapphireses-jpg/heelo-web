@@ -36,6 +36,7 @@ jobs:
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
+          include-hidden-files: true # .well-known(앱 링크 파일)이 빠지지 않게
 
   deploy:
     needs: build

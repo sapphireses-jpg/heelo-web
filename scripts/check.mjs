@@ -31,11 +31,11 @@ for (const f of files('dist')) {
         if (ext.test(u)) errors.push(`외부 리소스: ${f} → ${u.trim()}`);
   const scripts = [...text.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
   if (scripts.length && !/[\\/]invite[\\/]index\.html$/.test(f)) errors.push(`브라우저 자바스크립트: ${f}`);
-  // 초대 페이지 한 곳만 허용(오너 2026-10-04): 인라인만, 네트워크·저장·추적 호출 없음
+  // 초대 페이지 한 곳만 허용(오너 2026-10-04, 코드 복사 2026-10-05): 인라인만, 네트워크·저장·추적 호출 없음(navigator는 clipboard만)
   if (scripts.length && /[\\/]invite[\\/]index\.html$/.test(f))
     for (const [, attrs, body] of scripts) {
       if (/\ssrc\s*=/i.test(attrs)) errors.push(`초대 페이지 스크립트: 외부 파일을 불러올 수 없습니다 ${f}`);
-      for (const bad of /\b(fetch|XMLHttpRequest|sendBeacon|WebSocket|EventSource|localStorage|sessionStorage|indexedDB|import\s*\(|document\.cookie|navigator\.)/g[Symbol.matchAll](body))
+      for (const bad of /\b(fetch|XMLHttpRequest|sendBeacon|WebSocket|EventSource|localStorage|sessionStorage|indexedDB|import\s*\(|document\.cookie|navigator\.(?!clipboard\b))/g[Symbol.matchAll](body))
         errors.push(`초대 페이지 스크립트: 금지된 호출 "${bad[0]}" ${f}`);
     }
 }

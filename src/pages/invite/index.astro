@@ -40,6 +40,7 @@ const shares = [
       <p class="invite-code-row">
         <span class="muted">코드</span>
         <span id="invite-code" class="invite-code" aria-live="polite">초대 링크를 다시 열어 주세요</span>
+        <button id="invite-copy" type="button" class="invite-copy" hidden>복사</button>
       </p>
       <noscript><p class="muted">초대 코드는 받은 메시지에서 확인해 앱에 입력해 주세요.</p></noscript>
       <p class="muted">7일이 지났거나 이미 쓴 초대는 쓸 수 없어요. 초대한 가족에게 새 링크를 부탁해 주세요.</p>
@@ -55,6 +56,14 @@ const shares = [
       document.getElementById('invite-code').textContent = c.match(/.{4}/g).join('-');
       var a = document.getElementById('invite-open');
       if (a) { a.href = a.getAttribute('data-template').replace('{code}', c); a.hidden = false; }
+      // 복사: 코드를 클립보드에 넣는 일만 합니다(오너 허용 2026-10-05). 클립보드를 못 쓰면 버튼을 숨긴 채 둡니다.
+      var b = document.getElementById('invite-copy');
+      if (b && navigator.clipboard) {
+        b.hidden = false;
+        b.addEventListener('click', function () {
+          navigator.clipboard.writeText(c).then(function () { b.textContent = '복사했어요'; });
+        });
+      }
     })();
   </script>
 </Base>

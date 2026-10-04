@@ -77,4 +77,6 @@ th { background: var(--color-surface); }
 .invite-btn { display: flex; align-items: center; justify-content: center; min-height: 56px; border: 1.5px solid #dde3ec; border-radius: 26px; background: #fff; color: var(--inv-ink); font-size: 1.0625rem; font-weight: 900; text-decoration: none; }
 .invite-btn[hidden] { display: none; }
 .invite-code-row { display: flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: 44px; }
+.invite-copy { min-height: 44px; padding: 0 6px; border: 0; background: transparent; color: var(--inv-link); font: inherit; font-size: 0.8125rem; font-weight: 800; cursor: pointer; }
+.invite-copy[hidden] { display: none; }
 .invite-code { font-weight: 900; letter-spacing: 0.03em; word-break: break-all; user-select: all; }
