@@ -6,7 +6,8 @@ import { site } from './src/config/site.mjs';
 const fillServiceName = {
   name: 'fill-service-name',
   text(node, ctx) {
-    if (node.value.includes('{서비스명}')) ctx.setProperty(node, 'value', node.value.replaceAll('{서비스명}', site.serviceName));
+    // {서비스명_한글}을 먼저 바꿉니다(이름이 겹치지 않지만 순서를 고정)
+    if (node.value.includes('{서비스명')) ctx.setProperty(node, 'value', node.value.replaceAll('{서비스명_한글}', site.serviceNameReading).replaceAll('{서비스명}', site.serviceName));
   },
 };
 
