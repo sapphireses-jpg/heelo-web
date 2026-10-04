@@ -25,7 +25,7 @@ export const site = {
   storeLinks: { appStore: '', googlePlay: '' },
 
   // 가족 초대 페이지(/invite/). 앱 열기 주소 형식, {code}가 초대 코드로 바뀝니다. 비워 두면 「앱 열기」 버튼을 숨깁니다(A가 주소 체계를 정하면 채움).
-  invite: { openUrlTemplate: '' },
+  invite: { openUrlTemplate: 'com.sojaeha.walklog://invite/{code}' },
 
   androidPackage,
   subscriptionLinks: {
