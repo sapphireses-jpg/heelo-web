@@ -1,9 +1,18 @@
 ---
 import Base from '../layouts/Base.astro';
+import StoreLinks from '../components/StoreLinks.astro';
 import { href } from '../lib/url.mjs';
+import { site } from '../config/site.mjs';
 ---
 <Base title="찾는 페이지가 없어요">
   <h1>찾는 페이지가 없어요.</h1>
   <p>주소가 바뀌었거나 삭제된 페이지일 수 있어요.</p>
   <p><a class="button" href={href('/')}>서비스 소개로 가기</a> <a class="button" href={href('/support/')}>고객센터</a></p>
+
+  {/* 강아지 프로필 링크(/d/<id>)는 앱이 없으면 이 404로 옵니다. 정적 사이트·자바스크립트 0이라 주소를 보고 가르지 못해 모든 404에 같이 보여 줍니다. id는 화면에 표시하지 않고 서버도 부르지 않습니다. */}
+  <section>
+    <h2>강아지 프로필 링크를 열었나요?</h2>
+    <p>{site.serviceName} 앱에서 열어 주세요. 앱이 없다면 아래에서 설치해 주세요.</p>
+    <StoreLinks />
+  </section>
 </Base>
