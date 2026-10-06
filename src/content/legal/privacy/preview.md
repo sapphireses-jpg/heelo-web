@@ -4,7 +4,7 @@ status: preview
 source:
   path: "앱 저장소 docs/legal/public/privacy.md"
   sha256: fa9d44935ddb9bfbcdadc282875ad429bd3d32b7172a6b47a182202d622e4bbf
-  fetched: "2026-10-05"
+  fetched: "2026-10-06"
 ---
 # 2. 개인정보 처리방침
 
