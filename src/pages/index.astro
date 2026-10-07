@@ -29,6 +29,8 @@ const features = [
 ---
 <Base description={`오늘 걸은 산책부터 처음 가 본 길, 함께 찾은 장소와 추억까지. 우리 아이가 걸어온 모든 길을 ${s}에서 한 지도로 모아 보세요.`}>
   <section class="hero">
+    {/* 마스코트 한 마리(오너 D20: 한 화면 하나, 앱 화면 이미지와 겹치지 않게). 디자이너 3D 원본을 WebP로. */}
+    <img class="hero-mascot" src={href('/images/mascot-h.webp')} alt="" width="360" height="360" decoding="async">
     <h1>강아지와 함께 걸은 길을, <span class="hl">평생</span> 남겨요.</h1>
     <p>오늘 걸은 산책부터 처음 가 본 길, 함께 찾은 장소와 추억까지. 우리 아이가 걸어온 모든 길을 {s}({site.serviceNameReading})에서 한 지도로 모아 보세요.</p>
     <StoreLinks />
@@ -64,13 +66,13 @@ const features = [
 
   <section>
     <h2>요금</h2>
-    <div class="card">
+    <div class="card plan">
       <h3>무료</h3>
       <p>산책 기록, 새로운 길, 장소 발견, 생애지도(동네 단계), 추억 100개까지</p>
     </div>
-    <div class="card">
+    <div class="card plan">
       <h3>{s} Plus</h3>
-      <p>월 {site.priceMonthly} · 연 {site.priceYearly} (부가세 포함)</p>
+      <p><span class="price">월 {site.priceMonthly} · 연 {site.priceYearly}</span> <span class="muted">(부가세 포함)</span></p>
       <ul>
         <li>추억 개수 제한 없음</li>
         <li>생애지도 시·군·구, 시·도, 국가 단위 보기</li>

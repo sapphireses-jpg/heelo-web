@@ -72,6 +72,9 @@ th { background: var(--color-surface-inset); }
 .hero { padding-top: var(--space-4); }
 .hero h1 { font-size: clamp(2rem, 9vw, 2.75rem); letter-spacing: -0.04em; line-height: 1.15; margin-top: var(--space-4); }
 .hero > p { font-size: 1.0625rem; color: var(--color-muted); }
+.hero-mascot { display: block; width: 88px; height: auto; }
+.plan h3 { margin-top: 0; }
+.price { font-size: 1.5rem; font-weight: 900; letter-spacing: -0.03em; }
 .shot { margin: var(--space-4) 0 0; }
 .shot img { display: block; width: 100%; height: auto; border-radius: var(--radius); }
 .shot-hero { margin-top: var(--space-5); display: flex; justify-content: center; }
