@@ -75,6 +75,10 @@ th { background: var(--color-surface-inset); }
 .hero-mascot { display: block; width: 88px; height: auto; }
 .plan h3 { margin-top: 0; }
 .price { font-size: 1.5rem; font-weight: 900; letter-spacing: -0.03em; }
+.faq { margin: var(--space-3) 0; }
+.faq summary { font-size: 1.0625rem; font-weight: 800; line-height: 1.4; cursor: pointer; padding: var(--space-2) 0; }
+.faq[open] summary { margin-bottom: var(--space-2); }
+.faq p { color: var(--color-muted); margin: var(--space-2) 0; }
 .shot { margin: var(--space-4) 0 0; }
 .shot img { display: block; width: 100%; height: auto; border-radius: 28px; box-shadow: 0 12px 30px rgba(27, 34, 48, 0.16); border: 1px solid var(--color-line); } /* a.shadow-float: 화면 이미지를 흰 바탕에서 띄움 */
 .shot-hero { margin-top: var(--space-5); display: flex; justify-content: center; }

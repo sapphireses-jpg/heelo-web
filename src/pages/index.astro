@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import StoreLinks from '../components/StoreLinks.astro';
 import ScreenShot from '../components/ScreenShot.astro';
+import FaqEntries from '../components/FaqEntries.astro';
 import { site } from '../config/site.mjs';
 import { href } from '../lib/url.mjs';
 const s = site.serviceName;
@@ -85,6 +86,12 @@ const features = [
       <li>청약철회와 환불 조건은 <a href={href('/legal/terms/')}>이용약관</a> 제11조에서 확인하세요.</li>
       <li>만 19세 미만은 법정대리인의 동의를 받은 뒤 결제해 주세요.</li>
     </ul>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <FaqEntries only={['cancel', 'location', 'family-size', 'photo-location', 'withdraw']} mode="details" />
+    <p><a href={href('/support/')}>고객센터에서 더 보기</a></p>
   </section>
 
   <section id="download">
