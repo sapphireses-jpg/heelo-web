@@ -32,10 +32,10 @@ a { color: var(--color-link); }
 :focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 
-.wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--space-3); }
+.wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--space-4); } /* 좌우 24 (a.page-x) */
 main { padding: var(--space-4) 0 var(--space-5); }
 h1 { font-size: 1.75rem; font-weight: 900; letter-spacing: -0.03em; line-height: 1.2; margin: var(--space-4) 0 var(--space-3); }
-h2 { font-size: 1.25rem; font-weight: 800; line-height: 1.35; margin: var(--space-5) 0 var(--space-3); }
+h2 { font-size: 1.25rem; font-weight: 800; line-height: 1.35; margin: var(--space-5) 0 12px; } /* 블록 사이 40 · 제목 아래 12 (a.block-gap · a.title-gap) */
 h3 { font-size: 1.0625rem; font-weight: 800; line-height: 1.35; margin: var(--space-4) 0 var(--space-2); }
 ul, ol { padding-left: 1.3em; }
 li { margin: var(--space-1) 0; }
