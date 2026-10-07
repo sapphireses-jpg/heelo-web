@@ -13,6 +13,7 @@
 3. Supabase(운영·개발)와 앱 DB에 접속하지 않고, MCP도 연결하지 않습니다.
    서버 쪽 변경이 필요하면 초안만 쓰고 "A 요청"으로 보고합니다.
    - 예외(오너 허락 2026-10-01, 세션 우편함): Supabase 옛 프로젝트 Tailory(싱가포르, hbveaqbxsflummipkmht)의 hub.messages·hub.items에서 recipient가 C인 방송 읽기, 내 hub.items 상태 바꾸기, recipient=hub 보고·request 쓰기만 허용. 그 밖의 Supabase 프로젝트·표 접근은 계속 금지.
+   - 추가(총괄 방송 #202에 적힌 오너 허락 2026-10-07): recipient가 C인 메시지의 status를 'done'(처리함)으로 바꾸기. 다른 칸·다른 수신자의 메시지는 건드리지 않습니다.
    - 오너가 「우편함 확인해」라고 하면 이 예외 범위 안에서 C 방송을 읽고 진행합니다.
 4. 저장소 만들기, push, Pages 설정처럼 밖으로 나가는 작업은 오너 승인 후에만 합니다.
 5. 보고는 쉬운 한국어로, 코드·문서 근거로 합니다.
