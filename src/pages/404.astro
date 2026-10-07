@@ -9,10 +9,18 @@ import { site } from '../config/site.mjs';
   <p>주소가 바뀌었거나 삭제된 페이지일 수 있어요.</p>
   <p><a class="button" href={href('/')}>서비스 소개로 가기</a> <a class="button" href={href('/support/')}>고객센터</a></p>
 
-  {/* 강아지 프로필 링크(/d/<id>)는 앱이 없으면 이 404로 옵니다. 정적 사이트·자바스크립트 0이라 주소를 보고 가르지 못해 모든 404에 같이 보여 줍니다. id는 화면에 표시하지 않고 서버도 부르지 않습니다. */}
-  <section>
+  {/* 강아지 프로필 링크(/d/<id>)는 앱이 없으면 이 404로 옵니다. 주소가 /d/로 시작할 때만 이 안내를 보여 줍니다(오너 허락 2026-10-07, 방송 #199). 스크립트가 꺼져 있으면 모든 404에 보입니다. id는 화면에 표시하지 않고 서버도 부르지 않습니다. */}
+  <section id="d-notice" data-prefix={href('/d')}>
     <h2>강아지 프로필 링크를 열었나요?</h2>
     <p>{site.serviceName} 앱에서 열어 주세요. 앱이 없다면 아래에서 설치해 주세요.</p>
     <StoreLinks />
   </section>
+
+  {/* 이 페이지의 스크립트: 주소를 읽어 /d/가 아니면 안내를 숨기는 일만 합니다. 네트워크 요청·저장·추적 없음(scripts/check.mjs가 확인). */}
+  <script is:inline>
+    (function () {
+      var s = document.getElementById('d-notice'), b = s.getAttribute('data-prefix'), p = location.pathname;
+      if (p !== b && p.indexOf(b + '/') !== 0) s.hidden = true;
+    })();
+  </script>
 </Base>

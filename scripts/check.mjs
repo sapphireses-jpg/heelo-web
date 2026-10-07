@@ -11,7 +11,7 @@ const files = (dir) => readdirSync(dir, { recursive: true }).map((f) => join(dir
 const isPublished = (text) => /^status:\s*published\s*$/m.test(text.split(/^---\s*$/m)[1] ?? '');
 
 // 1. 외부 리소스 검사: 불러오는 곳(src, srcset, <link href>, CSS url()·@import 등)에 외부 주소가 있으면 실패. <a href>는 허용.
-// 브라우저 자바스크립트 0 규칙도 함께 확인합니다(예외: /invite/ 한 페이지의 인라인 스크립트).
+// 브라우저 자바스크립트 0 규칙도 함께 확인합니다(예외: /invite/와 404 페이지의 인라인 스크립트).
 const ext = /^\s*(https?:)?\/\//i;
 const htmlLoads = [
   /<(?:img|script|iframe|embed|source|video|audio|track|input)\b[^>]*?\ssrc\s*=\s*["']?([^"'\s>]+)/gi,
@@ -30,13 +30,13 @@ for (const f of files('dist')) {
       for (const u of m[1].split(','))
         if (ext.test(u)) errors.push(`외부 리소스: ${f} → ${u.trim()}`);
   const scripts = [...text.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
-  if (scripts.length && !/[\\/]invite[\\/]index\.html$/.test(f)) errors.push(`브라우저 자바스크립트: ${f}`);
-  // 초대 페이지 한 곳만 허용(오너 2026-10-04, 코드 복사 2026-10-05): 인라인만, 네트워크·저장·추적 호출 없음(navigator는 clipboard만)
-  if (scripts.length && /[\\/]invite[\\/]index\.html$/.test(f))
+  if (scripts.length && !/(?:[\\/]invite[\\/]index|[\\/]404)\.html$/.test(f)) errors.push(`브라우저 자바스크립트: ${f}`);
+  // 초대 페이지와 404 페이지만 허용(오너 2026-10-04, 코드 복사 2026-10-05, 404는 2026-10-07 방송 #199): 인라인만, 네트워크·저장·추적 호출 없음(navigator는 clipboard만)
+  if (scripts.length && /(?:[\\/]invite[\\/]index|[\\/]404)\.html$/.test(f))
     for (const [, attrs, body] of scripts) {
-      if (/\ssrc\s*=/i.test(attrs)) errors.push(`초대 페이지 스크립트: 외부 파일을 불러올 수 없습니다 ${f}`);
+      if (/\ssrc\s*=/i.test(attrs)) errors.push(`허용 페이지 스크립트: 외부 파일을 불러올 수 없습니다 ${f}`);
       for (const bad of /\b(fetch|XMLHttpRequest|sendBeacon|WebSocket|EventSource|localStorage|sessionStorage|indexedDB|import\s*\(|document\.cookie|navigator\.(?!clipboard\b))/g[Symbol.matchAll](body))
-        errors.push(`초대 페이지 스크립트: 금지된 호출 "${bad[0]}" ${f}`);
+        errors.push(`허용 페이지 스크립트: 금지된 호출 "${bad[0]}" ${f}`);
     }
 }
 if (files('dist').some((f) => f.endsWith('.js'))) errors.push('브라우저 자바스크립트: dist에 .js 파일이 있습니다');
