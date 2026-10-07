@@ -6,35 +6,46 @@ import FaqEntries from '../../components/FaqEntries.astro';
 const mail = site.contactEmail;
 const mailto = `mailto:${mail}?subject=${encodeURIComponent(`${site.serviceName} 문의`)}`;
 ---
-<Base title="고객센터">
-  <h1>무엇을 도와드릴까요?</h1>
-  <p>{mail}로 보내 주세요. {site.replyTime} 안에 답해 드려요.</p>
-  <p><a class="button" href={mailto}>문의 메일 쓰기</a></p>
-  <h2>메일에 적어 주시면 빨리 도와드릴 수 있어요</h2>
-  <ul>
-    <li>가입한 로그인 방식(카카오·구글·애플)</li>
-    <li>앱에서 쓰는 닉네임</li>
-    <li>휴대폰 기종과 앱 버전</li>
-    <li>문제가 생긴 화면의 캡처</li>
-  </ul>
+<Base title="고객센터" wide>
+  <section class="sub-hero-band">
+    <div class="sub-hero">
+      <div class="sub-hero-text">
+        <span class="pill pill-white">고객센터</span>
+        <h1>무엇을 도와드릴까요?</h1>
+        <p>{mail}로 보내 주세요. {site.replyTime} 안에 답해 드려요.</p>
+        <p><a class="button" href={mailto}>문의 메일 쓰기</a></p>
+      </div>
+      <img class="sub-mascot" src={href('/images/mascot-o.webp')} alt="" width="360" height="360" decoding="async">
+    </div>
+  </section>
 
-  <h2>요청별 안내</h2>
-  <div class="table-scroll">
-    <table>
-      <thead><tr><th scope="col">이런 경우</th><th scope="col">이렇게 해 주세요</th></tr></thead>
-      <tbody>
-        <tr><td>게시물·사용자 신고</td><td>앱에서 해당 추억·댓글·프로필의 신고 버튼을 눌러 주세요.</td></tr>
-        <tr><td>신고 처리나 이용 제한에 이의가 있어요</td><td>조치를 안 날부터 30일 안에 {mail}로 알려 주세요.</td></tr>
-        <tr><td>내 개인정보를 열람·정정·삭제하고 싶어요</td><td>앱에서 직접 할 수 없는 요청은 {mail}로 보내 주세요. 본인인지 확인하고, 요청을 받은 날부터 10일 안에 결과를 알려 드려요.</td></tr>
-        <tr><td>가족을 떠났는데 내가 기록한 경로를 지우고 싶어요</td><td>{mail}로 요청해 주세요.</td></tr>
-        <tr><td>회원이 아닌데 내 권리를 침해하는 게시물이 있어요</td><td>게시물을 알아볼 수 있는 정보와 침해라고 생각하는 이유를 적어 {mail}로 보내 주세요.</td></tr>
-        <tr><td>환불</td><td>결제한 앱마켓의 환불 절차로 신청해요. 아래 질문을 참고하세요.</td></tr>
-        <tr><td>탈퇴</td><td>앱에서 하거나, 앱이 없다면 <a href={href('/account/delete/')}>계정 삭제 안내</a>를 따라 주세요.</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <section class="plain">
+    <div class="band-in narrow">
+      <h2>메일에 적어 주시면 빨리 도와드릴 수 있어요</h2>
+      <ul class="checks">
+        <li>가입한 로그인 방식(카카오·구글·애플)</li>
+        <li>앱에서 쓰는 닉네임</li>
+        <li>휴대폰 기종과 앱 버전</li>
+        <li>문제가 생긴 화면의 캡처</li>
+      </ul>
 
-  <h2>자주 묻는 질문</h2>
+      <h2>요청별 안내</h2>
+      <div class="cases">
+        <div class="case"><span class="case-q">게시물·사용자 신고</span><span class="case-a">앱에서 해당 추억·댓글·프로필의 신고 버튼을 눌러 주세요.</span></div>
+        <div class="case"><span class="case-q">신고 처리나 이용 제한에 이의가 있어요</span><span class="case-a">조치를 안 날부터 30일 안에 {mail}로 알려 주세요.</span></div>
+        <div class="case"><span class="case-q">내 개인정보를 열람·정정·삭제하고 싶어요</span><span class="case-a">앱에서 직접 할 수 없는 요청은 {mail}로 보내 주세요. 본인인지 확인하고, 요청을 받은 날부터 10일 안에 결과를 알려 드려요.</span></div>
+        <div class="case"><span class="case-q">가족을 떠났는데 내가 기록한 경로를 지우고 싶어요</span><span class="case-a">{mail}로 요청해 주세요.</span></div>
+        <div class="case"><span class="case-q">회원이 아닌데 내 권리를 침해하는 게시물이 있어요</span><span class="case-a">게시물을 알아볼 수 있는 정보와 침해라고 생각하는 이유를 적어 {mail}로 보내 주세요.</span></div>
+        <div class="case"><span class="case-q">환불</span><span class="case-a">결제한 앱마켓의 환불 절차로 신청해요. 아래 질문을 참고하세요.</span></div>
+        <div class="case"><span class="case-q">탈퇴</span><span class="case-a">앱에서 하거나, 앱이 없다면 <a href={href('/account/delete/')}>계정 삭제 안내</a>를 따라 주세요.</span></div>
+      </div>
+    </div>
+  </section>
 
-  <FaqEntries />
+  <section class="band faq-band">
+    <div class="band-in narrow">
+      <h2 class="band-title">자주 묻는 질문</h2>
+      <FaqEntries mode="details" />
+    </div>
+  </section>
 </Base>

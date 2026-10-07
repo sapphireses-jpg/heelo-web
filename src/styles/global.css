@@ -120,6 +120,32 @@ th { background: var(--color-surface-inset); }
 .faq summary { font-size: 1.0625rem; font-weight: 800; line-height: 1.4; cursor: pointer; padding: var(--space-2) 0; }
 .faq[open] summary { margin-bottom: var(--space-2); }
 .faq p { color: var(--color-muted); margin: var(--space-2) 0; }
+/* 하위 페이지(고객센터 등): 회색 판 + 마스코트, 체크 줄, 요청별 안내 줄, 질문 카드(HP-02) */
+.sub-hero-band { padding: clamp(16px, 3vw, 40px) clamp(16px, 3vw, 48px) clamp(80px, 9vw, 130px); }
+.sub-hero { position: relative; max-width: 1200px; margin: 0 auto; border-radius: clamp(28px, 3vw, 44px); background: #eef2f6; padding: clamp(36px, 5.5vw, 80px) clamp(28px, 5.5vw, 80px); display: flex; flex-direction: column; justify-content: center; min-height: clamp(0px, 30vw, 400px); }
+.sub-hero-text { position: relative; z-index: 1; max-width: 560px; }
+.sub-hero h1 { font-size: clamp(2.25rem, 4.6vw, 3.5rem); margin: 20px 0 0; }
+.sub-hero p { color: var(--color-muted); font-size: 1.0625rem; font-weight: 600; margin: 16px 0 0; }
+.sub-hero .button { margin-top: 12px; min-height: 56px; padding: 0 28px; font-size: 1.0625rem; font-weight: 900; }
+.sub-mascot { width: 140px; height: auto; margin: 24px auto -90px; display: block; position: relative; z-index: 1; }
+@media (min-width: 900px) { .sub-mascot { position: absolute; right: clamp(24px, 6vw, 96px); bottom: -80px; width: clamp(200px, 24vw, 300px); margin: 0; } }
+.pill-white { background: #fff; }
+.checks { list-style: none; padding: 0; margin: var(--space-3) 0 var(--space-5); }
+.checks li { display: flex; align-items: center; gap: 14px; min-height: 56px; font-size: 1.0625rem; font-weight: 700; margin: 0; }
+.checks li::before { content: ""; flex: none; width: 22px; height: 22px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='%231D6EF5' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat; }
+.cases { margin: var(--space-3) 0 0; }
+.case { display: flex; flex-wrap: wrap; gap: 6px 48px; padding: 20px 0; border-top: 1px solid var(--color-line); }
+.case-q { flex: 1 1 260px; font-size: 1.0625rem; font-weight: 800; line-height: 1.5; }
+.case-a { flex: 2 1 340px; font-size: 0.9375rem; font-weight: 600; line-height: 1.65; color: var(--color-muted); }
+.faq summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: ""; flex: none; width: 24px; height: 24px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9.5L12 15.5L18 9.5' fill='none' stroke='%239AA4B4' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat; transition: transform 200ms ease-out; }
+.faq[open] summary::after { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { .faq summary::after { transition: none; } }
+.faq-band .faq { background: #fff; border-radius: 24px; padding: 0 24px 4px; margin: 12px 0; }
+.faq-band .faq summary { min-height: 72px; padding: 20px 0; }
+.faq-band .faq[open] summary { margin-bottom: 0; }
+.faq-band .faq p { margin: 0 0 20px; line-height: 1.7; }
 .download-band { text-align: center; padding: clamp(64px, 9vw, 120px) 0 clamp(48px, 7vw, 96px); }
 .download-mascot { width: 160px; height: auto; margin: 0 auto; display: block; }
 .download-title { font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 900; letter-spacing: -0.035em; margin: 16px 0 24px; }
