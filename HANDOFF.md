@@ -9,7 +9,7 @@
 - Astro 정적 출력, 브라우저 JS 0. 설정은 `src/config/site.mjs` 한 곳에 있습니다.
 - 페이지: `/`, `/support/`, `/account/delete/`, `/legal/`, `/legal/<문서>/`, `/legal/<문서>/<버전>/`, 404
 - 약관: 정식 버전이 없어, 이용약관·개인정보 처리방침·위치기반서비스 이용약관 세 문서는 앱 테스트용 **임시 초안**(`src/content/legal/<문서>/preview.md`)을 보여 줍니다(맨 위 초안 안내, noindex). 원본은 앱 저장소 `docs/legal/public/`이고 `npm run sync-legal-preview`로 다시 가져옵니다. 법률 검토가 끝나 오너가 알려 주면 「법률 검토 쟁점」 절과 검토용 주석을 뺀 본문으로 `v1.0.md`(published)를 만들고 preview는 지웁니다.
-- 출시 전(`launchReady: false`)에는 모든 페이지에 `noindex, nofollow`가 붙습니다.
+- 출시 전(`launchReady: false`)에는 모든 페이지에 `noindex, nofollow`가 붙습니다. 출시일 해제 순서는 `docs/LAUNCH.md`.
 - 배포: GitHub Actions → Pages. push할 때와 매일 00:05 KST에 다시 빌드합니다.
 - 주소: `https://heelo.app/` (base `/`, `public/CNAME`). 예전 임시 주소 `https://sapphireses-jpg.github.io/heelo-web/`는 도메인 연결 뒤 GitHub가 새 주소로 넘겨 줍니다. 저장소 `sapphireses-jpg/heelo-web`
 
