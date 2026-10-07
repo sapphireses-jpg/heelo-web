@@ -1,102 +1,129 @@
 ---
 import Base from '../layouts/Base.astro';
 import StoreLinks from '../components/StoreLinks.astro';
-import ScreenShot from '../components/ScreenShot.astro';
+import { existsSync } from 'node:fs';
 import FaqEntries from '../components/FaqEntries.astro';
 import { site } from '../config/site.mjs';
 import { href } from '../lib/url.mjs';
 const s = site.serviceName;
-// 줄 아이콘(앱 IC 아이콘 세트 r2의 24 규격 경로). 타일 없이 선만.
-const ic = {
-  route: 'M4 19 C8 19 8 12 12 12 S16 5 20 5 M4 19 L4 19.01',
-  flag: 'M5 21 V4 M5 4.5 H17 L14.5 8.2 L17 12 H5',
-  pin: 'M12 21 c-4.2 -4.6 -6.5 -8 -6.5 -11 a6.5 6.5 0 0 1 13 0 c0 3 -2.3 6.4 -6.5 11 Z M14.4 10 a2.4 2.4 0 1 1 -4.8 0 a2.4 2.4 0 1 1 4.8 0',
-  map: 'M3 6.5 L9 4 L15 6.5 L21 4 V17.5 L15 20 L9 17.5 L3 20 Z M9 4 V17.5 M15 6.5 V20',
-  image: 'M5 4.5 h14 a1.5 1.5 0 0 1 1.5 1.5 v12 a1.5 1.5 0 0 1 -1.5 1.5 H5 A1.5 1.5 0 0 1 3.5 18 V6 A1.5 1.5 0 0 1 5 4.5 Z M3.5 16 L8.5 11 L13 15.5 L15.5 13 L20.5 18',
-  family: 'M12 8 a3 3 0 1 1 -6 0 a3 3 0 1 1 6 0 M3.5 19.5 c0 -3.4 2.4 -5.6 5.5 -5.6 s5.5 2.2 5.5 5.6 M15.5 5.2 a2.8 2.8 0 0 1 0 5.6 M17 13.9 c2.3 .5 3.5 2.6 3.5 5.6',
-  heart: 'M12 20 C6 15.6 3.5 12.6 3.5 9.3 A4.3 4.3 0 0 1 12 7.2 a4.3 4.3 0 0 1 8.5 2.1 c0 3.3 -2.5 6.3 -8.5 10.7 Z',
-};
-
-// 기능 소개 7개: 문안은 docs/CONTENT.md 그대로(「—」 앞은 제목, 뒤는 한 줄 설명). shot = public/screens/<이름>.webp (있을 때만 보임).
-const features = [
-  { icon: 'route', t: '산책 기록', d: '산책을 시작하면 걸은 길과 시간, 거리를 기록해요.', shot: 'feature-walk' },
-  { icon: 'flag', t: '새로운 길', d: '처음 걸어 본 길은 따로 모아 보여 드려요. 새로운 길은 한국에서 걸은 산책에서 확정돼요.', shot: 'feature-newroad' },
-  { icon: 'pin', t: '장소 발견', d: '산책하며 지나간 공원과 장소가 차곡차곡 쌓여요.', shot: 'feature-discover' },
-  { icon: 'map', t: '생애지도', d: '지금까지 함께 걸은 길을 생애지도에서 봐요. 동네 단계는 누구나, 시·군·구, 시·도, 국가 단위 보기는 Plus에서 볼 수 있어요.', shot: 'feature-lifemap' },
-  { icon: 'image', t: '추억', d: '사진 최대 10장과 글로 그날을 남겨요. 전체·팔로워·나만 보기 중에서 공개 범위를 골라요. 가족과 함께 기록하는 강아지의 추억은 나만 보기 대신 가족만 보기를 골라요.', shot: 'feature-memory' },
-  { icon: 'family', t: '가족과 함께', d: 'Plus 이용자가 대표가 되어 가족을 최대 4명까지 초대하고, 같은 강아지를 함께 기록해요.', shot: 'feature-family' },
-  { icon: 'heart', t: '언제까지나', d: '강아지가 곁을 떠난 뒤에도 함께한 기록은 추모 프로필로 그대로 간직할 수 있어요.', shot: 'feature-memorial' },
+// 기능 소개 6칸(벤토). 제목은 한 줄로 줄인 새 문안(디자이너 HP-01), 아래 작은 글은 문안 CONTENT 그대로(제한·조건을 잃지 않게).
+const bento = [
+  { k: 'walk', label: '산책 기록', title: '걸은 길과 시간, 거리를 기록해요', desc: '산책을 시작하면 걸은 길과 시간, 거리를 기록해요.', shot: 'feature-walk', wide: true },
+  { k: 'newroad', label: '새로운 길', title: '처음 걸어 본 길은 따로 모아요', desc: '처음 걸어 본 길은 따로 모아 보여 드려요. 새로운 길은 한국에서 걸은 산책에서 확정돼요.', art: 'flower-path' },
+  { k: 'lifemap', label: '생애지도', title: '함께 걸은 길을 한 지도에서 봐요', desc: '지금까지 함께 걸은 길을 생애지도에서 봐요. 동네 단계는 누구나, 시·군·구, 시·도, 국가 단위 보기는 Plus에서 볼 수 있어요.', shot: 'feature-lifemap' },
+  { k: 'memory', label: '추억', title: '사진과 글로 그날을 남겨요', desc: '사진 최대 10장과 글로 그날을 남겨요. 전체·팔로워·나만 보기 중에서 공개 범위를 골라요. 가족과 함께 기록하는 강아지의 추억은 나만 보기 대신 가족만 보기를 골라요.', shot: 'feature-memory' },
+  { k: 'family', label: '가족과 함께', title: '가족과 같은 강아지를 함께 기록해요', desc: 'Plus 이용자가 대표가 되어 가족을 최대 4명까지 초대하고, 같은 강아지를 함께 기록해요.', mascots: true },
+  { k: 'memorial', label: '언제까지나', title: '함께한 기록은 추모 프로필로 간직해요', desc: '강아지가 곁을 떠난 뒤에도 함께한 기록은 추모 프로필로 그대로 간직할 수 있어요.', shot: 'feature-memorial', wide: true },
 ];
+const exists = (f) => existsSync(f);
 ---
-<Base description={`오늘 걸은 산책부터 처음 가 본 길, 함께 찾은 장소와 추억까지. 우리 아이가 걸어온 모든 길을 ${s}에서 한 지도로 모아 보세요.`}>
-  <section class="hero">
-    {/* 마스코트 한 마리(오너 D20: 한 화면 하나, 앱 화면 이미지와 겹치지 않게). 디자이너 3D 원본을 WebP로. */}
-    <img class="hero-mascot" src={href('/images/mascot-h.webp')} alt="" width="360" height="360" decoding="async">
-    <h1>강아지와 함께 걸은 길을, <span class="hl">평생</span> 남겨요.</h1>
-    <p>오늘 걸은 산책부터 처음 가 본 길, 함께 찾은 장소와 추억까지. 우리 아이가 걸어온 모든 길을 {s}({site.serviceNameReading})에서 한 지도로 모아 보세요.</p>
-    <StoreLinks />
-    <ScreenShot name="hero" alt={`${s} 앱 화면`} class="shot-hero" />
-  </section>
-
-  <section>
-    <h2>이런 걸 할 수 있어요</h2>
-    <ul class="features">
-      {features.map((f) => (
-        <li class="feature">
-          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={ic[f.icon]} stroke="#1560DE" stroke-width="1.9"></path></svg>
-          <div>
-            <strong>{f.t}</strong>
-            <p>{f.d}</p>
-            <ScreenShot name={f.shot} alt={`${f.t} 화면`} />
-          </div>
-        </li>
-      ))}
-    </ul>
-  </section>
-
-  <section>
-    <h2>위치와 기록을 이렇게 지켜요</h2>
-    <ul>
-      <li>위치는 산책을 시작해서 끝낼 때까지만 기록해요. 홈 화면 날씨에는 대략적인 위치만 쓰고 저장하지 않아요.</li>
-      <li>산책 경로는 나와, 경로 열람에 동의한 가족만 볼 수 있어요. 다른 이용자에게 실시간 위치나 경로는 보이지 않아요.</li>
-      <li>추억 사진은 촬영 위치 정보를 지운 뒤 올려요.</li>
-      <li>광고용 추적을 하지 않고, 앱과 이 홈페이지에 분석 도구를 넣지 않아요. 지도(Mapbox)에는 기기 위치를 넘기지 않고, 사용 통계 수집도 꺼 두었어요.</li>
-    </ul>
-    <p><a href={href('/legal/privacy/')}>개인정보 처리방침 보기</a> · <a href={href('/legal/location/')}>위치기반서비스 이용약관 보기</a></p>
-  </section>
-
-  <section>
-    <h2>요금</h2>
-    <div class="card plan">
-      <h3>무료</h3>
-      <p>산책 기록, 새로운 길, 장소 발견, 생애지도(동네 단계), 추억 100개까지</p>
+<Base
+  wide
+  description={`오늘 걸은 산책부터 처음 가 본 길, 함께 찾은 장소와 추억까지. 우리 아이가 걸어온 모든 길을 ${s}에서 한 지도로 모아 보세요.`}
+>
+  <section class="hero-band">
+    <div class="hero-panel">
+      <div class="hero-text">
+        <span class="hero-eyebrow">{s}({site.serviceNameReading})</span>
+        <h1>강아지와 함께 걸은 길을, 평생 남겨요.</h1>
+        <p>오늘 걸은 산책부터 처음 가 본 길, 함께 찾은 장소와 추억까지. 우리 아이가 걸어온 모든 길을 {s}에서 한 지도로 모아 보세요.</p>
+        <div class="hero-cta"><StoreLinks /></div>
+      </div>
+      <img class="hero-mascot" src={href('/images/mascot-h-900.webp')} alt={`${s} 마스코트`} width="900" height="900" decoding="async">
     </div>
-    <div class="card plan">
-      <h3>{s} Plus</h3>
-      <p><span class="price">월 {site.priceMonthly} · 연 {site.priceYearly}</span> <span class="muted">(부가세 포함)</span></p>
+  </section>
+
+  <section class="band" id="features">
+    <div class="band-in">
+      <h2 class="band-title">이런 걸 할 수 있어요</h2>
+      <div class="bento">
+        {bento.map((c) => (
+          <article class={`b-card b-${c.k}${c.wide ? ' b-wide' : ''}`}>
+            <span class="pill">{c.label}</span>
+            <h3 class="b-title">{c.title}</h3>
+            <p class="b-desc">{c.desc}</p>
+            {c.shot && exists(`public/screens/${c.shot}.webp`) && (
+              <div class="b-phone"><img src={href(`/screens/${c.shot}.webp`)} alt={`${c.label} 화면`} loading="lazy" decoding="async"></div>
+            )}
+            {c.art && <img class="b-art" src={href(`/images/${c.art}.webp`)} alt="" loading="lazy" decoding="async">}
+            {c.mascots && (
+              <div class="b-mascots">
+                <img src={href('/images/mascot-e1.webp')} alt="" loading="lazy" decoding="async">
+                <img src={href('/images/mascot-o.webp')} alt="" loading="lazy" decoding="async">
+                <img src={href('/images/mascot-e2.webp')} alt="" loading="lazy" decoding="async">
+              </div>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="screens-band">
+    <div class="band-in">
+      <h2 class="band-title">앱에서는 이렇게 보여요</h2>
+      <div class="screens">
+        <img src={href('/screens/app-profile.webp')} alt={`${s} 프로필 화면`} loading="lazy" decoding="async">
+        <img src={href('/screens/hero.webp')} alt={`${s} 산책 요약 화면`} loading="lazy" decoding="async">
+        <img src={href('/screens/app-memory-feed.webp')} alt={`${s} 추억 피드 화면`} loading="lazy" decoding="async">
+      </div>
+    </div>
+  </section>
+
+  <section class="plain">
+    <div class="band-in narrow">
+      <h2>위치와 기록을 이렇게 지켜요</h2>
       <ul>
-        <li>추억 개수 제한 없음</li>
-        <li>생애지도 시·군·구, 시·도, 국가 단위 보기</li>
-        <li>가족 대표가 되어 최대 4명 초대</li>
+        <li>위치는 산책을 시작해서 끝낼 때까지만 기록해요. 홈 화면 날씨에는 대략적인 위치만 쓰고 저장하지 않아요.</li>
+        <li>산책 경로는 나와, 경로 열람에 동의한 가족만 볼 수 있어요. 다른 이용자에게 실시간 위치나 경로는 보이지 않아요.</li>
+        <li>추억 사진은 촬영 위치 정보를 지운 뒤 올려요.</li>
+        <li>광고용 추적을 하지 않고, 앱과 이 홈페이지에 분석 도구를 넣지 않아요. 지도(Mapbox)에는 기기 위치를 넘기지 않고, 사용 통계 수집도 꺼 두었어요.</li>
+      </ul>
+      <p><a href={href('/legal/privacy/')}>개인정보 처리방침 보기</a> · <a href={href('/legal/location/')}>위치기반서비스 이용약관 보기</a></p>
+    </div>
+  </section>
+
+  <section class="plain">
+    <div class="band-in narrow">
+      <h2>요금</h2>
+      <div class="plans">
+        <div class="plan">
+          <h3>무료</h3>
+          <p>산책 기록, 새로운 길, 장소 발견, 생애지도(동네 단계), 추억 100개까지</p>
+        </div>
+        <div class="plan plan-plus">
+          <h3>{s} Plus</h3>
+          <p><span class="price">월 {site.priceMonthly} · 연 {site.priceYearly}</span> <span class="muted">(부가세 포함)</span></p>
+          <ul>
+            <li>추억 개수 제한 없음</li>
+            <li>생애지도 시·군·구, 시·도, 국가 단위 보기</li>
+            <li>가족 대표가 되어 최대 4명 초대</li>
+          </ul>
+        </div>
+      </div>
+      <ul>
+        <li>App Store·Google Play에서 결제하고, 해지하기 전까지 같은 주기로 자동 갱신돼요. 무료 체험은 없어요.</li>
+        <li>해지는 각 앱마켓의 구독 관리에서 언제든 할 수 있어요. 해지해도 지금까지의 기록은 그대로 남아요.</li>
+        <li>청약철회와 환불 조건은 <a href={href('/legal/terms/')}>이용약관</a> 제11조에서 확인하세요.</li>
+        <li>만 19세 미만은 법정대리인의 동의를 받은 뒤 결제해 주세요.</li>
       </ul>
     </div>
-    <ul>
-      <li>App Store·Google Play에서 결제하고, 해지하기 전까지 같은 주기로 자동 갱신돼요. 무료 체험은 없어요.</li>
-      <li>해지는 각 앱마켓의 구독 관리에서 언제든 할 수 있어요. 해지해도 지금까지의 기록은 그대로 남아요.</li>
-      <li>청약철회와 환불 조건은 <a href={href('/legal/terms/')}>이용약관</a> 제11조에서 확인하세요.</li>
-      <li>만 19세 미만은 법정대리인의 동의를 받은 뒤 결제해 주세요.</li>
-    </ul>
   </section>
 
-  <section>
-    <h2>자주 묻는 질문</h2>
-    <FaqEntries only={['cancel', 'location', 'family-size', 'photo-location', 'withdraw']} mode="details" />
-    <p><a href={href('/support/')}>고객센터에서 더 보기</a></p>
+  <section class="plain">
+    <div class="band-in narrow">
+      <h2>자주 묻는 질문</h2>
+      <FaqEntries only={['cancel', 'location', 'family-size', 'photo-location', 'withdraw']} mode="details" />
+      <p><a href={href('/support/')}>고객센터에서 더 보기</a></p>
+    </div>
   </section>
 
-  <section id="download">
-    <h2>오늘 산책부터 기록해 보세요.</h2>
-    <StoreLinks />
-    <p>iPhone·Android에서 쓸 수 있어요. 만 14세 이상 가입할 수 있어요.</p>
+  <section class="download-band" id="download">
+    <div class="band-in">
+      <img class="download-mascot" src={href('/images/mascot-e1.webp')} alt="" width="480" height="480" loading="lazy" decoding="async">
+      <h2 class="download-title">오늘 산책부터 기록해 보세요.</h2>
+      <StoreLinks />
+      <p class="muted">iPhone·Android에서 쓸 수 있어요. 만 14세 이상 가입할 수 있어요.</p>
+    </div>
   </section>
 </Base>

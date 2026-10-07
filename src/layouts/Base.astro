@@ -3,8 +3,8 @@ import '../styles/global.css';
 import { site } from '../config/site.mjs';
 import { href } from '../lib/url.mjs';
 
-interface Props { title?: string; description?: string; noindex?: boolean; ogImage?: string }
-const { title, description, noindex, ogImage } = Astro.props;
+interface Props { title?: string; description?: string; noindex?: boolean; ogImage?: string; wide?: boolean }
+const { title, description, noindex, ogImage, wide } = Astro.props;
 const abs = (path: string) => new URL(href(path), site.url).href;
 const b = site.business;
 const regDigits = b.regNo.replace(/\D/g, '');
@@ -33,7 +33,7 @@ const regDigits = b.regNo.replace(/\D/g, '');
 </head>
 <body>
   <header class="site-header">
-    <div class="wrap">
+    <div class={wide ? 'wrap wrap-wide' : 'wrap'}>
       <a class="logo" href={href('/')}>{site.serviceName}</a>
       <nav aria-label="주 메뉴">
         <a href={href('/')}>서비스 소개</a>
@@ -43,10 +43,10 @@ const regDigits = b.regNo.replace(/\D/g, '');
     </div>
   </header>
 
-  <main class="wrap"><slot /></main>
+  {wide ? <main><slot /></main> : <main class="wrap"><slot /></main>}
 
   <footer class="site-footer">
-    <div class="wrap">
+    <div class={wide ? 'wrap wrap-wide' : 'wrap'}>
       <nav aria-label="정책">
         <ul>
           <li><a href={href('/legal/terms/')}>이용약관</a></li>
