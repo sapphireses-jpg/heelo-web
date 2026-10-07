@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import StoreLinks from '../../components/StoreLinks.astro';
 import { site } from '../../config/site.mjs';
+import { href } from '../../lib/url.mjs';
 const s = site.serviceName;
 const open = site.invite.openUrlTemplate;
 // 시안 C-14a(앱 저장소 docs/design/family-v1/screens/C-14-invite-landing.dc.html)의 「함께하게 되는 것」. 아이콘 경로도 시안 그대로.
@@ -16,33 +17,45 @@ const shares = [
   description={`함께 키우는 강아지의 산책과 추억을 가족이 같이 기록해요. ${s}에서 초대 코드를 입력해 주세요.`}
   ogImage="/og/invite.png"
   noindex
+  wide
 >
-  <section class="invite">
-    <div class="invite-card">
-      <h1>가족이 {s}로<br><span class="hl">초대</span>했어요</h1>
-      <p>함께 키우는 강아지의 산책과 추억을<br>가족이 같이 기록해요.</p>
-    </div>
-
-    <div class="invite-share">
-      <p class="invite-label">함께하게 되는 것</p>
-      {shares.map((x) => (
-        <div class="invite-row">
-          <span class="invite-icon"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={x.d} stroke="#1560DE" stroke-width="1.9"></path></svg></span>
-          <span><strong>{x.t}</strong><span class="muted">{x.s}</span></span>
+  <section class="invite-band">
+    <div class="invite">
+      <div class="invite-card">
+        <span class="pill">가족 초대</span>
+        <h1>가족이 {s}로<br>초대했어요</h1>
+        <p>함께 키우는 강아지의 산책과 추억을 가족이 같이 기록해요.</p>
+        <div class="invite-mascots">
+          <img src={href('/images/mascot-e1.webp')} alt="" width="300" height="300" decoding="async">
+          <img src={href('/images/mascot-o.webp')} alt="" width="300" height="300" decoding="async">
+          <img src={href('/images/mascot-e2.webp')} alt="" width="300" height="300" decoding="async">
         </div>
-      ))}
-    </div>
+      </div>
 
-    <div class="invite-actions">
-      <StoreLinks />
-      {open && <p><a id="invite-open" class="invite-btn" href="#" hidden data-template={open}>앱에서 열기</a></p>}
-      <p class="invite-code-row">
-        <span class="muted">코드</span>
-        <span id="invite-code" class="invite-code" aria-live="polite">초대 링크를 다시 열어 주세요</span>
-        <button id="invite-copy" type="button" class="invite-copy" hidden>복사</button>
-      </p>
-      <noscript><p class="muted">초대 코드는 받은 메시지에서 확인해 앱에 입력해 주세요.</p></noscript>
-      <p class="muted">7일이 지났거나 이미 쓴 초대는 쓸 수 없어요. 초대한 가족에게 새 링크를 부탁해 주세요.</p>
+      <div class="invite-share">
+        <p class="invite-label">함께하게 되는 것</p>
+        {shares.map((x) => (
+          <div class="invite-row">
+            <span class="invite-icon"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={x.d} stroke="#1560DE" stroke-width="1.9"></path></svg></span>
+            <span><strong>{x.t}</strong><span class="muted">{x.s}</span></span>
+          </div>
+        ))}
+      </div>
+
+      <div class="invite-actions">
+        {open && <p><a id="invite-open" class="invite-btn" href="#" hidden data-template={open}>앱에서 열기</a></p>}
+        <div class="store-row"><StoreLinks /></div>
+      </div>
+
+      <div class="invite-note">
+        <p class="invite-code-row">
+          <span class="muted">코드</span>
+          <span id="invite-code" class="invite-code" aria-live="polite">초대 링크를 다시 열어 주세요</span>
+          <button id="invite-copy" type="button" class="invite-copy" hidden>복사</button>
+        </p>
+        <noscript><p>초대 코드는 받은 메시지에서 확인해 앱에 입력해 주세요.</p></noscript>
+        <p>7일이 지났거나 이미 쓴 초대는 쓸 수 없어요. 초대한 가족에게 새 링크를 부탁해 주세요.</p>
+      </div>
     </div>
   </section>
 
