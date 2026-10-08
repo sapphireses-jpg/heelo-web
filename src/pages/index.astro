@@ -9,11 +9,14 @@ const s = site.serviceName;
 // 기능 소개 6칸(벤토). 제목은 한 줄로 줄인 새 문안(디자이너 HP-01), 아래 작은 글은 문안 CONTENT 그대로(제한·조건을 잃지 않게).
 const bento = [
   { k: 'walk', label: '산책 기록', title: '걸은 길과 시간, 거리를 기록해요', desc: '산책을 시작하면 걸은 길과 시간, 거리를 기록해요.', shot: 'feature-newroad', wide: true },
-  { k: 'newroad', label: '새로운 길', title: '처음 걸어 본 길은 따로 모아요', desc: '처음 걸어 본 길은 따로 모아 보여 드려요. 새로운 길은 한국에서 걸은 산책에서 확정돼요.', art: 'flower-path' },
   { k: 'lifemap', label: '생애지도', title: '함께 걸은 길을 한 지도에서 봐요', desc: '지금까지 함께 걸은 길을 생애지도에서 봐요.', shot: 'feature-lifemap' },
   { k: 'memory', label: '추억', title: '사진과 글로 그날을 남겨요', desc: '사진 최대 10장과 글로 그날을 남겨요. 전체·팔로워·나만 보기 중에서 공개 범위를 골라요. 가족과 함께 기록하는 강아지의 추억은 나만 보기 대신 가족만 보기를 골라요.', shot: 'feature-memory' },
-  { k: 'family', label: '가족과 함께', title: '가족과 같은 강아지를 함께 기록해요', desc: '대표가 가족을 최대 4명까지 초대하고, 같은 강아지를 함께 기록해요.', mascots: true },
-  { k: 'memorial', label: '언제까지나', title: '함께한 기록은 추모 프로필로 간직해요', desc: '강아지가 곁을 떠난 뒤에도 함께한 기록은 추모 프로필로 그대로 간직할 수 있어요.', shot: 'feature-memorial', wide: true },
+  { k: 'family', label: '가족과 함께', title: '가족과 같은 강아지를 함께 기록해요', desc: '대표가 가족을 최대 4명까지 초대하고, 같은 강아지를 함께 기록해요.', mascots: true, wide: true },
+];
+const screens = [
+  { f: 'feature-walk', t: '산책' },
+  { f: 'feature-lifemap', t: '생애지도' },
+  { f: 'feature-memory', t: '추억' },
 ];
 const exists = (f) => existsSync(f);
 ---
@@ -63,9 +66,12 @@ const exists = (f) => existsSync(f);
     <div class="band-in">
       <h2 class="band-title">앱에서는 이렇게 보여요</h2>
       <div class="screens">
-        <img src={href('/screens/app-profile.webp')} alt={`${s} 프로필 화면`} loading="lazy" decoding="async">
-        <img src={href('/screens/hero.webp')} alt={`${s} 산책 요약 화면`} loading="lazy" decoding="async">
-        <img src={href('/screens/app-memory-feed.webp')} alt={`${s} 추억 피드 화면`} loading="lazy" decoding="async">
+        {screens.map((x) => (
+          <figure>
+            <img src={href(`/screens/${x.f}.webp`)} alt={`${s} ${x.t} 화면`} loading="lazy" decoding="async">
+            <figcaption>{x.t}</figcaption>
+          </figure>
+        ))}
       </div>
     </div>
   </section>
@@ -94,7 +100,7 @@ const exists = (f) => existsSync(f);
       <img class="download-mascot" src={href('/images/mascot-e1.webp')} alt="" width="480" height="480" loading="lazy" decoding="async">
       <h2 class="download-title">오늘 산책부터 기록해 보세요.</h2>
       <StoreLinks />
-      <p class="muted">iPhone·Android에서 쓸 수 있어요. 만 14세 이상 가입할 수 있어요.</p>
+      <p class="muted">iPhone·Android에서 쓸 수 있고, 만 14세 이상 가입할 수 있어요.</p>
     </div>
   </section>
 </Base>
