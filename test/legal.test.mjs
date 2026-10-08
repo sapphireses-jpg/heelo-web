@@ -1,7 +1,7 @@
 // 버전 전환 확인용 가짜 문서. 배포 결과물에는 들어가지 않습니다.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { currentVersion, upcomingVersion, sortVersions, todayKST, sortBeta, pickBetaTarget } from '../src/lib/legal.mjs';
+import { currentVersion, upcomingVersion, sortVersions, todayKST, sortBeta, pickBetaTarget, betaPrevious } from '../src/lib/legal.mjs';
 
 const docs = [
   { version: 'v1.0', announced: '2026-01-01', effective: '2026-01-08', status: 'published' },
@@ -52,4 +52,12 @@ test('베타 sync 대상: 게시된 같은 버전은 건드리지 않고, 새 �
   assert.deepEqual(pickBetaTarget('terms', 'v0.10', 'c', pub), { path: 'src/content/legal/beta/terms/v0.10.md', action: 'write' });
   assert.equal(pickBetaTarget('terms', 'v0.10', 'c', pub, () => true).action, 'skip');
   assert.equal(pickBetaTarget('terms', 'v0.9', 'a', null).path, 'src/content/legal/beta/terms.md');
+});
+
+test('베타: 시행일이 오늘 뒤인 새 버전만 「그 전까지는 이전 버전」 대상(같은 날 시행하는 이전 버전은 제외)', () => {
+  const v = [{ version: 'v0.12', effective: '2026-11-09' }, { version: 'v0.11', effective: '2026-10-13' }, { version: 'v0.10', effective: '2026-10-13' }];
+  assert.equal(betaPrevious(v, 'v0.12', '2026-10-10')?.version, 'v0.11');
+  assert.equal(betaPrevious(v, 'v0.12', '2026-11-09'), undefined);
+  assert.equal(betaPrevious(v, 'v0.11', '2026-10-10'), undefined);
+  assert.equal(betaPrevious(v, 'v0.10', '2026-10-10'), undefined);
 });

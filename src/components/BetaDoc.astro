@@ -1,6 +1,6 @@
 ---
 import { render } from 'astro:content';
-import { DOCS, ymd } from '../lib/legal.mjs';
+import { DOCS, ymd, todayKST, betaPrevious } from '../lib/legal.mjs';
 import { href } from '../lib/url.mjs';
 import { site } from '../config/site.mjs';
 
@@ -10,8 +10,10 @@ const { Content } = await render(entry);
 const d = entry.data;
 const latest = versions[0].data.version;
 const verPath = (v) => href(`/legal/beta/${doc}/${v}/`);
+const prev = betaPrevious(versions.map((v) => v.data), d.version, todayKST());
 ---
 <p class="notice">지금 보시는 문서는 {site.serviceName} 비공개 베타 기간에 적용돼요({d.version} 베타). 정식 출시 때 바뀐 문서를 다시 알리고 동의를 받아요.</p>
+{prev && <p class="notice">{ymd(d.effective).replace(/^(\d+)-0?(\d+)-0?(\d+)$/, '$1년 $2월 $3일')}부터 적용돼요. 그 전까지는 <a href={verPath(prev.version)}>{prev.version}</a>이 적용 중이에요.</p>}
 {d.version !== latest && <p class="notice">이전 버전이에요. 최신 버전은 <a href={verPath(latest)}>{latest}</a>이에요.</p>}
 {d.status === 'draft' && <p class="notice">초안(draft)이에요. 로컬 미리 보기에서만 보이고 배포되지 않아요.</p>}
 {d.effective && <p class="muted">버전 {d.version} · 시행일 {ymd(d.effective)}{d.announced && ` · 공고일 ${ymd(d.announced)}`}</p>}
