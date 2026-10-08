@@ -13,8 +13,6 @@ export const site = {
   contactEmail: 'support@sojaeha.studio',
   replyTime: '3영업일', // 이용약관 제18조
   appDeletePath: '홈 화면 오른쪽 위 설정 아이콘 › 설정 › 회원 탈퇴',
-  priceMonthly: '4,900원',
-  priceYearly: '39,000원',
 
   // 약관 초안을 가져오는 sync 스크립트만 씁니다(로컬). 앱 저장소는 읽기만 합니다.
   appRepoPath: '~/projects/tailory',
@@ -31,10 +29,6 @@ export const site = {
   subscriptionLinks: {
     apple: 'https://apps.apple.com/account/subscriptions',
     google: `https://play.google.com/store/account/subscriptions?package=${androidPackage}`,
-  },
-  helpLinks: {
-    apple: 'https://support.apple.com/ko-kr/118428',
-    google: 'https://support.google.com/googleplay/answer/7018481?hl=ko',
   },
 
   business: {

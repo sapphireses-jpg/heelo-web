@@ -10,9 +10,9 @@ const s = site.serviceName;
 const bento = [
   { k: 'walk', label: '산책 기록', title: '걸은 길과 시간, 거리를 기록해요', desc: '산책을 시작하면 걸은 길과 시간, 거리를 기록해요.', shot: 'feature-newroad', wide: true },
   { k: 'newroad', label: '새로운 길', title: '처음 걸어 본 길은 따로 모아요', desc: '처음 걸어 본 길은 따로 모아 보여 드려요. 새로운 길은 한국에서 걸은 산책에서 확정돼요.', art: 'flower-path' },
-  { k: 'lifemap', label: '생애지도', title: '함께 걸은 길을 한 지도에서 봐요', desc: '지금까지 함께 걸은 길을 생애지도에서 봐요. 동네 단계는 누구나, 시·군·구, 시·도, 국가 단위 보기는 Plus에서 볼 수 있어요.', shot: 'feature-lifemap' },
+  { k: 'lifemap', label: '생애지도', title: '함께 걸은 길을 한 지도에서 봐요', desc: '지금까지 함께 걸은 길을 생애지도에서 봐요.', shot: 'feature-lifemap' },
   { k: 'memory', label: '추억', title: '사진과 글로 그날을 남겨요', desc: '사진 최대 10장과 글로 그날을 남겨요. 전체·팔로워·나만 보기 중에서 공개 범위를 골라요. 가족과 함께 기록하는 강아지의 추억은 나만 보기 대신 가족만 보기를 골라요.', shot: 'feature-memory' },
-  { k: 'family', label: '가족과 함께', title: '가족과 같은 강아지를 함께 기록해요', desc: 'Plus 이용자가 대표가 되어 가족을 최대 4명까지 초대하고, 같은 강아지를 함께 기록해요.', mascots: true },
+  { k: 'family', label: '가족과 함께', title: '가족과 같은 강아지를 함께 기록해요', desc: '대표가 가족을 최대 4명까지 초대하고, 같은 강아지를 함께 기록해요.', mascots: true },
   { k: 'memorial', label: '언제까지나', title: '함께한 기록은 추모 프로필로 간직해요', desc: '강아지가 곁을 떠난 뒤에도 함께한 기록은 추모 프로필로 그대로 간직할 수 있어요.', shot: 'feature-memorial', wide: true },
 ];
 const exists = (f) => existsSync(f);
@@ -83,35 +83,8 @@ const exists = (f) => existsSync(f);
 
   <section class="plain">
     <div class="band-in narrow">
-      <h2>요금</h2>
-      <div class="plans">
-        <div class="plan">
-          <h3>무료</h3>
-          <p>산책 기록, 새로운 길, 장소 발견, 생애지도(동네 단계), 추억 100개까지</p>
-        </div>
-        <div class="plan plan-plus">
-          <h3>{s} Plus</h3>
-          <p><span class="price">월 {site.priceMonthly} · 연 {site.priceYearly}</span> <span class="muted">(부가세 포함)</span></p>
-          <ul>
-            <li>추억 개수 제한 없음</li>
-            <li>생애지도 시·군·구, 시·도, 국가 단위 보기</li>
-            <li>가족 대표가 되어 최대 4명 초대</li>
-          </ul>
-        </div>
-      </div>
-      <ul>
-        <li>App Store·Google Play에서 결제하고, 해지하기 전까지 같은 주기로 자동 갱신돼요. 무료 체험은 없어요.</li>
-        <li>해지는 각 앱마켓의 구독 관리에서 언제든 할 수 있어요. 해지해도 지금까지의 기록은 그대로 남아요.</li>
-        <li>청약철회와 환불 조건은 <a href={href('/legal/terms/')}>이용약관</a> 제11조에서 확인하세요.</li>
-        <li>만 19세 미만은 법정대리인의 동의를 받은 뒤 결제해 주세요.</li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="plain">
-    <div class="band-in narrow">
       <h2>자주 묻는 질문</h2>
-      <FaqEntries only={['cancel', 'location', 'family-size', 'photo-location', 'withdraw']} mode="details" />
+      <FaqEntries only={['location', 'family-size', 'family-leave', 'photo-location', 'withdraw']} mode="details" />
       <p><a href={href('/support/')}>고객센터에서 더 보기</a></p>
     </div>
   </section>

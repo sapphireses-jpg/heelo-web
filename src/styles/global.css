@@ -110,12 +110,6 @@ th { background: var(--color-surface-inset); }
 .b-mascots img { width: 30%; max-width: 110px; height: auto; }
 .screens { display: flex; gap: 24px; justify-content: center; overflow-x: auto; scroll-snap-type: x mandatory; padding: 8px 8px 24px; }
 .screens img { flex: none; width: min(240px, 68vw); height: auto; border-radius: 36px; box-shadow: 0 12px 30px rgba(27, 34, 48, 0.16); border: 1px solid var(--color-line); scroll-snap-align: center; }
-.plans { display: grid; gap: 16px; margin: var(--space-3) 0 var(--space-4); }
-@media (min-width: 700px) { .plans { grid-template-columns: 1fr 1fr; } }
-.plan { border-radius: var(--radius); padding: var(--space-4); border: 1px solid var(--color-line); }
-.plan h3 { margin-top: 0; }
-.plan-plus { border: 2px solid var(--color-accent); }
-.price { font-size: 1.5rem; font-weight: 900; letter-spacing: -0.03em; }
 .faq { margin: var(--space-3) 0; }
 .faq summary { font-size: 1.0625rem; font-weight: 800; line-height: 1.4; cursor: pointer; padding: var(--space-2) 0; }
 .faq[open] summary { margin-bottom: var(--space-2); }
