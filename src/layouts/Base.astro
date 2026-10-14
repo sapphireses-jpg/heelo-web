@@ -3,8 +3,8 @@ import '../styles/global.css';
 import { site } from '../config/site.mjs';
 import { href } from '../lib/url.mjs';
 
-interface Props { title?: string; description?: string; noindex?: boolean; ogImage?: string; wide?: boolean; overlay?: boolean }
-const { title, description, noindex, ogImage = '/og/home.png', wide, overlay } = Astro.props;
+interface Props { title?: string; description?: string; noindex?: boolean; ogImage?: string; wide?: boolean; overlay?: boolean; csp?: string }
+const { title, description, noindex, ogImage = '/og/home.png', wide, overlay, csp } = Astro.props;
 const abs = (path: string) => new URL(href(path), site.url).href;
 const b = site.business;
 const regDigits = b.regNo.replace(/\D/g, '');
@@ -15,6 +15,7 @@ const regDigits = b.regNo.replace(/\D/g, '');
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
+  {csp && <meta http-equiv="Content-Security-Policy" content={csp}>}
   {/* 출시 전(launchReady: false)에는 모든 페이지를 검색에서 뺍니다. robots.txt로 막지 않습니다(막으면 noindex를 못 읽음). */}
   {(noindex || !site.launchReady) && <meta name="robots" content="noindex, nofollow">}
   <link rel="icon" type="image/png" sizes="32x32" href={href('/favicon-32.png')}>

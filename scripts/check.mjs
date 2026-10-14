@@ -30,14 +30,35 @@ for (const f of files('dist')) {
       for (const u of m[1].split(','))
         if (ext.test(u)) errors.push(`외부 리소스: ${f} → ${u.trim()}`);
   const scripts = [...text.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
-  if (scripts.length && !/(?:[\\/]invite[\\/]index|[\\/]404)\.html$/.test(f)) errors.push(`브라우저 자바스크립트: ${f}`);
+  const isCard = /[\\/]c[\\/]index\.html$/.test(f);
+  if (scripts.length && !/(?:[\\/]invite[\\/]index|[\\/]404|[\\/]c[\\/]index)\.html$/.test(f)) errors.push(`브라우저 자바스크립트: ${f}`);
   // 초대 페이지와 404 페이지만 허용(오너 2026-10-04, 코드 복사 2026-10-05, 404는 2026-10-07 방송 #199): 인라인만, 네트워크·저장·추적 호출 없음(navigator는 clipboard만)
-  if (scripts.length && /(?:[\\/]invite[\\/]index|[\\/]404)\.html$/.test(f))
+  // 웹 카드 /c/ 한 곳은 서버 요청 fetch 한 번을 더 허락합니다(오너 2026-10-14, 방송 #371). 요청 주소는 설정값(site.card.apiUrl)과 같아야 하고 CSP connect-src가 그 주소만 열어야 합니다.
+  if (scripts.length && /(?:[\\/]invite[\\/]index|[\\/]404|[\\/]c[\\/]index)\.html$/.test(f)) {
     for (const [, attrs, body] of scripts) {
       if (/\ssrc\s*=/i.test(attrs)) errors.push(`허용 페이지 스크립트: 외부 파일을 불러올 수 없습니다 ${f}`);
-      for (const bad of /\b(fetch|XMLHttpRequest|sendBeacon|WebSocket|EventSource|localStorage|sessionStorage|indexedDB|import\s*\(|document\.cookie|navigator\.(?!clipboard\b))/g[Symbol.matchAll](body))
-        errors.push(`허용 페이지 스크립트: 금지된 호출 "${bad[0]}" ${f}`);
+      const badCalls = isCard
+        ? /\b(XMLHttpRequest|sendBeacon|WebSocket|EventSource|localStorage|sessionStorage|indexedDB|import\s*\(|document\.cookie|navigator\.)/g
+        : /\b(fetch|XMLHttpRequest|sendBeacon|WebSocket|EventSource|localStorage|sessionStorage|indexedDB|import\s*\(|document\.cookie|navigator\.(?!clipboard\b))/g;
+      for (const bad of badCalls[Symbol.matchAll](body)) errors.push(`허용 페이지 스크립트: 금지된 호출 "${bad[0]}" ${f}`);
+      if (isCard) {
+        if ((body.match(/\bfetch\s*\(/g) ?? []).length !== 1) errors.push(`웹 카드: fetch는 정확히 한 번이어야 합니다 ${f}`);
+        if (/https?:\/\//i.test(body)) errors.push(`웹 카드: 스크립트 안에 주소를 적을 수 없습니다(설정값 data-api로만) ${f}`);
+      }
     }
+    if (isCard) {
+      const api = site.card?.apiUrl ?? '';
+      const origin = api ? new URL(api).origin : "'none'";
+      if (api && !api.startsWith('https://')) errors.push('웹 카드: apiUrl은 https여야 합니다');
+      const want = api ? `data-api="${api}"` : 'data-api';
+      if (!new RegExp(`<section[^>]*\\s${want.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&')}(?=[\\s>])`).test(text)) errors.push(`웹 카드: data-api가 설정값과 다릅니다 ${f}`);
+      const csp = text.match(/<meta http-equiv="Content-Security-Policy" content="([^"]*)"/)?.[1];
+      if (!csp) errors.push(`웹 카드: CSP 메타가 없습니다 ${f}`);
+      else if (!csp.includes(`connect-src ${origin};`) || /(?:default|script|connect|img|font|style)-src[^;]*\*/.test(csp)) errors.push(`웹 카드: CSP connect-src가 설정 주소(${origin})만 열어야 합니다 ${f}`);
+      if (!/<meta name="robots" content="noindex/.test(text)) errors.push(`웹 카드: noindex가 없습니다 ${f}`);
+      if (!api) warnings.push('웹 카드: site.card.apiUrl이 비어 있습니다(A의 호출 주소 대기)');
+    }
+  }
 }
 if (files('dist').some((f) => f.endsWith('.js'))) errors.push('브라우저 자바스크립트: dist에 .js 파일이 있습니다');
 

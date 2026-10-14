@@ -1,0 +1,49 @@
+---
+import Base from '../../layouts/Base.astro';
+import { site } from '../../config/site.mjs';
+const api = site.card.apiUrl;
+const origin = api ? new URL(api).origin : '';
+// 이 페이지만 서버 요청을 합니다(오너 허락 2026-10-14, 방송 #371). 요청은 아래 한 곳(api)으로만 가고, 그 밖의 연결은 CSP가 막습니다.
+const csp = ["default-src 'none'", "script-src 'unsafe-inline'", "style-src 'self' 'unsafe-inline'", "img-src 'self' data:", "font-src 'self'", `connect-src ${origin || "'none'"}`, "base-uri 'none'", "form-action 'none'"].join('; ');
+// 개발 서버(astro dev)에서만 가짜 응답으로 모양을 봅니다. 배포 빌드에는 들어가지 않습니다.
+const devMock = import.meta.env.DEV ? `
+  if (!api) { api = 'mock'; window.fetch = function (u, o) { var t = JSON.parse(o.body).token; return Promise.resolve(t === 'expired000' ? { ok: false, status: 410 } : { ok: true, status: 200, json: function () { return Promise.resolve({ cards: [
+    { type: 'id', title: '신분증', subtitle: '보리', rows: [{ label: '견종', value: '말티즈' }, { label: '생일', value: '2019-03-02' }, { label: '성별', value: '남아' }] },
+    { type: 'health', title: '건강기록부', rows: [{ label: '접종', value: '종합백신 · 2026-04-10' }, { label: '체중', value: '4.2 kg' }] },
+    { type: 'care', title: '돌봄카드', rows: [{ label: '사료', value: '하루 두 번, 한 컵씩' }, { label: '좋아하는 것', value: '공원 산책' }] } ] }); } }); }; }` : '';
+const script = `
+(function () {
+  var root = document.getElementById('card'), out = document.getElementById('card-out'), msg = document.getElementById('card-msg');
+  var api = root.getAttribute('data-api');${devMock}
+  var token = location.hash.slice(1);
+  function show(t) { msg.textContent = t; msg.hidden = false; }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = String(text); return e; }
+  if (!/^[A-Za-z0-9._~-]{8,256}$/.test(token)) { show('카드 링크를 다시 열어 주세요'); return; }
+  if (!api) { show('카드를 불러오지 못했어요. 잠시 뒤 다시 열어 주세요'); return; }
+  fetch(api, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: token }), credentials: 'omit', cache: 'no-store', referrerPolicy: 'no-referrer' })
+    .then(function (r) { if (r.status === 404 || r.status === 410) return null; if (!r.ok) throw new Error('x'); return r.json(); })
+    .then(function (d) {
+      if (!d || !d.cards || !d.cards.length) { show('만료된 카드예요'); return; }
+      msg.hidden = true;
+      d.cards.forEach(function (c) {
+        var box = el('section', 'card-box');
+        box.appendChild(el('h2', null, c.title));
+        if (c.subtitle) box.appendChild(el('p', 'card-sub', c.subtitle));
+        var dl = el('dl', 'card-rows');
+        (c.rows || []).forEach(function (r) { var row = el('div', 'card-row'); row.appendChild(el('dt', null, r.label)); row.appendChild(el('dd', null, r.value)); dl.appendChild(row); });
+        box.appendChild(dl);
+        out.appendChild(box);
+      });
+    })
+    .catch(function () { show('카드를 불러오지 못했어요. 잠시 뒤 다시 열어 주세요'); });
+})();`;
+---
+<Base title="카드" noindex csp={csp}>
+  <section class="card-page" id="card" data-api={api}>
+    <p class="card-msg" id="card-msg" aria-live="polite">카드를 불러오고 있어요</p>
+    <div id="card-out"></div>
+    <noscript><p class="card-msg">카드를 보려면 브라우저의 스크립트를 켜 주세요.</p></noscript>
+  </section>
+  {/* 이 페이지의 스크립트: 주소 # 뒤의 토큰을 읽어 위 한 곳으로만 보내고 응답을 글자로 그립니다. 저장·쿠키·추적 없음(scripts/check.mjs가 확인). */}
+  <script is:inline set:html={script}></script>
+</Base>
