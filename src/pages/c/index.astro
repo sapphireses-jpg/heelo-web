@@ -7,10 +7,12 @@ const origin = api ? new URL(api).origin : '';
 const csp = ["default-src 'none'", "script-src 'unsafe-inline'", "style-src 'self' 'unsafe-inline'", "img-src 'self' data:", "font-src 'self'", `connect-src ${origin || "'none'"}`, "base-uri 'none'", "form-action 'none'"].join('; ');
 // 개발 서버(astro dev)에서만 가짜 응답으로 모양을 봅니다. 배포 빌드에는 들어가지 않습니다.
 const devMock = import.meta.env.DEV ? `
-  if (!api) { api = 'mock'; window.fetch = function (u, o) { var t = JSON.parse(o.body).token; return Promise.resolve(t === 'expired000' ? { ok: false, status: 410 } : { ok: true, status: 200, json: function () { return Promise.resolve({ cards: [
-    { type: 'id', title: '신분증', subtitle: '보리', rows: [{ label: '견종', value: '말티즈' }, { label: '생일', value: '2019-03-02' }, { label: '성별', value: '남아' }] },
-    { type: 'health', title: '건강기록부', rows: [{ label: '접종', value: '종합백신 · 2026-04-10' }, { label: '체중', value: '4.2 kg' }] },
-    { type: 'care', title: '돌봄카드', rows: [{ label: '사료', value: '하루 두 번, 한 컵씩' }, { label: '좋아하는 것', value: '공원 산책' }] } ] }); } }); }; }` : '';
+  window.fetch = function (u, o) { var t = JSON.parse(o.body).token; var k = { '1': 'id_card', '2': 'health', '3': 'care' }[t.charAt(0)];
+    if (t.charAt(0) === 'e') return Promise.resolve({ ok: false, status: 404 });
+    var c = { id_card: { name: '보리', breed: '말티즈', sex: 'male', neutered: true, birth_date: '2019-03-02', together_since: '2019-05-01', registration_no: '410100012345678', last_vaccine: { title: '종합백신', on_date: '2026-04-10', next_due: '2027-04-10' } },
+      health: { name: '보리', records: [{ kind: 'vaccine', title: '종합백신', on_date: '2026-04-10', next_due: '2027-04-10', clinic: '미사동물병원', note: null }, { kind: 'checkup', title: '정기검진', on_date: '2025-10-02', next_due: null, clinic: null, note: '이상 없음' }] },
+      care: { name: '보리', food: '하루 두 번, 한 컵씩', health: null, walk: '아침 저녁 30분', likes: '공원 산책, 노즈워크', memo: '낯선 사람은 처음에 조금 짖어요', medications: null, allergies: '닭고기', vet_name: '미사동물병원', vet_phone: '031-000-0000', emergency_name: '김지용', emergency_phone: '010-0000-0000' } }[k];
+    return Promise.resolve({ ok: true, status: 200, json: function () { return Promise.resolve({ card: k, expires_at: '2026-10-21T00:00:00Z', content: c }); } }); };` : '';
 const script = `
 (function () {
   var root = document.getElementById('card'), out = document.getElementById('card-out'), msg = document.getElementById('card-msg');
@@ -18,22 +20,40 @@ const script = `
   var token = location.hash.slice(1);
   function show(t) { msg.textContent = t; msg.hidden = false; }
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = String(text); return e; }
-  if (!/^[A-Za-z0-9._~-]{8,256}$/.test(token)) { show('카드 링크를 다시 열어 주세요'); return; }
+  function has(v) { return v !== null && v !== undefined && String(v).trim() !== ''; }
+  function day(v) { return String(v).slice(0, 10); }
+  if (!/^[0-9a-fA-F]{64}$/.test(token)) { show('카드 링크를 다시 열어 주세요'); return; }
   if (!api) { show('카드를 불러오지 못했어요. 잠시 뒤 다시 열어 주세요'); return; }
+  var SEX = { male: '남아', female: '여아', M: '남아', F: '여아' };
+  function phone(num) { var s = String(num); if (!/^[0-9+\\- ]{6,20}$/.test(s)) return el('span', null, s); var a = el('a', null, s); a.href = 'tel:' + s.replace(/[^0-9+]/g, ''); return a; }
+  function draw(card, c) {
+    var box = el('section', 'card-box'), dl = el('dl', 'card-rows');
+    function row(label, v) { if (!has(v)) return; var r = el('div', 'card-row'); r.appendChild(el('dt', null, label)); var dd = el('dd'); if (typeof v === 'object' && v.nodeType) dd.appendChild(v); else dd.textContent = String(v); r.appendChild(dd); dl.appendChild(r); }
+    if (card === 'id_card') {
+      box.appendChild(el('h2', null, '신분증')); if (has(c.name)) box.appendChild(el('p', 'card-sub', c.name));
+      row('견종', c.breed); row('성별', has(c.sex) ? (SEX[c.sex] || c.sex) : null);
+      row('중성화', c.neutered === true ? '했어요' : c.neutered === false ? '안 했어요' : null);
+      row('생일', has(c.birth_date) ? day(c.birth_date) : has(c.birth_year) ? c.birth_year + '년생' : null);
+      row('함께한 날', has(c.together_since) ? day(c.together_since) : has(c.together_year) ? c.together_year + '년부터' : null);
+      row('등록번호', c.registration_no);
+      if (c.last_vaccine) row('마지막 접종', [c.last_vaccine.title, has(c.last_vaccine.on_date) ? day(c.last_vaccine.on_date) : null, has(c.last_vaccine.next_due) ? '다음 ' + day(c.last_vaccine.next_due) : null].filter(has).join(' · '));
+    } else if (card === 'health') {
+      box.appendChild(el('h2', null, '건강기록부')); if (has(c.name)) box.appendChild(el('p', 'card-sub', c.name));
+      (c.records || []).forEach(function (r) { row(has(r.on_date) ? day(r.on_date) : '', [r.title, r.clinic, r.note, has(r.next_due) ? '다음 ' + day(r.next_due) : null].filter(has).join(' · ')); });
+    } else if (card === 'care') {
+      box.appendChild(el('h2', null, '돌봄카드')); if (has(c.name)) box.appendChild(el('p', 'card-sub', c.name));
+      row('사료', c.food); row('건강', c.health); row('산책', c.walk); row('좋아하는 것', c.likes); row('메모', c.memo); row('복용 중인 약', c.medications); row('알레르기', c.allergies);
+      row('병원', has(c.vet_name) ? c.vet_name : null); if (has(c.vet_phone)) row('병원 전화', phone(c.vet_phone));
+      row('비상 연락처', has(c.emergency_name) ? c.emergency_name : null); if (has(c.emergency_phone)) row('비상 전화', phone(c.emergency_phone));
+    } else { return false; }
+    box.appendChild(dl); out.appendChild(box); return true;
+  }
   fetch(api, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: token }), credentials: 'omit', cache: 'no-store', referrerPolicy: 'no-referrer' })
-    .then(function (r) { if (r.status === 404 || r.status === 410) return null; if (!r.ok) throw new Error('x'); return r.json(); })
+    .then(function (r) { if (r.status === 404) return null; if (!r.ok) throw new Error('x'); return r.json(); })
     .then(function (d) {
-      if (!d || !d.cards || !d.cards.length) { show('만료된 카드예요'); return; }
+      if (!d) { show('만료된 카드예요'); return; }
+      if (!d.content || !draw(d.card, d.content)) throw new Error('x');
       msg.hidden = true;
-      d.cards.forEach(function (c) {
-        var box = el('section', 'card-box');
-        box.appendChild(el('h2', null, c.title));
-        if (c.subtitle) box.appendChild(el('p', 'card-sub', c.subtitle));
-        var dl = el('dl', 'card-rows');
-        (c.rows || []).forEach(function (r) { var row = el('div', 'card-row'); row.appendChild(el('dt', null, r.label)); row.appendChild(el('dd', null, r.value)); dl.appendChild(row); });
-        box.appendChild(dl);
-        out.appendChild(box);
-      });
     })
     .catch(function () { show('카드를 불러오지 못했어요. 잠시 뒤 다시 열어 주세요'); });
 })();`;

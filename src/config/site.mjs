@@ -26,7 +26,7 @@ export const site = {
   invite: { openUrlTemplate: 'com.sojaeha.walklog://invite/{code}' },
 
   // 웹 카드 페이지(/c/#<토큰>, 오너 허락 2026-10-14 방송 #371). 호출 주소는 A가 만든 Edge Function(키 없이 부름)을 받으면 채웁니다. 비어 있으면 페이지가 「불러오지 못했어요」를 보여 줍니다.
-  card: { apiUrl: '' },
+  card: { apiUrl: 'https://ottryywssvukbqlfkiym.supabase.co/functions/v1/card-view' }, // dev 함수(키 없음, 방송 #382). 서울 주소는 묶음 8 뒤에 이 값만 바꿉니다
 
   androidPackage,
   subscriptionLinks: {
