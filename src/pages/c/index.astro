@@ -24,7 +24,7 @@ const script = `
   function day(v) { return String(v).slice(0, 10); }
   if (!/^[0-9a-fA-F]{64}$/.test(token)) { show('카드 링크를 다시 열어 주세요'); return; }
   if (!api) { show('카드를 불러오지 못했어요. 잠시 뒤 다시 열어 주세요'); return; }
-  var SEX = { male: '남아', female: '여아', M: '남아', F: '여아' };
+  var SEX = { male: '남아', female: '여아' }, KIND = { vaccine: '예방접종', visit: '병원 방문' };
   function phone(num) { var s = String(num); if (!/^[0-9+\\- ]{6,20}$/.test(s)) return el('span', null, s); var a = el('a', null, s); a.href = 'tel:' + s.replace(/[^0-9+]/g, ''); return a; }
   function draw(card, c) {
     var box = el('section', 'card-box'), dl = el('dl', 'card-rows');
@@ -39,7 +39,7 @@ const script = `
       if (c.last_vaccine) row('마지막 접종', [c.last_vaccine.title, has(c.last_vaccine.on_date) ? day(c.last_vaccine.on_date) : null, has(c.last_vaccine.next_due) ? '다음 ' + day(c.last_vaccine.next_due) : null].filter(has).join(' · '));
     } else if (card === 'health') {
       box.appendChild(el('h2', null, '건강기록부')); if (has(c.name)) box.appendChild(el('p', 'card-sub', c.name));
-      (c.records || []).forEach(function (r) { row(has(r.on_date) ? day(r.on_date) : '', [r.title, r.clinic, r.note, has(r.next_due) ? '다음 ' + day(r.next_due) : null].filter(has).join(' · ')); });
+      (c.records || []).forEach(function (r) { row(has(r.on_date) ? day(r.on_date) : '', [KIND[r.kind], r.title, r.clinic, r.note, has(r.next_due) ? '다음 ' + day(r.next_due) : null].filter(has).join(' · ')); });
     } else if (card === 'care') {
       box.appendChild(el('h2', null, '돌봄카드')); if (has(c.name)) box.appendChild(el('p', 'card-sub', c.name));
       row('사료', c.food); row('건강', c.health); row('산책', c.walk); row('좋아하는 것', c.likes); row('메모', c.memo); row('복용 중인 약', c.medications); row('알레르기', c.allergies);
