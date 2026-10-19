@@ -7,12 +7,12 @@
   --color-muted: #6d756f; /* #369 보조(Cream 위 4.54:1). 회색 바탕 위는 아래 muted-gray */
   --color-muted-gray: #565e59; /* Mist Gray·Light Sky 위 보조 글자(6:1) */
   --color-line: #e3e8ef; /* a.divider */
-  --color-accent: #67d58b; /* #369 Green: 행동 버튼 바탕 */
-  --color-accent-text: #1f3a2c; /* Green 바탕 위 글자(6.75:1, 흰 글자 금지) */
+  --color-accent: #1e9e5a; /* 앱 주 버튼 값(가이드 00-D 28차, 방송 #474): 행동 버튼 바탕 */
+  --color-accent-text: #ffffff; /* 굵은 큰 글자라 3.45:1 허용(방송 #474) */
   --color-link: #1c7d41; /* #369 진한 초록 글자·링크(Cream 위 4.95:1) */
   --color-focus: #1c7d41;
-  --color-cta-grad: #67d58b;
-  --shadow-primary: 0 12px 26px rgba(103, 213, 139, 0.32);
+  --color-cta-grad: #1e9e5a;
+  --shadow-primary: 0 12px 26px rgba(30, 158, 90, 0.3);
   --font-body: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
   --space-1: 4px;
   --space-2: 8px;
@@ -169,8 +169,8 @@ th { background: var(--color-surface-inset); }
 .invite-actions { padding: 32px 8px 0; display: flex; flex-direction: column; gap: 12px; }
 .invite-actions p { margin: 0; }
 .invite-actions .store-row p { min-height: 56px; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; font-size: 1.0625rem; font-weight: 800; }
-.invite-btn { display: flex; align-items: center; justify-content: center; min-height: 56px; border-radius: 26px; background: #67d58b; color: #1f3a2c; font-size: 1.0625rem; font-weight: 900; text-decoration: none; box-shadow: 0 12px 26px rgba(103, 213, 139, 0.32); }
-.invite-btn:hover { color: #1f3a2c; }
+.invite-btn { display: flex; align-items: center; justify-content: center; min-height: 56px; border-radius: 26px; background: #1e9e5a; color: #fff; font-size: 1.0625rem; font-weight: 900; text-decoration: none; box-shadow: 0 12px 26px rgba(30, 158, 90, 0.3); }
+.invite-btn:hover { color: #fff; background: #1c7d41; }
 .invite-btn[hidden] { display: none; }
 .invite-note { margin: 32px 8px 0; display: flex; flex-direction: column; gap: 8px; }
 .invite-note p { margin: 0; padding: 0 4px; font-size: 0.875rem; font-weight: 600; line-height: 1.55; color: var(--color-muted); }
@@ -214,3 +214,5 @@ th { background: var(--color-surface-inset); }
 
 /* 회색 바탕 위에서는 보조 글자를 한 단계 진하게(#369 대비 확인: Mist Gray 위 #6d756f는 4.3:1로 불합격) */
 .band, .sub-hero, .del-card, .del-sec.alt, .invite-code-row, th { --color-muted: var(--color-muted-gray); }
+
+.button:hover { background: #1c7d41; }
