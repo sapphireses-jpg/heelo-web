@@ -75,15 +75,17 @@ for (let i = 0; i < pts.length - 1; i++) { const [x0, y0] = pts[i], [x1, y1] = p
           )}
           {sc.k === 'diary' && (
             <div class="h2-paper">
-              <span class="h2-date">10월 18일 토요일</span>
-              <p>오늘은 한강까지 걸었다. 바람이 좋아서 자꾸 멈춰 섰다. 아빠가 간식을 두 번이나 줬다.</p>
-              <span class="h2-sign">— 보리</span>
+              <img class="h2-diary" src={href('/images/diary.svg')} alt="일기 — 10월 18일 토요일. 오늘은 한강까지 걸었다. 바람이 좋아서 자꾸 멈춰 섰다. 아빠가 간식을 두 번이나 줬다. — 보리" width="360" height="225" loading="lazy" decoding="async">
               {has('mood-happy.webp') && <img class="h2-mood" src={href('/images/mood-happy.webp')} alt="기분 뱃지 — 신나요" width="80" height="80" loading="lazy" decoding="async">}
             </div>
           )}
           {sc.k === 'family' && (
             <div class="h2-fam">
-              <div class="h2-faces" aria-hidden="true"><i class="f1"></i><i class="f2"></i><i class="f3"></i></div>
+              <div class="h2-faces">
+                <span class="f1"><img src={href('/images/face-mom.webp')} alt="가족 얼굴 — 보리 엄마" width="96" height="96" loading="lazy" decoding="async"></span>
+                <span class="f2"><img src={href('/images/face-dad.webp')} alt="가족 얼굴 — 보리 아빠" width="96" height="96" loading="lazy" decoding="async"></span>
+                <span class="f3"><img src={href('/images/face-kid.webp')} alt="가족 얼굴 — 보리 아이" width="96" height="96" loading="lazy" decoding="async"></span>
+              </div>
               <div class="h2-notice"><span class="h2-nt">보리 아빠가 산책을 시작했어요</span><span class="h2-ns">방금 · 집 앞에서</span><span class="h2-chip">함께 걷기</span></div>
             </div>
           )}
@@ -109,8 +111,8 @@ for (let i = 0; i < pts.length - 1; i++) { const [x0, y0] = pts[i], [x1, y1] = p
       <p class="muted">iPhone·Android에서 쓸 수 있고, 만 14세 이상 가입할 수 있어요.</p>
     </div>
     <a class="h2-mailbox" href={href('/support/')}>
-      <img src={href('/images/idea-mailbox.webp')} alt="힐로 우체통" width="64" height="64" loading="lazy" decoding="async">
-      <span><strong>힐로 우체통</strong><span class="muted">이런 기능 있으면 좋겠다면 ›</span></span>
+      <img src={href('/images/idea-mailbox.webp')} alt="Heelo 우체통" width="64" height="64" loading="lazy" decoding="async">
+      <span><strong>Heelo 우체통</strong><span class="muted">이런 기능 있으면 좋겠다면 ›</span></span>
     </a>
   </section>
 </Base>

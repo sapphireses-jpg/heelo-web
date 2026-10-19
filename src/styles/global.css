@@ -238,14 +238,13 @@ th { background: var(--color-surface-inset); }
 .h2-quilt { position: relative; width: min(440px, 100%); }
 .h2-quilt svg { display: block; width: 100%; height: auto; }
 .h2-felt { position: absolute; inset: 0; background: url("/images/felt-tile.webp") 0 0 / 256px; mix-blend-mode: soft-light; opacity: 0.2; pointer-events: none; }
-.h2-paper { position: relative; width: min(360px, 100%); background: #fffdf8; border-radius: 6px; padding: 24px 24px 20px; box-shadow: 0 1px 2px rgba(34, 40, 38, 0.06), 0 12px 24px rgba(34, 40, 38, 0.1); transform: rotate(-2deg); font-family: "Gaegu", "Nanum Pen Script", "Apple SD Gothic Neo", cursive; background-image: repeating-linear-gradient(transparent 0 35px, rgba(34, 40, 38, 0.1) 35px 36px); }
-.h2-paper p { margin: 12px 0 0; font-size: 1.5rem; line-height: 36px; color: var(--color-text); }
-.h2-date { font-size: 0.9375rem; color: var(--color-muted); }
-.h2-sign { display: block; margin-top: 8px; text-align: right; font-size: 1.0625rem; color: var(--color-link); }
+.h2-paper { position: relative; width: min(360px, 100%); transform: rotate(-2deg); box-shadow: 0 1px 2px rgba(34, 40, 38, 0.06), 0 12px 24px rgba(34, 40, 38, 0.1); border-radius: 6px; }
+.h2-diary { display: block; width: 100%; height: auto; border-radius: 6px; }
 .h2-mood { position: absolute; right: -16px; top: -28px; width: 80px; height: 80px; }
 .h2-fam { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
 .h2-faces { display: flex; }
-.h2-faces i { width: 96px; height: 96px; border-radius: 50%; margin-right: -18px; border: 3px solid var(--color-bg); }
+.h2-faces span { width: 96px; height: 96px; border-radius: 50%; margin-right: -18px; border: 3px solid var(--color-bg); overflow: hidden; display: block; }
+.h2-faces img { display: block; width: 120%; max-width: none; margin: 8% 0 0 -10%; }
 .h2-faces .f1 { background: #67d58b; } .h2-faces .f2 { background: #58b1f3; } .h2-faces .f3 { background: #f59ab8; }
 .h2-notice { background: #fff; border-radius: 20px; padding: 14px 16px; display: grid; gap: 2px; box-shadow: 0 1px 2px rgba(34, 40, 38, 0.05), 0 8px 20px rgba(34, 40, 38, 0.06); }
 .h2-nt { font-size: 0.9375rem; font-weight: 600; }
