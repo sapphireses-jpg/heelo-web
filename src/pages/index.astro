@@ -2,105 +2,115 @@
 import Base from '../layouts/Base.astro';
 import StoreLinks from '../components/StoreLinks.astro';
 import { existsSync } from 'node:fs';
-import FaqEntries from '../components/FaqEntries.astro';
 import { site } from '../config/site.mjs';
 import { href } from '../lib/url.mjs';
 const s = site.serviceName;
-// 기능 소개 6칸(벤토). 제목은 한 줄로 줄인 새 문안(디자이너 HP-01), 아래 작은 글은 문안 CONTENT 그대로(제한·조건을 잃지 않게).
-const bento = [
-  { k: 'walk', label: '산책 기록', title: '걸은 길과 시간, 거리를 기록해요', desc: '산책을 시작하면 걸은 길과 시간, 거리를 기록해요.', shot: 'feature-newroad', wide: true },
-  { k: 'lifemap', label: '생애지도', title: '함께 걸은 길을 한 지도에서 봐요', desc: '지금까지 함께 걸은 길을 생애지도에서 봐요.', shot: 'feature-lifemap' },
-  { k: 'memory', label: '추억', title: '사진과 글로 그날을 남겨요', desc: '사진 최대 10장과 글로 그날을 남겨요. 전체·팔로워·나만 보기 중에서 공개 범위를 골라요. 가족과 함께 기록하는 강아지의 추억은 나만 보기 대신 가족만 보기를 골라요.', shot: 'feature-memory' },
-  { k: 'family', label: '가족과 함께', title: '가족과 같은 강아지를 함께 기록해요', desc: '대표가 가족을 최대 4명까지 초대하고, 같은 강아지를 함께 기록해요.', mascots: true, wide: true },
+const has = (name) => existsSync(`public/images/${name}`);
+// 홈 1.0 새 화풍(디자이너 2 HP-homepage 2.1차, N 검수, 방송 #474·#476): 펠트 첫 화면 → 흰 실 길이 이어지는 5장면 → 다운로드 띠 → 우체통 줄.
+// 장면 제목·설명은 시안의 제안 문구(docs/CONTENT.md §1 새 화풍). 길 그리기는 CSS 스크롤 연동 애니메이션(스크립트 없음, 지원하지 않거나 동작 줄이기면 처음부터 다 그려진 상태).
+const scenes = [
+  { n: '01', k: 'walk', t: '걸어요', d: '오늘 걸은 길과 시간이 그대로 남아요.' },
+  { n: '02', k: 'paint', t: '칠해져요', d: '걸은 동네 조각이 계절 색으로 차올라요.' },
+  { n: '03', k: 'diary', t: '보리가 일기를 써요', d: '산책이 끝나면 강아지 마음으로 한 줄이 적혀요.' },
+  { n: '04', k: 'family', t: '가족이 함께', d: '누가 걷고 있는지, 가족 모두에게 바로 닿아요.' },
+  { n: '05', k: 'gather', t: '모여요', d: '다녀온 장소와 계절 도장, 배지가 한곳에 쌓여요.' },
 ];
-const screens = [
-  { f: 'feature-walk', t: '산책' },
-  { f: 'feature-lifemap', t: '생애지도' },
-  { f: 'feature-memory', t: '추억' },
-];
-const exists = (f) => existsSync(f);
+// 조각보 격자(6×4, 14칸 칠함): 봄 Pink · 여름 Yellow · 가을 Coral · 겨울 Blue, 안 걸은 칸은 Cream.
+const W = 400, H = 300, C = 6, R = 4, gap = 4;
+const cw = (W - gap * (C + 1)) / C, ch = (H - gap * (R + 1)) / R, rr = Math.min(cw, ch) * 0.32;
+const season = ['#f59ab8', '#f4cf49', '#ff866c', '#58b1f3'];
+const filled = [0, 1, 2, 6, 7, 8, 9, 12, 13, 14, 15, 19, 20, 21];
+const cells = Array.from({ length: C * R }, (_, i) => ({ x: gap + (i % C) * (cw + gap), y: gap + Math.floor(i / C) * (ch + gap), on: filled.indexOf(i), }));
+// 길(왼쪽 160 안, 위에서 아래로 흔들리며 내려감): 점을 부드럽게 잇는 곡선
+const pts = [[76, 0], [112, 200], [40, 400], [112, 600], [40, 800], [76, 1000]];
+let d = `M${pts[0][0]} ${pts[0][1]}`;
+for (let i = 0; i < pts.length - 1; i++) { const [x0, y0] = pts[i], [x1, y1] = pts[i + 1]; d += ` C${x0} ${y0 + (y1 - y0) / 2} ${x1} ${y1 - (y1 - y0) / 2} ${x1} ${y1}`; }
 ---
 <Base
   wide
+  overlay
   description={`오늘 걸은 산책부터 처음 가 본 길, 함께 찾은 장소와 추억까지. 우리 아이가 걸어온 모든 길을 ${s}에서 한 지도로 모아 보세요.`}
 >
-  <section class="hero-band">
-    <div class="hero-panel">
-      <div class="hero-text">
-        <span class="hero-eyebrow">{s}({site.serviceNameReading})</span>
-        <h1>강아지와 함께 걸은 길을, 평생 남겨요.</h1>
-        <p>오늘 걸은 산책부터 처음 가 본 길, 함께 찾은 장소와 추억까지. 우리 아이가 걸어온 모든 길을 {s}에서 한 지도로 모아 보세요.</p>
-        <div class="hero-cta"><StoreLinks /></div>
-      </div>
-      <img class="hero-mascot" src={href('/images/mascot-h-900.webp')} alt={`${s} 마스코트`} width="900" height="900" decoding="async">
+  <section class="h2-hero">
+    <img class="h2-hero-bg" src={href('/images/hp-hero.webp')} alt="펠트 조각보 풍경 — 크림 하늘 아래 계절색 들판" width="1832" height="859" fetchpriority="high" decoding="async">
+    <div class="h2-hero-text">
+      <span class="hero-eyebrow">{s}({site.serviceNameReading})</span>
+      <h1>강아지와 함께 걸은 길을, 평생 남겨요.</h1>
+      <p>오늘 걸은 산책부터 처음 가 본 길, 함께 찾은 장소와 추억까지. 우리 아이가 걸어온 모든 길을 {s}에서 한 지도로 모아 보세요.</p>
+      <div class="hero-cta"><StoreLinks /></div>
     </div>
   </section>
 
-  <section class="band" id="features">
-    <div class="band-in">
-      <h2 class="band-title">이런 걸 할 수 있어요</h2>
-      <div class="bento">
-        {bento.map((c) => (
-          <article class={`b-card b-${c.k}${c.wide ? ' b-wide' : ''}`}>
-            <span class="pill">{c.label}</span>
-            <h3 class="b-title">{c.title}</h3>
-            <p class="b-desc">{c.desc}</p>
-            {c.shot && exists(`public/screens/${c.shot}.webp`) && (
-              <div class="b-phone"><img src={href(`/screens/${c.shot}.webp`)} alt={`${c.label} 화면`} loading="lazy" decoding="async"></div>
-            )}
-            {c.art && <img class="b-art" src={href(`/images/${c.art}.webp`)} alt="" loading="lazy" decoding="async">}
-            {c.mascots && (
-              <div class="b-mascots">
-                <img src={href('/images/mascot-e1.webp')} alt="" loading="lazy" decoding="async">
-                <img src={href('/images/mascot-o.webp')} alt="" loading="lazy" decoding="async">
-                <img src={href('/images/mascot-e2.webp')} alt="" loading="lazy" decoding="async">
-              </div>
-            )}
-          </article>
-        ))}
-      </div>
-    </div>
+  <section class="h2-story" id="features">
+    <svg class="h2-path" viewBox="0 0 160 1000" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <mask id="h2-draw" maskUnits="userSpaceOnUse" x="0" y="0" width="160" height="1000">
+          <path class="h2-draw" d={d} pathLength="1" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
+        </mask>
+      </defs>
+      <g mask="url(#h2-draw)">
+        <path d={d} fill="none" stroke="rgba(34,40,38,0.14)" stroke-width="7" stroke-linecap="round" vector-effect="non-scaling-stroke" transform="translate(0 2)"></path>
+        <path d={d} fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 11" vector-effect="non-scaling-stroke"></path>
+      </g>
+    </svg>
+    {scenes.map((sc, i) => (
+      <article class={`h2-scene${i % 2 ? ' h2-rev' : ''}`}>
+        <div class="h2-copy">
+          <span class="h2-num">{sc.n}</span>
+          <h2>{sc.t}</h2>
+          <p>{sc.d}</p>
+        </div>
+        <div class={`h2-art h2-art-${sc.k}`}>
+          {sc.k === 'walk' && <img class="h2-phone" src={href('/screens/feature-walk.webp')} alt={`${s} 산책 화면`} loading="lazy" decoding="async">}
+          {sc.k === 'paint' && (
+            <div class="h2-quilt">
+              <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
+                {cells.map((c) => (
+                  <rect x={c.x} y={c.y} width={cw} height={ch} rx={rr} fill={c.on >= 0 ? season[c.on % 4] : '#f3ebdd'} class={c.on >= 0 ? 'h2-fill' : undefined}></rect>
+                ))}
+                {cells.map((c) => c.on >= 0 && <rect x={c.x + 4} y={c.y + 4} width={cw - 8} height={ch - 8} rx={rr - 3} fill="none" stroke="#fff" stroke-width="1.6" stroke-dasharray="3.5 3.5" opacity=".85"></rect>)}
+              </svg>
+              <span class="h2-felt" aria-hidden="true"></span>
+            </div>
+          )}
+          {sc.k === 'diary' && (
+            <div class="h2-paper">
+              <span class="h2-date">10월 18일 토요일</span>
+              <p>오늘은 한강까지 걸었다. 바람이 좋아서 자꾸 멈춰 섰다. 아빠가 간식을 두 번이나 줬다.</p>
+              <span class="h2-sign">— 보리</span>
+              {has('mood-happy.webp') && <img class="h2-mood" src={href('/images/mood-happy.webp')} alt="기분 뱃지 — 신나요" width="80" height="80" loading="lazy" decoding="async">}
+            </div>
+          )}
+          {sc.k === 'family' && (
+            <div class="h2-fam">
+              <div class="h2-faces" aria-hidden="true"><i class="f1"></i><i class="f2"></i><i class="f3"></i></div>
+              <div class="h2-notice"><span class="h2-nt">보리 아빠가 산책을 시작했어요</span><span class="h2-ns">방금 · 집 앞에서</span><span class="h2-chip">함께 걷기</span></div>
+            </div>
+          )}
+          {sc.k === 'gather' && (
+            <div class="h2-gather">
+              <img class="pl p1" src={href('/images/pl-park.webp')} alt="장소 그림 — 공원 펠트" loading="lazy" decoding="async">
+              <img class="pl p2" src={href('/images/pl-beach.webp')} alt="장소 그림 — 바닷가 펠트" loading="lazy" decoding="async">
+              <img class="pl p3" src={href('/images/pl-river.webp')} alt="장소 그림 — 강가 펠트" loading="lazy" decoding="async">
+              <img class="st s1" src={href('/images/stamp-spring.webp')} alt="계절 도장 — 봄" loading="lazy" decoding="async">
+              <img class="st s2" src={href('/images/stamp-autumn.webp')} alt="" loading="lazy" decoding="async">
+              <img class="bd" src={href('/images/badge-sprout.webp')} alt="" loading="lazy" decoding="async">
+            </div>
+          )}
+        </div>
+      </article>
+    ))}
   </section>
 
-  <section class="screens-band">
-    <div class="band-in">
-      <h2 class="band-title">앱에서는 이렇게 보여요</h2>
-      <div class="screens">
-        {screens.map((x) => (
-          <figure>
-            <img src={href(`/screens/${x.f}.webp`)} alt={`${s} ${x.t} 화면`} loading="lazy" decoding="async">
-            <figcaption>{x.t}</figcaption>
-          </figure>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="plain">
-    <div class="band-in narrow">
-      <h2>위치와 기록을 이렇게 지켜요</h2>
-      <ul>
-        <li>위치는 산책을 시작해서 끝낼 때까지만 기록해요. 홈 화면 날씨에는 대략적인 위치만 쓰고 저장하지 않아요.</li>
-        <li>광고용 추적을 하지 않고, 앱과 이 홈페이지에 분석 도구를 넣지 않아요.</li>
-      </ul>
-      <p><a href={href('/legal/privacy/')}>개인정보 처리방침 보기</a> · <a href={href('/legal/location/')}>위치기반서비스 이용약관 보기</a></p>
-    </div>
-  </section>
-
-  <section class="plain">
-    <div class="band-in narrow">
-      <h2>자주 묻는 질문</h2>
-      <FaqEntries only={['location', 'family-size', 'family-leave', 'photo-location', 'withdraw']} mode="details" />
-      <p><a href={href('/support/')}>고객센터에서 더 보기</a></p>
-    </div>
-  </section>
-
-  <section class="download-band" id="download">
-    <div class="band-in">
-      <img class="download-mascot" src={href('/images/mascot-e1.webp')} alt="" width="480" height="480" loading="lazy" decoding="async">
-      <h2 class="download-title">오늘 산책부터 기록해 보세요.</h2>
+  <section class="h2-dl" id="download">
+    <div class="h2-dl-band">
+      <h2>오늘 산책부터 기록해 보세요.</h2>
       <StoreLinks />
       <p class="muted">iPhone·Android에서 쓸 수 있고, 만 14세 이상 가입할 수 있어요.</p>
     </div>
+    <a class="h2-mailbox" href={href('/support/')}>
+      <img src={href('/images/idea-mailbox.webp')} alt="힐로 우체통" width="64" height="64" loading="lazy" decoding="async">
+      <span><strong>힐로 우체통</strong><span class="muted">이런 기능 있으면 좋겠다면 ›</span></span>
+    </a>
   </section>
 </Base>

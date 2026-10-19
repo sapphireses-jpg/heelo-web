@@ -216,3 +216,64 @@ th { background: var(--color-surface-inset); }
 .band, .sub-hero, .del-card, .del-sec.alt, .invite-code-row, th { --color-muted: var(--color-muted-gray); }
 
 .button:hover { background: #1c7d41; }
+/* 홈 1.0 새 화풍(디자이너 2 HP-homepage 2.1차): 펠트 첫 화면 → 흰 실 길 5장면 → 다운로드 띠 → 우체통 줄. 브라우저 자바스크립트 없음(길·조각보는 CSS 스크롤 연동 애니메이션). */
+.site-header.over { position: absolute; left: 0; right: 0; background: transparent; backdrop-filter: none; }
+.site-header.over nav a:not(.button):hover { background: rgba(255, 255, 255, 0.7); }
+.h2-hero { position: relative; height: clamp(640px, 100svh, 960px); overflow: hidden; background: var(--color-bg); }
+.h2-hero-bg { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 62%; object-fit: cover; object-position: 50% 100%; }
+.h2-hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: linear-gradient(to bottom, var(--color-bg), rgba(255, 249, 243, 0) 22%); pointer-events: none; }
+.h2-hero-text { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: clamp(88px, 9vw, 128px) clamp(16px, 3vw, 48px) 0; }
+.h2-hero-text > * { max-width: 720px; }
+.h2-hero-text h1 { font-size: clamp(2.25rem, 5.2vw, 4.75rem); font-weight: 900; line-height: 1.14; letter-spacing: -0.03em; margin: 12px 0 0; text-wrap: balance; }
+.h2-hero-text p { font-size: clamp(1rem, 1.3vw, 1.25rem); font-weight: 600; margin: 16px 0 0; max-width: 34em; }
+.h2-story { position: relative; max-width: 1200px; margin: 0 auto; padding: clamp(72px, 9vw, 128px) clamp(16px, 3vw, 48px) clamp(72px, 9vw, 128px) clamp(52px, 12vw, 160px); display: flex; flex-direction: column; gap: clamp(72px, 9vw, 128px); }
+.h2-path { position: absolute; left: 0; top: 0; width: clamp(52px, 12vw, 160px); height: 100%; pointer-events: none; }
+.h2-scene { display: flex; flex-direction: column; gap: 32px; align-items: flex-start; }
+@media (min-width: 900px) { .h2-scene { flex-direction: row; align-items: center; justify-content: space-between; } .h2-scene.h2-rev { flex-direction: row-reverse; } .h2-copy { flex: 0 1 420px; } .h2-art { flex: 0 1 460px; } }
+.h2-num { font: 800 0.8125rem/1 Nunito, var(--font-body); color: var(--color-link); letter-spacing: 0.04em; }
+.h2-copy h2 { margin: 12px 0 0; font-size: clamp(1.75rem, 3.2vw, 2.5rem); font-weight: 700; line-height: 1.2; letter-spacing: -0.03em; }
+.h2-copy p { margin: 12px 0 0; font-size: 1.0625rem; line-height: 1.6; color: var(--color-muted); max-width: 420px; }
+.h2-art { display: flex; justify-content: center; width: 100%; max-width: 460px; }
+.h2-phone { width: min(280px, 70vw); height: auto; border-radius: 36px; border: 1px solid var(--color-line); box-shadow: 0 12px 30px rgba(27, 34, 48, 0.16); transform: rotate(-2deg); }
+.h2-quilt { position: relative; width: min(440px, 100%); }
+.h2-quilt svg { display: block; width: 100%; height: auto; }
+.h2-felt { position: absolute; inset: 0; background: url("/images/felt-tile.webp") 0 0 / 256px; mix-blend-mode: soft-light; opacity: 0.2; pointer-events: none; }
+.h2-paper { position: relative; width: min(360px, 100%); background: #fffdf8; border-radius: 6px; padding: 24px 24px 20px; box-shadow: 0 1px 2px rgba(34, 40, 38, 0.06), 0 12px 24px rgba(34, 40, 38, 0.1); transform: rotate(-2deg); font-family: "Gaegu", "Nanum Pen Script", "Apple SD Gothic Neo", cursive; background-image: repeating-linear-gradient(transparent 0 35px, rgba(34, 40, 38, 0.1) 35px 36px); }
+.h2-paper p { margin: 12px 0 0; font-size: 1.5rem; line-height: 36px; color: var(--color-text); }
+.h2-date { font-size: 0.9375rem; color: var(--color-muted); }
+.h2-sign { display: block; margin-top: 8px; text-align: right; font-size: 1.0625rem; color: var(--color-link); }
+.h2-mood { position: absolute; right: -16px; top: -28px; width: 80px; height: 80px; }
+.h2-fam { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
+.h2-faces { display: flex; }
+.h2-faces i { width: 96px; height: 96px; border-radius: 50%; margin-right: -18px; border: 3px solid var(--color-bg); }
+.h2-faces .f1 { background: #67d58b; } .h2-faces .f2 { background: #58b1f3; } .h2-faces .f3 { background: #f59ab8; }
+.h2-notice { background: #fff; border-radius: 20px; padding: 14px 16px; display: grid; gap: 2px; box-shadow: 0 1px 2px rgba(34, 40, 38, 0.05), 0 8px 20px rgba(34, 40, 38, 0.06); }
+.h2-nt { font-size: 0.9375rem; font-weight: 600; }
+.h2-ns { font-size: 0.8125rem; color: var(--color-muted); }
+.h2-chip { justify-self: start; margin-top: 6px; min-height: 28px; padding: 0 12px; border-radius: 14px; background: #def6e5; color: #1c7d41; display: inline-flex; align-items: center; font-size: 0.8125rem; font-weight: 700; }
+.h2-gather { position: relative; width: min(440px, 100%); aspect-ratio: 1; }
+.h2-gather .pl { position: absolute; width: 62%; background: #fff; padding: 4% 4% 11%; border-radius: 6px; box-shadow: 0 8px 20px rgba(34, 40, 38, 0.14); }
+.h2-gather .p1 { left: 0; top: 4%; transform: rotate(-4deg); }
+.h2-gather .p2 { right: 0; top: 18%; transform: rotate(3deg); }
+.h2-gather .p3 { left: 18%; bottom: 0; }
+.h2-gather .st { position: absolute; width: 96px; height: 96px; }
+.h2-gather .s1 { left: 6%; bottom: 8%; transform: rotate(-10deg); }
+.h2-gather .s2 { right: 6%; bottom: 14%; transform: rotate(7deg); }
+.h2-gather .bd { position: absolute; right: 2%; top: 0; width: 80px; height: auto; }
+.h2-dl { max-width: 1200px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 48px) clamp(48px, 7vw, 96px); }
+.h2-dl-band { background: #def6e5; border-radius: clamp(24px, 3vw, 32px); padding: clamp(32px, 5vw, 56px); }
+.h2-dl-band h2 { margin: 0 0 24px; font-size: clamp(1.75rem, 3.4vw, 2.5rem); font-weight: 700; letter-spacing: -0.03em; }
+.h2-dl-band p { margin: 16px 0 0; }
+.h2-mailbox { display: flex; align-items: center; gap: 16px; min-height: 64px; margin-top: 16px; padding: 8px 16px; border-radius: 20px; text-decoration: none; color: var(--color-text); }
+.h2-mailbox:hover { background: #fff; }
+.h2-mailbox img { width: 64px; height: 64px; }
+.h2-mailbox strong { display: block; font-size: 0.9375rem; font-weight: 700; }
+.h2-mailbox .muted { font-size: 0.875rem; }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes h2-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+    @keyframes h2-fill { from { fill-opacity: 0; } to { fill-opacity: 1; } }
+    .h2-draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: h2-draw linear both; animation-timeline: view(); animation-range: entry 60% exit 40%; }
+    .h2-fill { animation: h2-fill linear both; animation-timeline: view(); animation-range: entry 10% entry 90%; }
+  }
+}
