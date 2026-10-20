@@ -47,28 +47,27 @@ const regDigits = b.regNo.replace(/\D/g, '');
 
   <footer class="site-footer">
     <div class={wide ? 'wrap wrap-wide' : 'wrap'}>
-      <nav aria-label="정책">
+      <p class="ft-name">{b.name}</p>
+      <dl class="ft-info">
+        <div><dt>대표자</dt><dd>{b.ceo}</dd></div>
+        {b.address && <div><dt>주소</dt><dd>{b.address}</dd></div>}
+        <div><dt>사업자등록번호</dt><dd>{b.regNo}{regDigits.length === 10 && <> <a href={`https://www.ftc.go.kr/bizCommPop.do?wrkr_no=${regDigits}`}>사업자정보 확인</a></>}</dd></div>
+        <div><dt>통신판매업 신고번호</dt><dd>{b.mailOrderNo}</dd></div>
+        <div><dt>위치기반서비스사업 신고</dt><dd>{b.lbsNo ? b.lbsNo : b.lbsPending}</dd></div>
+        <div><dt>전화</dt><dd>{b.phone}</dd></div>
+        <div><dt>이메일</dt><dd>{site.contactEmail}</dd></div>
+        <div><dt>호스팅 제공자</dt><dd>{b.hosting}</dd></div>
+      </dl>
+      <p class="ft-copy">{b.copyright}</p>
+      <nav class="ft-links" aria-label="정책">
         <ul>
           <li><a href={href('/legal/terms/')}>이용약관</a></li>
           <li><a href={href('/legal/privacy/')}><strong>개인정보 처리방침</strong></a></li>
           <li><a href={href('/legal/location/')}>위치기반서비스 이용약관</a></li>
-          <li><a href={href('/account/delete/')}>계정 삭제 안내</a></li>
           <li><a href={href('/support/')}>고객센터</a></li>
+          <li><a href={href('/account/delete/')}>계정 삭제 안내</a></li>
         </ul>
       </nav>
-      <ul class="biz">
-        <li>상호: {b.name}</li>
-        <li>대표자: {b.ceo}</li>
-        <li>사업자등록번호: {b.regNo}
-          {regDigits.length === 10 && <> (<a href={`https://www.ftc.go.kr/bizCommPop.do?wrkr_no=${regDigits}`}>사업자정보 확인</a>)</>}
-        </li>
-        <li>통신판매업 신고번호: {b.mailOrderNo}</li>
-        <li>{b.lbsNo ? `위치기반서비스사업 신고: ${b.lbsNo}` : `위치기반서비스사업 신고: ${b.lbsPending}`}</li>
-        {b.address && <li>주소: {b.address}</li>}
-        <li>전화: {b.phone}</li>
-        <li>이메일: {site.contactEmail}</li>
-      </ul>
-      <p>© {new Date().getFullYear()} {b.name}</p>
     </div>
   </footer>
 </body>
