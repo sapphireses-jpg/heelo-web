@@ -61,7 +61,7 @@ for (let i = 0; i < pts.length - 1; i++) { const [x0, y0] = pts[i], [x1, y1] = p
           <p>{sc.d}</p>
         </div>
         <div class={`h2-art h2-art-${sc.k}`}>
-          {sc.k === 'walk' && <img class="h2-phone" src={href('/screens/feature-walk.webp')} alt={`${s} 산책 화면`} loading="lazy" decoding="async">}
+          {sc.k === 'walk' && <img class="h2-phone" src={href('/screens/scene-walk.webp')} alt={`${s} 산책 화면 — 보리와 1.8 km 걸은 뒤`} loading="lazy" decoding="async">}
           {sc.k === 'paint' && (
             <div class="h2-quilt">
               <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
@@ -86,7 +86,10 @@ for (let i = 0; i < pts.length - 1; i++) { const [x0, y0] = pts[i], [x1, y1] = p
                 <span class="f2"><img src={href('/images/face-dad.webp')} alt="가족 얼굴 — 보리 아빠" width="96" height="96" loading="lazy" decoding="async"></span>
                 <span class="f3"><img src={href('/images/face-kid.webp')} alt="가족 얼굴 — 보리 아이" width="96" height="96" loading="lazy" decoding="async"></span>
               </div>
-              <div class="h2-notice"><span class="h2-nt">보리 아빠가 산책을 시작했어요</span><span class="h2-ns">방금 · 집 앞에서</span><span class="h2-chip">함께 걷기</span></div>
+              <div class="h2-notice">
+                <span class="h2-nt">아빠가 지금 보리와 산책 중</span>
+                <span class="h2-nt h2-nt2">아빠가 보리와 1.8 km 다녀왔어요</span>
+              </div>
             </div>
           )}
           {sc.k === 'gather' && (

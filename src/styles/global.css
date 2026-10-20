@@ -248,8 +248,7 @@ th { background: var(--color-surface-inset); }
 .h2-faces .f1 { background: #67d58b; } .h2-faces .f2 { background: #58b1f3; } .h2-faces .f3 { background: #f59ab8; }
 .h2-notice { background: #fff; border-radius: 20px; padding: 14px 16px; display: grid; gap: 2px; box-shadow: 0 1px 2px rgba(34, 40, 38, 0.05), 0 8px 20px rgba(34, 40, 38, 0.06); }
 .h2-nt { font-size: 0.9375rem; font-weight: 600; }
-.h2-ns { font-size: 0.8125rem; color: var(--color-muted); }
-.h2-chip { justify-self: start; margin-top: 6px; min-height: 28px; padding: 0 12px; border-radius: 14px; background: #def6e5; color: #1c7d41; display: inline-flex; align-items: center; font-size: 0.8125rem; font-weight: 700; }
+.h2-nt2 { padding-top: 10px; border-top: 1px solid var(--color-line); margin-top: 8px; }
 .h2-gather { position: relative; width: min(440px, 100%); aspect-ratio: 1; }
 .h2-gather .pl { position: absolute; width: 62%; background: #fff; padding: 4% 4% 11%; border-radius: 6px; box-shadow: 0 8px 20px rgba(34, 40, 38, 0.14); }
 .h2-gather .p1 { left: 0; top: 4%; transform: rotate(-4deg); }
