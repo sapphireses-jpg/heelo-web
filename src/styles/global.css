@@ -66,10 +66,16 @@ th { background: var(--color-surface-inset); }
 .legal-body table { display: block; overflow-x: auto; min-width: 0; }
 .legal-body th, .legal-body td { min-width: 7em; overflow-wrap: normal; }
 
-.site-footer { margin-top: var(--space-5); font-size: .9rem; padding: var(--space-4) 0; }
-.site-footer ul { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); }
-.site-footer .biz { display: block; margin: var(--space-3) 0 0; }
-.site-footer .biz li { margin: 0; }
+.site-footer { margin-top: var(--space-5); padding: var(--space-5) 0 var(--space-5); border-top: 1px solid var(--color-line); font-size: 0.8125rem; line-height: 1.7; }
+.ft-name { margin: 0 0 12px; font-size: 1rem; font-weight: 800; }
+.ft-info { margin: 0; display: flex; flex-direction: column; gap: 2px; }
+.ft-info > div { display: flex; flex-wrap: wrap; gap: 0 12px; }
+.ft-info dt { flex: none; margin: 0; font-weight: 700; color: var(--color-text); }
+.ft-info dt::after { content: "|"; margin-left: 12px; color: #c8cdc9; font-weight: 400; }
+.ft-info dd { margin: 0; min-width: 0; color: var(--color-muted); }
+.ft-copy { margin: 16px 0 0; color: var(--color-muted); }
+.ft-links ul { list-style: none; padding: 0; margin: 12px 0 0; display: flex; flex-wrap: wrap; gap: 4px 20px; }
+.ft-links li { margin: 0; }
 
 /* 홈(디자이너 HP-01, 방송 #223): 첫 화면 판 + 마스코트, 벤토 기능 카드, 앱 화면, 요금, 다운로드 띠. 브라우저 자바스크립트 없음. */
 .wrap-wide { max-width: 1200px; padding-left: clamp(16px, 3vw, 48px); padding-right: clamp(16px, 3vw, 48px); }
