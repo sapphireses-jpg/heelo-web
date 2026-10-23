@@ -284,3 +284,26 @@ th { background: var(--color-surface-inset); }
     .h2-fill { animation: h2-fill linear both; animation-timeline: view(); animation-range: entry 10% entry 90%; }
   }
 }
+/* 고객센터(디자이너 2 HP-pages 「짧은 글 틀」): 제목 → 설명 → 단추 → 흰 카드 목록 → 요청별 안내 2열 카드 → 질문 카드 → 돌아가기. 폭 680 한 단. */
+.sp { max-width: 680px; margin: 0 auto; padding: clamp(24px, 4vw, 56px) clamp(16px, 3vw, 24px) clamp(48px, 7vw, 96px); }
+.sp-top h1 { font-size: clamp(1.75rem, 2.8vw, 2.5rem); line-height: 1.25; letter-spacing: -0.02em; margin: 12px 0 0; }
+.sp-top p { margin: 16px 0 0; font-size: 1.0625rem; line-height: 1.7; }
+.sp-btn { margin-top: 24px; min-height: 56px; padding: 0 28px; border-radius: 28px; font-size: 1.0625rem; font-weight: 700; }
+.sp-sec { margin-top: 40px; }
+.sp-sec h2 { margin: 0 0 12px; font-size: 1.25rem; font-weight: 700; line-height: 1.4; }
+.sp-card { background: #fff; border-radius: 24px; box-shadow: 0 1px 2px rgba(34, 40, 38, 0.05), 0 8px 20px rgba(34, 40, 38, 0.06); padding: 8px 24px; }
+.sp-tips span { display: flex; align-items: center; gap: 12px; min-height: 48px; line-height: 1.5; border-bottom: 1px solid #f3f4f3; }
+.sp-tips span:last-child { border-bottom: 0; }
+.sp-tips span::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: #67d58b; }
+.sp-case { display: grid; grid-template-columns: 1fr; gap: 4px; padding: 16px 0; border-bottom: 1px solid #f3f4f3; }
+.sp-case:last-child { border-bottom: 0; }
+.sp-q { font-weight: 700; line-height: 1.5; }
+.sp-a { color: var(--color-muted); font-size: 0.9375rem; line-height: 1.65; }
+@media (min-width: 640px) { .sp-case { grid-template-columns: 1fr 1.3fr; gap: 24px; } }
+.sp-faq .faq { background: #fff; border-radius: 24px; padding: 0 24px 4px; margin: 12px 0; box-shadow: 0 1px 2px rgba(34, 40, 38, 0.05), 0 8px 20px rgba(34, 40, 38, 0.06); }
+.sp-faq .faq summary { min-height: 72px; padding: 20px 0; }
+.sp-faq .faq[open] summary { margin-bottom: 0; }
+.sp-faq .faq p { margin: 0 0 20px; line-height: 1.7; }
+.sp-back { margin-top: 32px; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px; margin-left: -10px; border-radius: 12px; font-size: 0.9375rem; font-weight: 600; text-decoration: none; }
+.sp-back:hover { background: #f3f4f3; }
+.sp-back svg { width: 16px; height: 16px; }
