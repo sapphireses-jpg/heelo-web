@@ -12,7 +12,7 @@ export const site = {
   serviceNameReading: '힐로', // 처음 소개에 「Heelo(힐로)」로 읽는 법을 보여 줍니다
   contactEmail: 'support@sojaeha.studio',
   replyTime: '3영업일', // 이용약관 제18조
-  appDeletePath: '홈 화면 오른쪽 위 설정 아이콘 › 설정 › 회원 탈퇴',
+  appDeletePath: '설정 › 계정 › 회원 탈퇴', // 방송 #554(N 5330): 두 곳(계정 삭제 방법 1 · 고객센터 탈퇴 줄)에 같은 글
 
   // 약관 초안을 가져오는 sync 스크립트만 씁니다(로컬). 앱 저장소는 읽기만 합니다.
   appRepoPath: '~/projects/tailory',

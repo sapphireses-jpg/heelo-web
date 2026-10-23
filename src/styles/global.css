@@ -288,6 +288,16 @@ th { background: var(--color-surface-inset); }
 .sp { max-width: 680px; margin: 0 auto; padding: clamp(24px, 4vw, 56px) clamp(16px, 3vw, 24px) clamp(48px, 7vw, 96px); }
 .sp-top h1 { font-size: clamp(1.75rem, 2.8vw, 2.5rem); line-height: 1.25; letter-spacing: -0.02em; margin: 12px 0 0; }
 .sp-top p { margin: 16px 0 0; font-size: 1.0625rem; line-height: 1.7; }
+.sp-mail { font-family: Nunito, var(--font-body); font-weight: 700; }
+.sp-hint { margin: -4px 0 12px; font-size: 0.9375rem; color: var(--color-muted); }
+.sp-mailbtn { margin-top: 16px; }
+.sp-case-link { text-decoration: none; color: inherit; position: relative; padding-right: 32px; border-radius: 14px; }
+.sp-case-link:hover { background: #f3f4f3; }
+.sp-case-link svg { position: absolute; right: 4px; top: 50%; width: 20px; height: 20px; margin-top: -10px; color: var(--color-muted); }
+.sp-ghost { display: inline-flex; align-items: center; justify-content: center; align-self: flex-start; min-height: 48px; margin-top: 20px; padding: 0 24px; border-radius: 24px; background: #fff; border: 1.5px solid rgba(34, 40, 38, 0.18); color: var(--color-link); font-weight: 700; text-decoration: none; }
+.sp-ghost:hover { background: #f3f4f3; }
+.sp-sky { background: #eaf5ff; border-radius: 16px; padding: 4px 20px; }
+.sp-sky .sp-item { border-bottom-color: rgba(34, 40, 38, 0.08); }
 .sp-btn { margin-top: 24px; min-height: 56px; padding: 0 28px; border-radius: 28px; font-size: 1.0625rem; font-weight: 700; }
 .sp-sec { margin-top: 40px; }
 .sp-sec h2 { margin: 0 0 12px; font-size: 1.25rem; font-weight: 700; line-height: 1.4; }
@@ -317,9 +327,10 @@ th { background: var(--color-surface-inset); }
 .sp-method p { margin: 12px 0 0; color: var(--color-muted); font-size: 0.9375rem; line-height: 1.65; }
 .sp-method .sp-btn { margin-top: 20px; }
 .sp-steps { list-style: none; counter-reset: step; margin: 0; padding: 8px 24px; }
-.sp-steps li { counter-increment: step; display: flex; flex-direction: column; gap: 4px; position: relative; padding: 16px 0 16px 48px; margin: 0; border-bottom: 1px solid #f3f4f3; font-size: 0.9375rem; line-height: 1.7; color: var(--color-muted); }
+.sp-steps li { counter-increment: step; display: flex; flex-direction: column; gap: 4px; position: relative; padding: 16px 0 16px 56px; margin: 0; border-bottom: 0; font-size: 0.9375rem; line-height: 1.7; color: var(--color-muted); }
 .sp-steps li:last-child { border-bottom: 0; }
-.sp-steps li::before { content: counter(step); position: absolute; left: 0; top: 16px; width: 32px; height: 32px; border-radius: 50%; background: var(--color-text); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; }
+.sp-steps li::before { content: counter(step); position: absolute; left: 0; top: 16px; width: 36px; height: 36px; border-radius: 50%; background: #1e9e5a; color: #fff; display: flex; align-items: center; justify-content: center; font: 800 0.9375rem Nunito, var(--font-body); }
+.sp-steps li:not(:last-child)::after { content: ""; position: absolute; left: 17px; top: 56px; bottom: -16px; width: 2px; background: #def6e5; }
 .sp-steps strong { font-size: 1.0625rem; color: var(--color-text); }
 .sp-item { display: flex; flex-direction: column; gap: 4px; padding: 16px 0; border-bottom: 1px solid #f3f4f3; font-size: 0.9375rem; line-height: 1.7; color: var(--color-muted); }
 .sp-item:last-child { border-bottom: 0; }

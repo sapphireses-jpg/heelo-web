@@ -29,7 +29,7 @@ const mailto = `mailto:${mail}?subject=${encodeURIComponent('계정 삭제 요�
         <span class="sp-k">방법 2</span>
         <h2 class="sp-t">앱 없이 메일로 요청하기</h2>
         <p>앱을 지웠거나 쓸 수 없다면 {mail}로 요청해 주세요.</p>
-        <a class="button sp-btn" href={mailto}>삭제 요청 메일 쓰기</a>
+        <a class="sp-ghost" href={mailto}>삭제 요청 메일 쓰기</a>
       </div>
     </section>
 
@@ -55,7 +55,7 @@ const mailto = `mailto:${mail}?subject=${encodeURIComponent('계정 삭제 요�
 
     <section class="sp-sec">
       <h2>요청하기 전에 확인해 주세요</h2>
-      <div class="sp-card sp-items">
+      <div class="sp-sky sp-items">
         <div class="sp-item"><strong>구독은 따로 해지해야 해요.</strong><span>계정을 삭제해도 App Store·Google Play의 {s} Plus 구독은 자동으로 해지되지 않아요. <a href={site.subscriptionLinks.apple}>App Store 구독 관리</a> · <a href={site.subscriptionLinks.google}>Google Play 구독 관리</a></span></div>
         <div class="sp-item"><strong>가족 대표라면</strong><span>가족을 해체하거나 대표를 다른 구성원에게 넘긴 뒤 탈퇴할 수 있어요. 앱을 쓸 수 없어 메일로 요청하면, 가족에 가장 먼저 합류한 구성원에게 대표 자격과 공유 강아지를 넘긴 뒤 탈퇴를 처리하고, 구성원이 없으면 가족을 해체한 뒤 처리해요. 넘겨받은 구성원이 Plus 이용자가 아니면 가족은 읽기 전용이 돼요.</span></div>
       </div>
@@ -63,7 +63,14 @@ const mailto = `mailto:${mail}?subject=${encodeURIComponent('계정 삭제 요�
 
     <section class="sp-sec">
       <h2>삭제되는 정보</h2>
-      <div class="sp-card sp-plain">계정과 로그인 정보, 강아지 프로필, 산책 기록과 경로·방문 장소, 추억과 사진·댓글, 팔로우·좋아요·차단·숨긴 추억, 가족 관계 기록, 알림 기록, 푸시 알림 정보</div>
+      <div class="sp-card sp-tips">
+        <span>계정과 로그인 정보</span>
+        <span>강아지 프로필</span>
+        <span>산책 기록과 경로·방문 장소</span>
+        <span>추억과 사진·댓글</span>
+        <span>팔로우·좋아요·차단·숨긴 추억</span>
+        <span>가족 관계 기록, 알림 기록, 푸시 알림 정보</span>
+      </div>
     </section>
 
     <section class="sp-sec">
