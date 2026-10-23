@@ -48,11 +48,13 @@ export function pickBetaTarget(doc, version, sha256, legacy, existsPublished = (
   return { path: `${dir}.md`, action: 'write' };
 }
 
-// 베타: 시행일이 아직 안 된 새 버전 위에 「그 전까지는 이전 버전」을 알릴 때 쓸 이전 버전. 이전 버전의 시행일이 더 앞일 때만 있습니다.
-// versions: [{ version, effective }] 새것이 앞. 같은 날 시행하는 이전 버전(v0.10→v0.11)은 대상이 아닙니다.
+// 베타: 시행일이 아직 안 된 새 버전 위에 「그 전까지는 ○○ 버전」을 알릴 때 쓸 버전.
+// 오늘 적용 중인 가장 새 이전 버전(시행일이 오늘 이전)을 고르고, 아직 하나도 시행 전이면 바로 앞 버전을 고릅니다. 이 버전보다 시행일이 빠른 것만 대상이라 같은 날 시행하는 이전 버전은 제외합니다.
+// versions: [{ version, effective }] 새것이 앞.
 export function betaPrevious(versions, version, today) {
   const i = versions.findIndex((v) => v.version === version);
-  const cur = versions[i], prev = versions[i + 1];
-  if (!cur || !prev || !cur.effective || !prev.effective) return undefined;
-  return ymd(cur.effective) > today && ymd(prev.effective) < ymd(cur.effective) ? prev : undefined;
+  const cur = versions[i];
+  if (!cur || !cur.effective || ymd(cur.effective) <= today) return undefined;
+  const older = versions.slice(i + 1).filter((v) => v.effective && ymd(v.effective) < ymd(cur.effective));
+  return older.find((v) => ymd(v.effective) <= today) ?? older[0];
 }
