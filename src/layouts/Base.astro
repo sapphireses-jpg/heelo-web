@@ -17,6 +17,8 @@ const regDigits = b.regNo.replace(/\D/g, '');
   <meta name="referrer" content="no-referrer">
   {/* 출시 전(launchReady: false)에는 모든 페이지를 검색에서 뺍니다. robots.txt로 막지 않습니다(막으면 noindex를 못 읽음). */}
   {(noindex || !site.launchReady) && <meta name="robots" content="noindex, nofollow">}
+  <link rel="icon" type="image/png" sizes="32x32" href={href('/favicon-32.png')}>
+  <link rel="apple-touch-icon" href={href('/apple-touch-icon.png')}>
   <title>{title ? `${title} | ${site.serviceName}` : site.serviceName}</title>
   {description && <meta name="description" content={description}>}
   {/* 공유 미리보기(카카오·문자 등). 이미지 주소는 불러오는 게 아니라 크롤러가 읽는 값입니다. */}

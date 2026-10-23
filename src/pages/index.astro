@@ -39,6 +39,7 @@ for (let i = 0; i < pts.length - 1; i++) { const [x0, y0] = pts[i], [x1, y1] = p
       <p>오늘 걸은 산책부터 처음 가 본 길, 함께 찾은 장소와 추억까지. 우리 아이가 걸어온 모든 길을 {s}에서 한 지도로 모아 보세요.</p>
       <div class="hero-cta"><StoreLinks /></div>
     </div>
+    <div class="h2-clip"><img src={href('/images/hero-frame.webp')} alt="" width="720" height="720" decoding="async"></div>
   </section>
 
   <section class="h2-story" id="features">
@@ -66,7 +67,7 @@ for (let i = 0; i < pts.length - 1; i++) { const [x0, y0] = pts[i], [x1, y1] = p
             <div class="h2-quilt">
               <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
                 {cells.map((c) => (
-                  <rect x={c.x} y={c.y} width={cw} height={ch} rx={rr} fill={c.on >= 0 ? season[c.on % 4] : '#f3ebdd'} class={c.on >= 0 ? 'h2-fill' : undefined}></rect>
+                  <rect x={c.x} y={c.y} width={cw} height={ch} rx={rr} fill={c.on >= 0 ? season[c.on % 4] : '#f3f4f3'} class={c.on >= 0 ? 'h2-fill' : undefined}></rect>
                 ))}
                 {cells.map((c) => c.on >= 0 && <rect x={c.x + 4} y={c.y + 4} width={cw - 8} height={ch - 8} rx={rr - 3} fill="none" stroke="#fff" stroke-width="1.6" stroke-dasharray="3.5 3.5" opacity=".85"></rect>)}
               </svg>
