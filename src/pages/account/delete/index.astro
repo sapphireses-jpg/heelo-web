@@ -10,7 +10,7 @@ const body = [
   '등록한 강아지 이름:',
   '구글이나 애플로 가입했다면, 가입한 이메일 주소(알고 있다면):',
 ].join('\n');
-const mailto = `mailto:${mail}?subject=${encodeURIComponent('계정 삭제 요청')}&body=${encodeURIComponent(body)}`;
+const mailto = `mailto:${mail}?subject=${encodeURIComponent(`[${s}] 계정 삭제 요청`)}&body=${encodeURIComponent(body)}`;
 ---
 <Base title="계정 삭제 안내" wide>
   <div class="sp">
