@@ -23,7 +23,7 @@ export const site = {
   storeLinks: { appStore: '', googlePlay: '' },
 
   // 가족 초대 페이지(/invite/). 앱 열기 주소 형식, {code}가 초대 코드로 바뀝니다. 비워 두면 「앱 열기」 버튼을 숨깁니다(A가 주소 체계를 정하면 채움).
-  invite: { openUrlTemplate: 'com.sojaeha.walklog://invite/{code}' },
+  invite: { openUrlTemplate: 'https://heelo.app/invite/#{code}' },
 
   // 웹 카드 페이지(/c/#<토큰>, 오너 허락 2026-10-14 방송 #371). 호출 주소는 A가 만든 Edge Function(키 없이 부름)을 받으면 채웁니다. 비어 있으면 페이지가 「불러오지 못했어요」를 보여 줍니다.
   card: { apiUrl: 'https://wjsuyufriyceeadudeff.supabase.co/functions/v1/card-view' }, // 서울 함수(키 없음, 방송 #556). A가 Origin·응답 모양을 확인하면 게시

@@ -2,15 +2,15 @@
 import Base from '../../layouts/Base.astro';
 import StoreLinks from '../../components/StoreLinks.astro';
 import { site } from '../../config/site.mjs';
-import { href } from '../../lib/url.mjs';
 const s = site.serviceName;
 const open = site.invite.openUrlTemplate;
-// 시안 C-14a(앱 저장소 docs/design/family-v1/screens/C-14-invite-landing.dc.html)의 「함께하게 되는 것」. 아이콘 경로도 시안 그대로.
+// 「함께하게 되는 것」 글은 CONTENT.md §6 정본(「경로」라는 말은 뺌, 방송 #205). 디자인: 디자이너 2 HP-invite 1차(짧은 글 틀).
 const shares = [
-  { t: '공유 강아지', s: '함께 키우는 강아지를 같이 돌봐요', d: 'M10 6 a2 2 0 1 1 -4 0 a2 2 0 1 1 4 0 M18 6 a2 2 0 1 1 -4 0 a2 2 0 1 1 4 0 M8 9.5 V15 L6 20.5 M8 15 L10 20.5 M16 9.5 V15 L14 20.5 M16 15 L18 20.5' },
-  { t: '산책 기록', s: '누가 언제 얼마나 걸었는지 같이 봐요', d: 'M4 19 C8 19 8 12 12 12 S16 5 20 5 M4 19 L4 19.01' },
-  { t: '추억', s: '사진과 한 줄을 함께 남겨요', d: 'M5 4.5 h14 a1.5 1.5 0 0 1 1.5 1.5 v12 a1.5 1.5 0 0 1 -1.5 1.5 H5 A1.5 1.5 0 0 1 3.5 18 V6 A1.5 1.5 0 0 1 5 4.5 Z M3.5 16 L8.5 11 L13 15.5 L15.5 13 L20.5 18' },
+  { t: '공유 강아지', d: '함께 키우는 강아지를 같이 돌봐요' },
+  { t: '산책 기록', d: '누가 언제 얼마나 걸었는지 같이 봐요' },
+  { t: '추억', d: '사진과 한 줄을 함께 남겨요' },
 ];
+const copyIcon = 'M9 9h10v11H9zM5 15V4h10';
 ---
 <Base
   title="가족 초대"
@@ -19,45 +19,41 @@ const shares = [
   noindex
   wide
 >
-  <section class="invite-band">
-    <div class="invite">
-      <div class="invite-card">
-        <span class="pill">가족 초대</span>
-        <h1>가족이 {s}로<br>초대했어요</h1>
-        <p>함께 키우는 강아지의 산책과 추억을 가족이 같이 기록해요.</p>
-        <div class="invite-mascots">
-          <img src={href('/images/mascot-e1.webp')} alt="" width="300" height="300" decoding="async">
-          <img src={href('/images/mascot-o.webp')} alt="" width="300" height="300" decoding="async">
-          <img src={href('/images/mascot-e2.webp')} alt="" width="300" height="300" decoding="async">
-        </div>
-      </div>
-
-      <div class="invite-share">
-        <p class="invite-label">함께하게 되는 것</p>
-        {shares.map((x) => (
-          <div class="invite-row">
-            <span class="invite-icon"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={x.d} stroke="#1560DE" stroke-width="1.9"></path></svg></span>
-            <span><strong>{x.t}</strong><span class="muted">{x.s}</span></span>
-          </div>
-        ))}
-      </div>
-
-      <div class="invite-actions">
-        {open && <p><a id="invite-open" class="invite-btn" href="#" hidden data-template={open}>앱에서 열기</a></p>}
-        <div class="store-row"><StoreLinks /></div>
-      </div>
-
-      <div class="invite-note">
-        <p class="invite-code-row">
-          <span class="muted">코드</span>
-          <span id="invite-code" class="invite-code" aria-live="polite">초대 링크를 다시 열어 주세요</span>
-          <button id="invite-copy" type="button" class="invite-copy" hidden>복사</button>
-        </p>
-        <noscript><p>초대 코드는 받은 메시지에서 확인해 앱에 입력해 주세요.</p></noscript>
-        <p>7일이 지났거나 이미 쓴 초대는 쓸 수 없어요. 초대한 가족에게 새 링크를 부탁해 주세요.</p>
-      </div>
+  <div class="sp">
+    <div class="sp-top">
+      <span class="sp-chip">가족 초대</span>
+      <h1>가족이 {s}로 초대했어요</h1>
+      <p>함께 키우는 강아지의 산책과 추억을 가족이 같이 기록해요.</p>
     </div>
-  </section>
+
+    <section class="sp-sec">
+      <h2>함께하게 되는 것</h2>
+      <div class="sp-card sp-tips">
+        {shares.map((x) => <div><p><strong>{x.t}</strong> <small class="sp-dim">— {x.d}</small></p></div>)}
+      </div>
+    </section>
+
+    <section class="sp-sec">
+      <div class="sp-card sp-code">
+        <span class="sp-label">초대 코드</span>
+        <div class="sp-code-row">
+          <span id="invite-code" class="sp-codetxt" aria-live="polite">초대 링크를 다시 열어 주세요</span>
+          <button id="invite-copy" type="button" class="sp-copy" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path id="invite-copy-ic" d={copyIcon} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span id="invite-copy-t">복사</span>
+          </button>
+        </div>
+        <noscript><p class="sp-sky-line">초대 코드는 받은 메시지에서 확인해 앱에 입력해 주세요.</p></noscript>
+        {open && <a id="invite-open" class="button sp-btn sp-wide" href="#" hidden data-template={open}>앱에서 열기</a>}
+      </div>
+    </section>
+
+    <section class="sp-sec">
+      <h2>앱이 없다면</h2>
+      <div class="store-row"><StoreLinks /></div>
+    </section>
+
+    <p class="sp-foot">7일이 지났거나 이미 쓴 초대는 쓸 수 없어요. 초대한 가족에게 새 링크를 부탁해 주세요.</p>
+  </div>
 
   {/* 이 페이지의 유일한 스크립트: 링크의 코드를 읽어 화면에 보여 줍니다. 네트워크 요청·저장·추적 없음(scripts/check.mjs가 확인). */}
   <script is:inline>
@@ -65,15 +61,31 @@ const shares = [
       var q = new URLSearchParams(location.search).get('code');
       var c = (location.hash.slice(1) || q || '').replace(/[\s-]/g, '').toUpperCase();
       if (!/^[A-Z0-9]{16}$/.test(c)) return;
-      document.getElementById('invite-code').textContent = c.match(/.{4}/g).join('-');
+      var g = c.match(/.{4}/g), el = document.getElementById('invite-code');
+      el.textContent = '';
+      el.classList.add('on');
+      // 4자 묶음은 한 덩어리로(좁으면 묶음 사이에서만 줄바꿈). 스크린리더는 묶음 단위로 읽음.
+      el.setAttribute('role', 'img');
+      el.setAttribute('aria-label', '초대 코드 ' + g.map(function (p) { return p.split('').join(' '); }).join(', '));
+      g.forEach(function (p, i) {
+        var s = document.createElement('span');
+        s.setAttribute('aria-hidden', 'true');
+        s.textContent = p + (i < 3 ? '-' : '');
+        el.appendChild(s);
+      });
       var a = document.getElementById('invite-open');
       if (a) { a.href = a.getAttribute('data-template').replace('{code}', c); a.hidden = false; }
       // 복사: 코드를 클립보드에 넣는 일만 합니다(오너 허용 2026-10-05). 클립보드를 못 쓰면 버튼을 숨긴 채 둡니다.
       var b = document.getElementById('invite-copy');
       if (b && navigator.clipboard) {
+        var t = document.getElementById('invite-copy-t'), ic = document.getElementById('invite-copy-ic'), d0 = ic.getAttribute('d'), tm;
         b.hidden = false;
         b.addEventListener('click', function () {
-          navigator.clipboard.writeText(c).then(function () { b.textContent = '복사했어요'; });
+          navigator.clipboard.writeText(c).then(function () {
+            t.textContent = '복사했어요'; ic.setAttribute('d', 'M5 12.5l4.5 4.5L19 7.5'); b.classList.add('done');
+            clearTimeout(tm);
+            tm = setTimeout(function () { t.textContent = '복사'; ic.setAttribute('d', d0); b.classList.remove('done'); }, 1800);
+          });
         });
       }
     })();
