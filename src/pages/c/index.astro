@@ -58,7 +58,7 @@ const script = `
     .catch(function () { show('카드를 불러오지 못했어요. 잠시 뒤 다시 열어 주세요'); });
 })();`;
 ---
-<Base title="카드" noindex csp={csp}>
+<Base title="카드" ogImage="/og/card.png" noindex csp={csp}>
   <section class="card-page" id="card" data-api={api}>
     <p class="card-msg" id="card-msg" aria-live="polite">카드를 불러오고 있어요</p>
     <div id="card-out"></div>

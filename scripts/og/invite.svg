@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-<!-- 초대 링크 미리보기(OG). 오너 디자인 기준(방송 #209·#211): 흰 바탕 · Heelo 글자 · 제목 한 줄 · 강조 하나, 칩·색 원 없음. 글자 로고(시안, 상표 확인 중)는 확정 뒤 교체. -->
-<rect width="1200" height="630" fill="#FFFFFF"/>
-<g font-family="Apple SD Gothic Neo, Pretendard, sans-serif">
-<text x="96" y="140" font-size="44" font-weight="900" letter-spacing="-1" fill="#1B2230" font-family="Avenir Next, Helvetica Neue, sans-serif">Heelo</text>
-<text x="96" y="352" font-size="84" font-weight="900" letter-spacing="-3" fill="#1B2230">가족이 Heelo로 <tspan fill="#1560DE">초대</tspan>했어요</text>
-</g>
-</svg>

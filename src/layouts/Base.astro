@@ -4,7 +4,7 @@ import { site } from '../config/site.mjs';
 import { href } from '../lib/url.mjs';
 
 interface Props { title?: string; description?: string; noindex?: boolean; ogImage?: string; wide?: boolean; overlay?: boolean; csp?: string }
-const { title, description, noindex, ogImage = '/og/home.png', wide, overlay, csp } = Astro.props;
+const { title, description, noindex, ogImage = '/og/default.png', wide, overlay, csp } = Astro.props;
 const abs = (path: string) => new URL(href(path), site.url).href;
 const b = site.business;
 const regDigits = b.regNo.replace(/\D/g, '');
