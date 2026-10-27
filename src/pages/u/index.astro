@@ -1,0 +1,49 @@
+---
+import Base from '../../layouts/Base.astro';
+import { site } from '../../config/site.mjs';
+const api = site.profile.apiUrl;
+const origin = api ? new URL(api).origin : '';
+// 이 페이지도 서버 요청을 한 번 합니다(총괄 방송 #629·#635, 2026-10-27). 요청은 아래 한 곳(api)으로만 가고, 그 밖의 연결은 CSP가 막습니다.
+const csp = ["default-src 'none'", "script-src 'unsafe-inline'", "style-src 'self' 'unsafe-inline'", "img-src 'self' data:", "font-src 'self'", `connect-src ${origin || "'none'"}`, "base-uri 'none'", "form-action 'none'"].join('; ');
+// 개발 서버(astro dev)에서만 가짜 응답으로 모양을 봅니다. 배포 빌드에는 들어가지 않습니다.
+const devMock = import.meta.env.DEV ? `
+  window.fetch = function (u, o) { var c = JSON.parse(o.body).code;
+    if (c.charAt(0) === 'z') return Promise.resolve({ ok: false, status: 404 });
+    var d = c.charAt(0) === 'p' ? { private: true } : { private: false, name: '보리', breed: '말티즈' };
+    return Promise.resolve({ ok: true, status: 200, json: function () { return Promise.resolve(d); } }); };` : '';
+const script = `
+(function () {
+  var root = document.getElementById('profile'), out = document.getElementById('profile-out'), msg = document.getElementById('profile-msg');
+  var api = root.getAttribute('data-api');${devMock}
+  var code = location.hash.slice(1).toLowerCase();
+  function show(t) { msg.textContent = t; msg.hidden = false; }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = String(text); return e; }
+  function has(v) { return v !== null && v !== undefined && String(v).trim() !== ''; }
+  if (!/^[a-hjkmnp-z2-9]{10}$/.test(code)) { show('프로필 링크를 다시 열어 주세요'); return; }
+  if (!api) { show('프로필을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요'); return; }
+  function draw(d) {
+    var box = el('section', 'card-box');
+    if (d.private === true) { box.appendChild(el('h2', null, '비공개 계정이에요')); }
+    else if (has(d.name)) { box.appendChild(el('h2', null, d.name)); if (has(d.breed)) box.appendChild(el('p', 'card-sub', d.breed)); }
+    else { return false; }
+    out.appendChild(box); return true;
+  }
+  fetch(api, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: code }), credentials: 'omit', cache: 'no-store', referrerPolicy: 'no-referrer' })
+    .then(function (r) { if (r.status === 404) return null; if (!r.ok) throw new Error('x'); return r.json(); })
+    .then(function (d) {
+      if (!d) { show('찾을 수 없는 링크예요'); return; }
+      if (!draw(d)) throw new Error('x');
+      msg.hidden = true;
+    })
+    .catch(function () { show('프로필을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요'); });
+})();`;
+---
+<Base title="프로필" noindex csp={csp}>
+  <section class="card-page" id="profile" data-api={api}>
+    <p class="card-msg" id="profile-msg" aria-live="polite">프로필을 불러오고 있어요</p>
+    <div id="profile-out"></div>
+    <noscript><p class="card-msg">프로필을 보려면 브라우저의 스크립트를 켜 주세요.</p></noscript>
+  </section>
+  {/* 이 페이지의 스크립트: 주소 # 뒤의 코드를 읽어 위 한 곳으로만 보내고 응답을 글자로 그립니다. 저장·쿠키·추적 없음(scripts/check.mjs가 확인). */}
+  <script is:inline set:html={script}></script>
+</Base>
