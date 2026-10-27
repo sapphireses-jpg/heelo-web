@@ -19,7 +19,7 @@ const script = `
   function show(t) { msg.textContent = t; msg.hidden = false; }
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = String(text); return e; }
   function has(v) { return v !== null && v !== undefined && String(v).trim() !== ''; }
-  if (!/^[a-hjkmnp-z2-9]{10}$/.test(code)) { show('프로필 링크를 다시 열어 주세요'); return; }
+  if (!/^[a-hjkmnp-z2-9]{10}$/.test(code)) { show('링크 주소를 다시 확인해 주세요'); return; }
   if (!api) { show('프로필을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요'); return; }
   function draw(d) {
     var box = el('section', 'card-box');
