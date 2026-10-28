@@ -1,0 +1,52 @@
+---
+import Base from '../../layouts/Base.astro';
+import { site } from '../../config/site.mjs';
+import { href } from '../../lib/url.mjs';
+const api = site.partners.apiUrl;
+const origin = api ? new URL(api).origin : '';
+// 양식은 일반 HTML 전송(POST)이라 서버 요청 스크립트가 필요 없습니다. 보낼 곳은 설정값 한 주소뿐이고(form-action), 그 밖의 연결은 CSP가 막습니다. 'self'는 서버가 되돌려 보내는(303) 우리 주소(/partners/thanks/ · ?error=)를 브라우저가 막지 않게 하려는 것입니다.
+const csp = ["default-src 'none'", "script-src 'unsafe-inline'", "style-src 'self' 'unsafe-inline'", "img-src 'self' data:", "font-src 'self'", "connect-src 'none'", `form-action 'self' ${origin || ""}`.trim(), "base-uri 'none'"].join('; ');
+const kinds = ['펫 브랜드', '동물병원 · 미용 · 공간', '지자체 · 공원 · 산책로', '미디어 · 콘텐츠'];
+const chips = [...kinds, '그 외'];
+// 서버가 실패했을 때 돌려보내는 주소(?error=값)를 읽어 한 줄을 보여 줍니다. 네트워크·저장 없음(scripts/check.mjs가 확인).
+const errors = { invalid: '입력한 내용을 다시 확인해 주세요', consent: '개인정보 수집 · 이용에 동의해야 보낼 수 있어요', contact: '이메일이나 전화번호를 다시 확인해 주세요', limit: '잠시 뒤 다시 보내 주세요', server: '보내지 못했어요. 잠시 뒤 다시 해 주세요' };
+const script = `(function(){var e=${JSON.stringify(errors)};var k=new URLSearchParams(location.search).get('error');var b=document.getElementById('partner-error');if(b&&k&&Object.prototype.hasOwnProperty.call(e,k)){b.textContent=e[k];b.hidden=false;}})();`;
+---
+<Base title="제휴 문의" noindex csp={csp} referrer="origin" wide>
+  <section class="pt-hero">
+    <h1>힐로와 함께해요</h1>
+    <p>가족이 함께 걷는 강아지 산책 기록 앱, 힐로예요.</p>
+  </section>
+
+  <section class="pt-kinds" aria-label="제휴 종류">
+    {kinds.map((k) => <article class="pt-kind"><h2>{k}</h2></article>)}
+  </section>
+
+  <section class="pt-form-wrap" id="form">
+    <div class="pt-side">
+      <h2>제휴 문의</h2>
+      <p>어떤 제휴든 편하게 적어 주세요.</p>
+    </div>
+    <form class="pt-form" method="post" action={api || undefined} autocomplete="on">
+      <p class="pt-error" id="partner-error" role="alert" hidden></p>
+      <label class="pt-field"><span>회사 · 기관 이름</span><input name="business_name" required maxlength="60" placeholder="예) 소재하 펫푸드"></label>
+      <label class="pt-field"><span>담당자 이름</span><input name="contact_name" required maxlength="30" autocomplete="name"></label>
+      <label class="pt-field"><span>지역 (선택)</span><input name="region" maxlength="40"></label>
+      <label class="pt-field"><span>이메일 또는 전화번호</span><input name="contact" required minlength="5" maxlength="80" autocomplete="email"></label>
+      <fieldset class="pt-chips">
+        <legend>제휴 종류 (선택)</legend>
+        {chips.map((c) => <label class="pt-chip"><input type="radio" name="business_type" value={c}><span>{c}</span></label>)}
+      </fieldset>
+      <label class="pt-field pt-area"><span>내용 (300자 이내)</span><textarea name="message" required maxlength="300" rows="6" placeholder="제안하시는 내용, 기간, 바라는 점을 자유롭게 적어 주세요."></textarea></label>
+      <div class="pt-consent">
+        <label class="pt-check"><input type="checkbox" name="agree" value="on" required><span>(필수) 개인정보 수집 · 이용에 동의해요</span></label>
+        <p>목적: 제휴 상담과 회신 · 항목: 담당자 이름, 연락처(이메일 또는 전화번호), 문의 내용 · 보관: 상담을 끝낸 날부터 1년(끝내지 않은 문의는 받은 날부터 1년) · 동의하지 않으면 이 양식으로 보낼 수 없어요({site.contactEmail} 메일로도 문의할 수 있어요). <a href={href('/legal/beta/privacy/')}>개인정보 처리방침</a></p>
+      </div>
+      <input type="hidden" name="consent_version" value={site.partners.consentVersion}>
+      <div class="pt-trap" aria-hidden="true"><label>website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <button class="button pt-send" type="submit">문의 보내기</button>
+      <noscript><p class="pt-note">양식은 스크립트 없이도 보내져요. 오류 안내만 보이지 않을 수 있어요.</p></noscript>
+    </form>
+  </section>
+  <script is:inline set:html={script}></script>
+</Base>

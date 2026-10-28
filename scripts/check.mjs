@@ -32,10 +32,10 @@ for (const f of files('dist')) {
   const scripts = [...text.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
   const isCard = /[\\/][cu][\\/]index\.html$/.test(f);
   const cardApi = /[\\/]u[\\/]index\.html$/.test(f) ? site.profile?.apiUrl ?? '' : site.card?.apiUrl ?? '';
-  if (scripts.length && !/(?:[\\/]invite[\\/]index|[\\/]404|[\\/][cu][\\/]index)\.html$/.test(f)) errors.push(`브라우저 자바스크립트: ${f}`);
+  if (scripts.length && !/(?:[\\/]invite[\\/]index|[\\/]404|[\\/][cu][\\/]index|[\\/]partners[\\/]index)\.html$/.test(f)) errors.push(`브라우저 자바스크립트: ${f}`);
   // 초대 페이지와 404 페이지만 허용(오너 2026-10-04, 코드 복사 2026-10-05, 404는 2026-10-07 방송 #199): 인라인만, 네트워크·저장·추적 호출 없음(navigator는 clipboard만)
   // 웹 카드 /c/와 프로필 카드 /u/ 두 곳은 서버 요청 fetch 한 번을 더 허락합니다(오너 2026-10-14, 방송 #371 · /u/는 2026-10-27, 방송 #629·#635). 요청 주소는 설정값(site.card.apiUrl · site.profile.apiUrl)과 같아야 하고 CSP connect-src가 그 주소만 열어야 합니다.
-  if (scripts.length && /(?:[\\/]invite[\\/]index|[\\/]404|[\\/][cu][\\/]index)\.html$/.test(f)) {
+  if (scripts.length && /(?:[\\/]invite[\\/]index|[\\/]404|[\\/][cu][\\/]index|[\\/]partners[\\/]index)\.html$/.test(f)) {
     for (const [, attrs, body] of scripts) {
       if (/\ssrc\s*=/i.test(attrs)) errors.push(`허용 페이지 스크립트: 외부 파일을 불러올 수 없습니다 ${f}`);
       const badCalls = isCard
@@ -60,6 +60,27 @@ for (const f of files('dist')) {
       if (!api) warnings.push(`웹 카드: ${f}의 apiUrl이 비어 있습니다(A의 호출 주소 대기)`);
     }
   }
+}
+// 1-1. 양식 검사(오너 요청 2026-10-19, 방송 #467·#471): <form>은 /partners/ 한 곳만. 일반 POST, 보낼 곳 = 설정값 site.partners.apiUrl 한 주소, CSP form-action이 그 주소만 열고, noindex·referrer origin(서버가 Origin을 받게).
+for (const f of files('dist').filter((f) => f.endsWith('.html'))) {
+  const text = readFileSync(f, 'utf8');
+  const forms = [...text.matchAll(/<form\b([^>]*)>/gi)];
+  if (!forms.length) continue;
+  if (!/[\\/]partners[\\/]index\.html$/.test(f)) { errors.push(`양식: ${f} 에 <form>이 있습니다(제휴 문의 /partners/만 허용)`); continue; }
+  const api = site.partners?.apiUrl ?? '';
+  const origin = api ? new URL(api).origin : "'none'";
+  if (forms.length !== 1) errors.push(`양식: ${f} 에 <form>이 하나가 아닙니다`);
+  const attrs = forms[0][1];
+  if (!/\smethod="?post"?/i.test(attrs)) errors.push(`양식: method가 post가 아닙니다 ${f}`);
+  if (api) {
+    if (!api.startsWith('https://')) errors.push('양식: partners.apiUrl은 https여야 합니다');
+    if (!attrs.includes(`action="${api}"`)) errors.push(`양식: action이 설정값과 다릅니다 ${f}`);
+  } else warnings.push('양식: site.partners.apiUrl이 비어 있습니다(H의 호출 주소 대기)');
+  if (!site.partners?.consentVersion) warnings.push('양식: consentVersion이 비어 있습니다(M의 동의 문구 버전 값 대기)');
+  const csp = text.match(/<meta http-equiv="Content-Security-Policy" content="([^"]*)"/)?.[1];
+  if (!csp || !csp.includes(`form-action 'self' ${origin}`) || !csp.includes("connect-src 'none'")) errors.push(`양식: CSP(form-action=${origin}, connect-src 'none')가 없습니다 ${f}`);
+  if (!/<meta name="robots" content="noindex/.test(text)) errors.push(`양식: noindex가 없습니다 ${f}`);
+  if (!/<meta name="referrer" content="origin">/.test(text)) errors.push(`양식: referrer origin 메타가 없습니다(Origin 전달) ${f}`);
 }
 if (files('dist').some((f) => f.endsWith('.js'))) errors.push('브라우저 자바스크립트: dist에 .js 파일이 있습니다');
 
