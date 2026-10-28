@@ -4,7 +4,7 @@ status: preview
 source:
   path: "앱 저장소 docs/legal/public/terms.md"
   sha256: 68dd1ac3915c383b346c649e0c2b6b53fac793f737f77a082d17df26fec32a5c
-  fetched: "2026-10-27"
+  fetched: "2026-10-28"
 ---
 # 1. 서비스 이용약관
 

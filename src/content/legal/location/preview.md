@@ -4,7 +4,7 @@ status: preview
 source:
   path: "앱 저장소 docs/legal/public/location.md"
   sha256: f384dfc2aa3e80bfd86fb5324798e0efd2ee16f26284d1d834f99fd44587fb71
-  fetched: "2026-10-27"
+  fetched: "2026-10-28"
 ---
 # 3. 위치기반서비스 이용약관
 
