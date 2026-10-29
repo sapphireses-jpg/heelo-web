@@ -4,10 +4,16 @@ import { site } from '../../config/site.mjs';
 import { href } from '../../lib/url.mjs';
 const api = site.partners.apiUrl;
 const origin = api ? new URL(api).origin : '';
+const place = site.place;
+const placeOn = Boolean(place?.apiUrl);
+const placeOrigin = placeOn ? new URL(place.apiUrl).origin : '';
 // 양식은 일반 HTML 전송(POST)이라 서버 요청 스크립트가 필요 없습니다. 보낼 곳은 설정값 한 주소뿐이고(form-action), 그 밖의 연결은 CSP가 막습니다. 'self'는 서버가 되돌려 보내는(303) 우리 주소(/partners/thanks/ · ?error=)를 브라우저가 막지 않게 하려는 것입니다.
-const csp = ["default-src 'none'", "script-src 'unsafe-inline'", "style-src 'self' 'unsafe-inline'", "img-src 'self' data:", "font-src 'self'", "connect-src 'none'", `form-action 'self' ${origin || ""}`.trim(), "base-uri 'none'"].join('; ');
-const kinds = ['펫 브랜드', '동물병원 · 미용 · 공간', '지자체 · 공원 · 산책로', '미디어 · 콘텐츠'];
-const chips = [...kinds, '그 외'];
+const csp = ["default-src 'none'", "script-src 'unsafe-inline'", "style-src 'self' 'unsafe-inline'", "img-src 'self' data:", "font-src 'self'", "connect-src 'none'", `form-action 'self' ${[...new Set([origin, placeOrigin].filter(Boolean))].join(' ')}`.trim(), "base-uri 'none'"].join('; ');
+// 제휴 문의 종류(방송 #670 D-120: 펫 브랜드 · 미디어 · 콘텐츠 · 행사 · 기관 협업 · 그 외). 서버 business_type은 글자라 그대로 받음.
+const chips = ['펫 브랜드', '미디어 · 콘텐츠', '행사', '기관 협업', '그 외'];
+// 장소 등록 양식(방송 #670 D-120): 보낼 곳(H 서버)이 설정값에 오기 전에는 화면에 나오지 않습니다.
+const placeKinds = ['카페', '식당', '숙소', '매장', '병원', '미용', '유치원', '그 외'];
+const conditions = ['실내 동반 가능', '테라스 · 야외만', '소형견만', '대형견도 가능', '리드줄 필수', '이동장 필수', '반려견 메뉴 · 물그릇'];
 // 서버가 실패했을 때 돌려보내는 주소(?error=값)를 읽어 한 줄을 보여 줍니다. 네트워크·저장 없음(scripts/check.mjs가 확인).
 const errors = { invalid: '입력한 내용을 다시 확인해 주세요', consent: '개인정보 수집 · 이용에 동의해야 보낼 수 있어요', contact: '이메일이나 전화번호를 다시 확인해 주세요', limit: '잠시 뒤 다시 보내 주세요', server: '보내지 못했어요. 잠시 뒤 다시 해 주세요' };
 const script = `(function(){var e=${JSON.stringify(errors)};var k=new URLSearchParams(location.search).get('error');var b=document.getElementById('partner-error');if(b&&k&&Object.prototype.hasOwnProperty.call(e,k)){b.textContent=e[k];b.hidden=false;}})();`;
@@ -18,9 +24,52 @@ const script = `(function(){var e=${JSON.stringify(errors)};var k=new URLSearchP
     <p>가족이 함께 걷는 강아지 산책 기록 앱, 힐로예요.</p>
   </section>
 
-  <section class="pt-kinds" aria-label="제휴 종류">
-    {kinds.map((k) => <article class="pt-kind"><h2>{k}</h2></article>)}
-  </section>
+  {placeOn && (
+    <section class="pt-doors" aria-label="문의 창구">
+      <article class="pt-door pt-door-main">
+        <h2>우리 가게, 힐로 지도에 올리기</h2>
+        <p>카페 · 식당 · 숙소 · 매장 · 병원 · 미용 · 유치원처럼 강아지와 함께 갈 수 있는 곳</p>
+        <a class="button pt-door-btn" href="#place">장소 등록하기</a>
+      </article>
+      <article class="pt-door">
+        <h2>제휴 문의하기</h2>
+        <p>펫 브랜드 · 미디어 · 행사 · 기관 협업</p>
+        <a class="pt-back" href="#form">문의하기</a>
+      </article>
+    </section>
+  )}
+
+  {placeOn && (
+    <section class="pt-form-wrap" id="place">
+      <div class="pt-side">
+        <h2>우리 가게, 힐로 지도에 올리기</h2>
+        <p>확인 뒤 힐로 지도에 반려견 동반 장소로 소개할 예정이에요.</p>
+      </div>
+      <form class="pt-form" method="post" action={place.apiUrl} autocomplete="on">
+        <label class="pt-field"><span>가게 이름</span><input name="place_name" required maxlength="60"></label>
+        <fieldset class="pt-chips">
+          <legend>업종</legend>
+          {placeKinds.map((c) => <label class="pt-chip"><input type="radio" name="place_type" value={c} required><span>{c}</span></label>)}
+        </fieldset>
+        <label class="pt-field"><span>도로명 주소</span><input name="address" required maxlength="120" autocomplete="street-address"></label>
+        <fieldset class="pt-chips">
+          <legend>동반 조건 · 여러 개 고를 수 있어요</legend>
+          {conditions.map((c) => <label class="pt-chip"><input type="checkbox" name="conditions" value={c}><span>{c}</span></label>)}
+        </fieldset>
+        <label class="pt-field"><span>영업시간 (선택)</span><input name="hours" maxlength="80"></label>
+        <label class="pt-field"><span>담당자 이름</span><input name="contact_name" required maxlength="30" autocomplete="name"></label>
+        <label class="pt-field"><span>연락처</span><input name="contact" required minlength="5" maxlength="80" autocomplete="email"></label>
+        <label class="pt-check"><input type="checkbox" name="pass_notice" value="on"><span>힐로 패스가 준비되면 안내받기 (선택)</span></label>
+        <div class="pt-consent">
+          <label class="pt-check"><input type="checkbox" name="agree" value="on" required><span>(필수) 개인정보 수집 · 이용에 동의해요</span></label>
+          <p>[동의 문구: M 확정 대기] <a href={href('/legal/beta/privacy/')}>개인정보 처리방침</a></p>
+        </div>
+        <input type="hidden" name="consent_version" value={place.consentVersion}>
+        <div class="pt-trap" aria-hidden="true"><label>website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+        <button class="button pt-send" type="submit">신청 보내기</button>
+      </form>
+    </section>
+  )}
 
   <section class="pt-form-wrap" id="form">
     <div class="pt-side">

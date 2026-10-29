@@ -68,15 +68,23 @@ for (const f of files('dist').filter((f) => f.endsWith('.html'))) {
   if (!forms.length) continue;
   if (!/[\\/]partners[\\/]index\.html$/.test(f)) { errors.push(`양식: ${f} 에 <form>이 있습니다(제휴 문의 /partners/만 허용)`); continue; }
   const api = site.partners?.apiUrl ?? '';
-  const origin = api ? new URL(api).origin : "'none'";
-  if (forms.length !== 1) errors.push(`양식: ${f} 에 <form>이 하나가 아닙니다`);
-  const attrs = forms[0][1];
-  if (!/\smethod="?post"?/i.test(attrs)) errors.push(`양식: method가 post가 아닙니다 ${f}`);
-  if (api) {
-    if (!api.startsWith('https://')) errors.push('양식: partners.apiUrl은 https여야 합니다');
-    if (!attrs.includes(`action="${api}"`)) errors.push(`양식: action이 설정값과 다릅니다 ${f}`);
-  } else warnings.push('양식: site.partners.apiUrl이 비어 있습니다(H의 호출 주소 대기)');
+  const placeApi = site.place?.apiUrl ?? ''; // 장소 등록 양식(방송 #670 D-120): 주소가 있을 때만 두 번째 <form>
+  const origins = [...new Set([api, placeApi].filter(Boolean).map((u) => new URL(u).origin))];
+  const origin = origins.length ? origins.join(' ') : "'none'";
+  if (forms.length !== (placeApi ? 2 : 1)) errors.push(`양식: ${f} 의 <form> 개수(${forms.length})가 설정값과 맞지 않습니다`);
+  for (const [, attrs] of forms) {
+    if (!/\smethod="?post"?/i.test(attrs)) errors.push(`양식: method가 post가 아닙니다 ${f}`);
+    const action = attrs.match(/\saction="([^"]*)"/)?.[1];
+    if (action && ![api, placeApi].includes(action)) errors.push(`양식: action이 설정값과 다릅니다 ${f}`);
+  }
+  for (const u of [api, placeApi].filter(Boolean)) {
+    if (!u.startsWith('https://')) errors.push('양식: apiUrl은 https여야 합니다');
+    if (!forms.some(([, attrs]) => attrs.includes(`action="${u}"`))) errors.push(`양식: action이 설정값과 다릅니다 ${f}`);
+  }
+  if (!api) warnings.push('양식: site.partners.apiUrl이 비어 있습니다(H의 호출 주소 대기)');
+  if (!placeApi) warnings.push('양식: site.place.apiUrl이 비어 있습니다(장소 등록 양식은 숨김 — H 서버 대기)');
   if (!site.partners?.consentVersion) warnings.push('양식: consentVersion이 비어 있습니다(M의 동의 문구 버전 값 대기)');
+  if (placeApi && !site.place?.consentVersion) warnings.push('양식: site.place.consentVersion이 비어 있습니다(M의 장소 양식 동의 문구 버전 대기)');
   const csp = text.match(/<meta http-equiv="Content-Security-Policy" content="([^"]*)"/)?.[1];
   if (!csp || !csp.includes(`form-action 'self' ${origin}`) || !csp.includes("connect-src 'none'")) errors.push(`양식: CSP(form-action=${origin}, connect-src 'none')가 없습니다 ${f}`);
   if (!/<meta name="robots" content="noindex/.test(text)) errors.push(`양식: noindex가 없습니다 ${f}`);
