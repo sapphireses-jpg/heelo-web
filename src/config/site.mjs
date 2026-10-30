@@ -28,8 +28,8 @@ export const site = {
   // 웹 카드 페이지(/c/#<토큰>, 오너 허락 2026-10-14 방송 #371). 호출 주소는 A가 만든 Edge Function(키 없이 부름)을 받으면 채웁니다. 비어 있으면 페이지가 「불러오지 못했어요」를 보여 줍니다.
   profile: { apiUrl: 'https://wjsuyufriyceeadudeff.supabase.co/functions/v1/profile-view' }, // 서울 함수(키 없음, Origin https://heelo.app만, 방송 #635)
   // 제휴 문의 양식(/partners/, 오너 결정 D-111 · 방송 #657·#658). 일반 POST, 서울 partner-inquiry 함수(키 없음, 성공은 /partners/thanks/ · 실패는 /partners/?error=코드로 되돌아옴). consentVersion은 M의 동의 문구 버전(partner-v1).
-  // 장소 등록 양식(/partners/#place, 오너 결정 D-120 · 방송 #670). 보낼 곳(H 서버)과 동의 문구 버전(M)이 오면 채움 — apiUrl이 비어 있으면 큰 카드 둘과 장소 양식은 화면에 나오지 않음.
-  place: { apiUrl: '', consentVersion: '' },
+  // 장소 등록 양식(/partners/#place, 오너 결정 D-120 · 방송 #670). 보낼 곳은 H의 place-listing 서울 주소(일괄 28 배포 뒤 hub가 알려 줌, Origin https://heelo.app만)가 오면 채움. 동의 문구 버전 place-v1(M 6641) — apiUrl이 비어 있으면 큰 카드 둘과 장소 양식은 화면에 나오지 않음.
+  place: { apiUrl: '', consentVersion: 'place-v1' },
   partners: { apiUrl: 'https://wjsuyufriyceeadudeff.supabase.co/functions/v1/partner-inquiry', consentVersion: 'partner-v1' },
   card: { apiUrl: 'https://wjsuyufriyceeadudeff.supabase.co/functions/v1/card-view' }, // 서울 함수(키 없음, 방송 #556). A가 Origin·응답 모양을 확인하면 게시
 
