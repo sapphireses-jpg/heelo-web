@@ -1,0 +1,12 @@
+---
+import Base from '../../../../layouts/Base.astro';
+import { href } from '../../../../lib/url.mjs';
+---
+<Base title="장소 등록" noindex wide>
+  <section class="pt-thanks" role="status">
+    <img class="pt-mailbox" src={href('/images/idea-mailbox.webp')} alt="힐로 우체통" width="120" height="120">
+    <h1>신청이 접수됐어요</h1>
+    <p>확인 뒤 연락드릴게요.</p>
+    <p><a class="pt-back" href={href('/')}>홈으로 돌아가기</a></p>
+  </section>
+</Base>
