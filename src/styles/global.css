@@ -220,6 +220,12 @@ th { background: var(--color-surface-inset); }
 .h2-hero { position: relative; height: clamp(640px, 100svh, 960px); overflow: hidden; background: var(--color-bg); }
 .h2-hero-bg { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 62%; object-fit: cover; object-position: 50% 100%; }
 @media (prefers-reduced-motion: reduce) { .h2-hero-video { display: none; } } /* 동작 줄이기: 영상 대신 아래 그림 그대로(오너 결정 D-153) */
+/* 390 이하(방송 #752 · N 7280): 바탕은 정지 그림 그대로, 영상은 정본 「강아지 영상 칸」(300 × 200 · 오른쪽 45 · 아래 80 · r20) 안에 cover. 동작 줄이기면 같은 칸에 poster 그림 */
+.h2-hero-dogcard { display: none; }
+@media (max-width: 390px) {
+  .h2-hero-video, .h2-hero-dogcard { position: absolute; left: auto; right: 45px; top: auto; bottom: 80px; width: min(300px, calc(100% - 60px)); height: 200px; border-radius: 20px; object-fit: cover; box-shadow: 0 1px 2px rgba(28, 33, 30, 0.05), 0 12px 32px rgba(28, 33, 30, 0.10); }
+}
+@media (max-width: 390px) and (prefers-reduced-motion: reduce) { .h2-hero-dogcard { display: block; } }
 .h2-hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: linear-gradient(to bottom, var(--color-bg), rgba(255, 249, 243, 0) 22%); pointer-events: none; }
 .h2-hero-text { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: clamp(88px, 9vw, 128px) clamp(16px, 3vw, 48px) 0; }
 .h2-hero-text > * { max-width: 720px; }
