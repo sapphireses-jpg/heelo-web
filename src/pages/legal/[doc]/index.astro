@@ -5,6 +5,7 @@ import LegalDoc from '../../../components/LegalDoc.astro';
 import { DOCS, currentVersion, upcomingVersion, todayKST } from '../../../lib/legal.mjs';
 import { legalByDoc, previewByDoc } from '../../../lib/legal-data';
 import { href } from '../../../lib/url.mjs';
+import { site } from '../../../config/site.mjs';
 
 export function getStaticPaths() {
   return Object.keys(DOCS).map((doc) => ({ params: { doc } }));
@@ -15,8 +16,10 @@ const versions = (await legalByDoc())[doc];
 const today = todayKST();
 const current = currentVersion(versions, today);
 const next = upcomingVersion(versions, today);
-// 임시 초안은 정식 현재본이 없을 때만 보여 줍니다.
-const preview = current ? undefined : (await previewByDoc())[doc];
+// 현재본이 없고 시행 예정인 정식 버전이 있으면 그것을 주소의 본문으로 보여 줍니다(정식 출시 전 첫 정식판, M 7007).
+const shown = current ?? next;
+// 임시 초안은 정식 버전이 하나도 없을 때만 보여 줍니다.
+const preview = shown ? undefined : (await previewByDoc())[doc];
 const Preview = preview && (await render(preview)).Content;
 ---
 <Base title={DOCS[doc]} noindex={!!preview}>
@@ -26,8 +29,10 @@ const Preview = preview && (await render(preview)).Content;
       <div class="legal-body"><Preview /></div>
     </>
   ) : (
-    <LegalDoc doc={doc} versions={versions} shown={current}>
-      {next && (
+    <LegalDoc doc={doc} versions={versions} shown={shown}>
+      {!current && next ? (
+        <p class="notice">{site.serviceName} 정식 출시에 맞춰 비공개 베타 약관을 정식 약관으로 바꿉니다. 시행일 {next.effective.replace(/^(\d+)-0?(\d+)-0?(\d+)$/, '$1년 $2월 $3일')} — 그 전에 앱에서 동의하면 동의한 때부터 적용돼요.</p>
+      ) : next && (
         <p class="notice">{next.effective}부터 새 버전이 시행돼요. <a href={href(`/legal/${doc}/${next.version}/`)}>새 버전 미리 보기</a></p>
       )}
     </LegalDoc>
