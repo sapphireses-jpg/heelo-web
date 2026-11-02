@@ -219,14 +219,10 @@ th { background: var(--color-surface-inset); }
 .site-header.over nav a:not(.button):hover { background: rgba(255, 255, 255, 0.7); }
 .h2-hero { position: relative; height: clamp(640px, 100svh, 960px); overflow: hidden; background: var(--color-bg); }
 .h2-hero-bg { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 62%; object-fit: cover; object-position: 50% 100%; }
-@media (prefers-reduced-motion: reduce) { .h2-hero-video { display: none; } } /* 동작 줄이기: 영상 대신 아래 그림 그대로(오너 결정 D-153) */
-/* 자동 재생이 막혀도(iOS 저전력 모드 · 앱 안 브라우저) 큰 재생 버튼이 뜨지 않게: 막히면 poster 그림만 보임(방송 #774 ①) */
-.h2-hero-video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
-.h2-hero-video::-webkit-media-controls { display: none !important; }
-/* 390 이하(방송 #752 · N 7280, #777): 바탕은 정지 그림 그대로, 정본 「강아지 영상 칸」(300 × 200 · 오른쪽 45 · 아래 80 · r20) 안에 움직이는 그림(WebP, 영상과 같은 장면 — 저전력 모드에서도 스크립트 없이 도는 쪽). 동작 줄이기면 같은 칸에 정지 그림. <picture>의 media로 고르므로 391 이상에서는 WebP를 받지 않음 */
+/* 첫 화면 강아지는 영상이 아니라 움직이는 그림(WebP)만 씀: 막힌 영상 위에 Safari가 그리는 재생 버튼은 CSS로 못 지워서(오너 D-175, 방송 #788). 391 이상 = 바탕 그림이 움직이는 WebP, 동작 줄이기 = 정지 그림 */
+/* 390 이하(방송 #752 · N 7280, #777): 바탕은 정지 그림 그대로, 정본 「강아지 영상 칸」(300 × 200 · 오른쪽 45 · 아래 80 · r20) 안에 움직이는 그림(WebP, 스크립트 없이 도는 쪽). 동작 줄이기면 같은 칸에 정지 그림. <picture>의 media로 고르므로 391 이상에서는 WebP를 받지 않음 */
 .h2-hero-dogcard { display: none; }
 @media (max-width: 390px) {
-  .h2-hero-video { display: none; }
   .h2-hero-dogcard { display: block; position: absolute; left: auto; right: 45px; top: auto; bottom: 80px; width: min(300px, calc(100% - 60px)); height: 200px; border-radius: 20px; object-fit: cover; box-shadow: 0 1px 2px rgba(28, 33, 30, 0.05), 0 12px 32px rgba(28, 33, 30, 0.10); }
 }
 .h2-hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: linear-gradient(to bottom, var(--color-bg), rgba(255, 249, 243, 0) 22%); pointer-events: none; }
