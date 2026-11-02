@@ -32,10 +32,10 @@ for (const f of files('dist')) {
   const scripts = [...text.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
   const isCard = /[\\/][cu][\\/]index\.html$/.test(f);
   const cardApi = /[\\/]u[\\/]index\.html$/.test(f) ? site.profile?.apiUrl ?? '' : site.card?.apiUrl ?? '';
-  if (scripts.length && !/(?:[\\/]invite[\\/]index|[\\/]404|[\\/][cu][\\/]index|[\\/]partners[\\/]index)\.html$/.test(f)) errors.push(`브라우저 자바스크립트: ${f}`);
+  if (scripts.length && !/(?:[\\/]invite[\\/]index|[\\/]404|[\\/][cu][\\/]index|[\\/]partners[\\/]index)\.html$|^dist[\\/]index\.html$/.test(f)) errors.push(`브라우저 자바스크립트: ${f}`);
   // 초대 페이지와 404 페이지만 허용(오너 2026-10-04, 코드 복사 2026-10-05, 404는 2026-10-07 방송 #199): 인라인만, 네트워크·저장·추적 호출 없음(navigator는 clipboard만)
   // 웹 카드 /c/와 프로필 카드 /u/ 두 곳은 서버 요청 fetch 한 번을 더 허락합니다(오너 2026-10-14, 방송 #371 · /u/는 2026-10-27, 방송 #629·#635). 요청 주소는 설정값(site.card.apiUrl · site.profile.apiUrl)과 같아야 하고 CSP connect-src가 그 주소만 열어야 합니다.
-  if (scripts.length && /(?:[\\/]invite[\\/]index|[\\/]404|[\\/][cu][\\/]index|[\\/]partners[\\/]index)\.html$/.test(f)) {
+  if (scripts.length && /(?:[\\/]invite[\\/]index|[\\/]404|[\\/][cu][\\/]index|[\\/]partners[\\/]index)\.html$|^dist[\\/]index\.html$/.test(f)) {
     for (const [, attrs, body] of scripts) {
       if (/\ssrc\s*=/i.test(attrs)) errors.push(`허용 페이지 스크립트: 외부 파일을 불러올 수 없습니다 ${f}`);
       const badCalls = isCard
@@ -46,6 +46,16 @@ for (const f of files('dist')) {
         if ((body.match(/\bfetch\s*\(/g) ?? []).length !== 1) errors.push(`웹 카드: fetch는 정확히 한 번이어야 합니다 ${f}`);
         if (/https?:\/\//i.test(body)) errors.push(`웹 카드: 스크립트 안에 주소를 적을 수 없습니다(설정값 data-api로만) ${f}`);
       }
+    }
+    // 홈(/) 첫 화면 강아지 영상 재생 스크립트(오너 2026-11-02 D-180, 방송 #800 · 예외 6): 인라인 하나, 주소 · 이동 · 쓰기 호출 없음, CSP가 연결 · 양식을 막음
+    if (/^dist[\\/]index\.html$/.test(f)) {
+      if (scripts.length !== 1) errors.push(`홈: 스크립트는 정확히 하나여야 합니다(${scripts.length}개) ${f}`);
+      for (const [, , body] of scripts) {
+        if (/https?:\/\/|\b(location|innerHTML|outerHTML|insertAdjacentHTML|document\.write|eval|Function)\b/.test(body)) errors.push(`홈: 스크립트에 주소 · 이동 · 쓰기 호출이 있습니다 ${f}`);
+        if (!/getElementById\('h2-dogvid'\)/.test(body)) errors.push(`홈: 스크립트가 첫 화면 영상용이 아닙니다 ${f}`);
+      }
+      const hcsp = text.match(/<meta http-equiv="Content-Security-Policy" content="([^"]*)"/)?.[1];
+      if (!hcsp || !hcsp.includes("script-src 'unsafe-inline'") || !hcsp.includes("connect-src 'none'") || !hcsp.includes("form-action 'none'") || /\*/.test(hcsp)) errors.push(`홈: CSP(script-src 인라인만 · connect-src 'none' · form-action 'none')가 없습니다 ${f}`);
     }
     if (isCard) {
       const api = cardApi;
