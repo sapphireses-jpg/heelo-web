@@ -272,18 +272,7 @@ th { background: var(--color-surface-inset); }
 .h2-mailbox img { width: 64px; height: 64px; }
 .h2-mailbox strong { display: block; font-size: 0.9375rem; font-weight: 700; }
 .h2-mailbox .muted { font-size: 0.875rem; }
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    @keyframes h2-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
-    @keyframes h2-fill { from { fill-opacity: 0; } to { fill-opacity: 1; } }
-    /* 길 선: 타임라인을 섹션(.h2-story)에 걸어, 보고 있는 자리 옆은 언제나 이미 그려져 있게(방송 #774 ②). 줄이기(minify)가 animation 속 timeline을 한 줄로 합쳐 일부 브라우저가 통째로 버리므로 규칙을 나눠 둠 */
-    .h2-story { view-timeline: --h2-story block; }
-    .h2-draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: h2-draw linear both; }
-    .h2-story .h2-draw { animation-timeline: --h2-story; animation-range: cover 0% cover calc(100% - 100vh - 4%); } /* 섹션 위가 화면 아래에 닿을 때부터 섹션 아래가 화면 아래에 닿기 조금 전까지 */
-    .h2-fill { animation: h2-fill linear both; }
-    .h2-art .h2-fill { animation-timeline: view(); animation-range: entry 10% entry 90%; }
-  }
-}
+/* 길 선 · 칸 채우기는 스크롤로 그리지 않고 처음부터 다 보임(동작 줄이기와 같은 모양): 스크롤 그리기가 브라우저마다 어긋나 맥 Safari에서 03 아래로 길이 안 이어짐(방송 #799 ①) */
 /* 고객센터(디자이너 2 HP-pages 「짧은 글 틀」): 제목 → 설명 → 단추 → 흰 카드 목록 → 요청별 안내 2열 카드 → 질문 카드 → 돌아가기. 폭 680 한 단. */
 .sp { max-width: 680px; margin: 0 auto; padding: clamp(24px, 4vw, 56px) clamp(16px, 3vw, 24px) clamp(48px, 7vw, 96px); }
 .sp-top h1 { font-size: clamp(1.75rem, 2.8vw, 2.5rem); line-height: 1.25; letter-spacing: -0.02em; margin: 12px 0 0; }
