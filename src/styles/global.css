@@ -220,12 +220,15 @@ th { background: var(--color-surface-inset); }
 .h2-hero { position: relative; height: clamp(640px, 100svh, 960px); overflow: hidden; background: var(--color-bg); }
 .h2-hero-bg { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 62%; object-fit: cover; object-position: 50% 100%; }
 @media (prefers-reduced-motion: reduce) { .h2-hero-video { display: none; } } /* 동작 줄이기: 영상 대신 아래 그림 그대로(오너 결정 D-153) */
-/* 390 이하(방송 #752 · N 7280): 바탕은 정지 그림 그대로, 영상은 정본 「강아지 영상 칸」(300 × 200 · 오른쪽 45 · 아래 80 · r20) 안에 cover. 동작 줄이기면 같은 칸에 poster 그림 */
+/* 자동 재생이 막혀도(iOS 저전력 모드 · 앱 안 브라우저) 큰 재생 버튼이 뜨지 않게: 막히면 poster 그림만 보임(방송 #774 ①) */
+.h2-hero-video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
+.h2-hero-video::-webkit-media-controls { display: none !important; }
+/* 390 이하(방송 #752 · N 7280, #777): 바탕은 정지 그림 그대로, 정본 「강아지 영상 칸」(300 × 200 · 오른쪽 45 · 아래 80 · r20) 안에 움직이는 그림(WebP, 영상과 같은 장면 — 저전력 모드에서도 스크립트 없이 도는 쪽). 동작 줄이기면 같은 칸에 정지 그림. <picture>의 media로 고르므로 391 이상에서는 WebP를 받지 않음 */
 .h2-hero-dogcard { display: none; }
 @media (max-width: 390px) {
-  .h2-hero-video, .h2-hero-dogcard { position: absolute; left: auto; right: 45px; top: auto; bottom: 80px; width: min(300px, calc(100% - 60px)); height: 200px; border-radius: 20px; object-fit: cover; box-shadow: 0 1px 2px rgba(28, 33, 30, 0.05), 0 12px 32px rgba(28, 33, 30, 0.10); }
+  .h2-hero-video { display: none; }
+  .h2-hero-dogcard { display: block; position: absolute; left: auto; right: 45px; top: auto; bottom: 80px; width: min(300px, calc(100% - 60px)); height: 200px; border-radius: 20px; object-fit: cover; box-shadow: 0 1px 2px rgba(28, 33, 30, 0.05), 0 12px 32px rgba(28, 33, 30, 0.10); }
 }
-@media (max-width: 390px) and (prefers-reduced-motion: reduce) { .h2-hero-dogcard { display: block; } }
 .h2-hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: linear-gradient(to bottom, var(--color-bg), rgba(255, 249, 243, 0) 22%); pointer-events: none; }
 .h2-hero-text { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: clamp(88px, 9vw, 128px) clamp(16px, 3vw, 48px) 0; }
 .h2-hero-text > * { max-width: 720px; }
@@ -277,8 +280,12 @@ th { background: var(--color-surface-inset); }
   @media (prefers-reduced-motion: no-preference) {
     @keyframes h2-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
     @keyframes h2-fill { from { fill-opacity: 0; } to { fill-opacity: 1; } }
-    .h2-draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: h2-draw linear both; animation-timeline: view(); animation-range: entry 60% exit 40%; }
-    .h2-fill { animation: h2-fill linear both; animation-timeline: view(); animation-range: entry 10% entry 90%; }
+    /* 길 선: 타임라인을 섹션(.h2-story)에 걸어, 보고 있는 자리 옆은 언제나 이미 그려져 있게(방송 #774 ②). 줄이기(minify)가 animation 속 timeline을 한 줄로 합쳐 일부 브라우저가 통째로 버리므로 규칙을 나눠 둠 */
+    .h2-story { view-timeline: --h2-story block; }
+    .h2-draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: h2-draw linear both; }
+    .h2-story .h2-draw { animation-timeline: --h2-story; animation-range: cover 0% cover calc(100% - 100vh - 4%); } /* 섹션 위가 화면 아래에 닿을 때부터 섹션 아래가 화면 아래에 닿기 조금 전까지 */
+    .h2-fill { animation: h2-fill linear both; }
+    .h2-art .h2-fill { animation-timeline: view(); animation-range: entry 10% entry 90%; }
   }
 }
 /* 고객센터(디자이너 2 HP-pages 「짧은 글 틀」): 제목 → 설명 → 단추 → 흰 카드 목록 → 요청별 안내 2열 카드 → 질문 카드 → 돌아가기. 폭 680 한 단. */
