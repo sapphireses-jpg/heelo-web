@@ -1,0 +1,15 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.sojaeha.walklog",
+      "sha256_cert_fingerprints": [
+        "0A:32:FE:77:91:19:2A:4D:00:6C:38:32:D3:5B:57:F2:14:CB:13:8C:50:E2:26:9F:81:2E:AE:C1:AB:4D:37:2D",
+        "E8:D4:EF:49:71:05:45:71:67:7F:A2:81:81:70:B0:AB:1B:9C:95:E9:42:55:0A:D1:E8:41:CA:6B:43:A3:08:ED",
+        "9E:34:73:7A:F8:FC:81:3A:ED:88:00:DD:19:3A:63:D4:0B:38:38:DD:46:56:24:5B:B7:9B:25:2E:1F:FB:B4:34",
+        "EA:4B:B2:9C:98:3E:BD:A8:5E:61:64:5D:3D:CA:22:94:3B:57:7F:0B:FE:D0:8E:0D:CB:7F:D5:C3:76:37:E3:6B"
+      ]
+    }
+  }
+]
