@@ -11,6 +11,10 @@ export const site = {
   serviceName: 'Heelo', // 앱 노출 이름(영문 통일, 오너 결정 2026-10-04). 약관 본문의 {서비스명}도 이 값으로 채웁니다
   serviceNameReading: '힐로', // 처음 소개에 「Heelo(힐로)」로 읽는 법을 보여 줍니다
   contactEmail: 'support@sojaeha.studio',
+  social: [ // 푸터 링크(방송 #820, 오너 11/3). 사용자 이름은 heelo.app
+    { name: '인스타그램', url: 'https://www.instagram.com/heelo.app/' },
+    { name: '스레드', url: 'https://www.threads.com/@heelo.app' },
+  ],
   replyTime: '3영업일', // 이용약관 제18조
   appDeletePath: '설정 › 계정 › 회원 탈퇴', // 방송 #554(N 5330): 두 곳(계정 삭제 방법 1 · 고객센터 탈퇴 줄)에 같은 글
 

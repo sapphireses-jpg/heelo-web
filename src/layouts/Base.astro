@@ -62,6 +62,11 @@ const regDigits = b.regNo.replace(/\D/g, '');
           <li><a href={href('/partners/')}>제휴 문의</a></li>
         </ul>
       </nav>
+      <nav class="ft-links ft-social" aria-label="소셜">
+        <ul>
+          {site.social.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.name}</a></li>)}
+        </ul>
+      </nav>
       <hr>
       <p class="ft-biz">
         <span>{b.name}</span>
