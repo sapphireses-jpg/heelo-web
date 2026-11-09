@@ -1,5 +1,5 @@
 // 사이트 설정값은 여기 한 곳에만 둡니다. 페이지에 직접 쓰지 않습니다.
-// 대괄호 값은 자리표시입니다(docs/CONTENT.md 끝 목록). launchReady: true면 CI가 남은 자리표시를 실패로 막습니다(false일 때는 경고만).
+// 대괄호 값은 자리표시입니다(docs/CONTENT.md 끝 목록). launchReady: false면 CI가 남은 자리표시를 실패로 막습니다(false일 때는 경고만).
 
 const androidPackage = 'com.sojaeha.walklog'; // 서비스명과 분리된 값, 바꾸지 않습니다
 
@@ -21,10 +21,11 @@ export const site = {
   // 약관 초안을 가져오는 sync 스크립트만 씁니다(로컬). 앱 저장소는 읽기만 합니다.
   appRepoPath: '~/projects/tailory',
 
-  launchStatus: 'soon', // 'soon' | 'live'
+  launchStatus: 'live', // 'soon' | 'live' — App Store 판매 중(2026-11-07), 방송 #929 오너 11/9
   launchReady: false,
   // live로 바꿀 때: 링크를 넣고, 공식 배지 파일을 public/badges/app-store.svg, google-play.png로 둡니다.
-  storeLinks: { appStore: '', googlePlay: '' },
+  // googlePlay는 심사 중이라 비워 둠(비어 있으면 「Google Play 곧 열려요」, 링크 없음). 승인되면 hub가 알려 주는 주소를 넣습니다.
+  storeLinks: { appStore: 'https://apps.apple.com/kr/app/id6816855348', googlePlay: '' },
 
   // 가족 초대 페이지(/invite/). 앱 열기 주소 형식, {code}가 초대 코드로 바뀝니다. 비워 두면 「앱 열기」 버튼을 숨깁니다(A가 주소 체계를 정하면 채움).
   invite: { openUrlTemplate: 'https://heelo.app/invite/#{code}' },
