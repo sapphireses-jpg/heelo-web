@@ -14,6 +14,6 @@ export async function getStaticPaths() {
 const { doc } = Astro.params;
 const { entry, versions } = Astro.props;
 ---
-<Base title={`${DOCS[doc]} ${entry.data.version} (비공개 베타)`}>
+<Base noindex title={`${DOCS[doc]} ${entry.data.version} (비공개 베타)`}>
   <BetaDoc doc={doc} entry={entry} versions={versions} />
 </Base>

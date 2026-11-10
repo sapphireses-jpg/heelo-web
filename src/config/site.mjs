@@ -22,7 +22,7 @@ export const site = {
   appRepoPath: '~/projects/tailory',
 
   launchStatus: 'live', // 'soon' | 'live' — App Store 판매 중(2026-11-07), 방송 #929 오너 11/9
-  launchReady: false,
+  launchReady: true, // 검색 노출 켬(오너 D-268, 방송 #932, 2026-11-10). 초대 · 카드 · 제휴 감사 · 베타 약관은 페이지별 noindex
   // live로 바꿀 때: 링크를 넣고, 공식 배지 파일을 public/badges/app-store.svg, google-play.png로 둡니다.
   // googlePlay는 심사 중이라 비워 둠(비어 있으면 「Google Play 곧 열려요」, 링크 없음). 승인되면 hub가 알려 주는 주소를 넣습니다.
   storeLinks: { appStore: 'https://apps.apple.com/kr/app/id6816855348', googlePlay: '' },

@@ -13,3 +13,6 @@
 ## 안 만들 때 쓸 CSS 요지
 - ⓑ(폭 ≤ 600): `#h2-herobg { display: none }` + `.h2-hero-dogcard, .h2-hero-video, .h2-ns { left: 0; right: 0; bottom: 0; width: 100%; height: auto; aspect-ratio: 3/2; border-radius: 0; box-shadow: none; mask-image: linear-gradient(to bottom, transparent 0, #000 38%) }` + `.h2-hero::after { display: none }`. 한계: 폭 390에서 영상 띠가 260px 높이라 강아지가 작음.
 - ⓐ: 영상 · 카드 숨기고 `<img>`(폰 150px · PC 300px 너비, 모서리 22~34, 그림자)를 오른쪽 아래에. 새 그림 파일은 `public/`에 복사 필요(1 MB 넘어 WebP로 줄임). 영상 스크립트(예외 6)는 필요 없어져 지울 수 있음(오너 허락 범위 축소).
+
+## 배포 뒤(D-266 반영, 11/10)
+after-390 · after-768 · after-1440 = ⓐ 적용 결과(공식 App Store 배지 포함).
