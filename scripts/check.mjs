@@ -150,6 +150,16 @@ for (const f of files('dist').filter((f) => f.endsWith('.html')))
 for (const f of files('dist').filter((f) => f.endsWith('.html')))
   if (readFileSync(f, 'utf8').includes('TAILORY')) errors.push(`남의 상표: ${f} 에 "TAILORY"가 있습니다`);
 
+// 권리 · 의무 변경 없는 오탈자 정정 예외(오너 D-267, 방송 #933): 판 · 공고일 · 시행일 · 상태가 그대로이고, 머리 정보 corrections 기록이 이전 기록을 그대로 둔 채 늘어난 교체만 허락합니다.
+const frontOf = (t) => t.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '';
+const fieldOf = (t, k) => frontOf(t).match(new RegExp(`^${k}:\\s*(.*)$`, 'm'))?.[1]?.trim();
+const corrOf = (t) => frontOf(t).match(/^corrections:\n((?:[ \t]+.*\n?)+)/m)?.[1] ?? '';
+const isCorrection = (before, after) => {
+  if (['version', 'announced', 'effective', 'status'].some((k) => fieldOf(before, k) !== fieldOf(after, k))) return false;
+  const [b, a] = [corrOf(before), corrOf(after)];
+  return a.length > b.length && a.startsWith(b);
+};
+
 // 4. 버전 불변 검사: 기준 커밋에서 published였던 약관 파일이 바뀌거나 지워지면 실패.
 const git = (...a) => execFileSync('git', a, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
 let base = process.env.BASE_SHA;
@@ -159,7 +169,7 @@ if (base) {
     const before = git('show', `${base}:${f}`);
     if (!isPublished(before)) continue;
     if (!existsSync(f)) errors.push(`버전 불변: published 파일이 지워졌습니다 ${f}`);
-    else if (readFileSync(f, 'utf8') !== before) errors.push(`버전 불변: published 파일이 바뀌었습니다 ${f} (새 버전 파일을 만드세요)`);
+    else if (readFileSync(f, 'utf8') !== before && !isCorrection(before, readFileSync(f, 'utf8'))) errors.push(`버전 불변: published 파일이 바뀌었습니다 ${f} (새 버전 파일을 만드세요. 권리 · 의무 변경 없는 오탈자 정정이면 머리 정보 corrections 기록을 더하세요)`);
   }
 } else warnings.push('버전 불변: 비교할 이전 커밋이 없어 건너뜀');
 

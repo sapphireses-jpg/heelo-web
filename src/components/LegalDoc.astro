@@ -9,6 +9,7 @@ const Content = shown ? (await render(shown.entry)).Content : null;
 ---
 <h1>{shown?.title ?? DOCS[doc]}</h1>
 {shown && <p class="muted">버전 {shown.version} · 시행일 {shown.effective} · 공고일 {shown.announced}</p>}
+{shown?.corrections?.map((c) => <p class="notice">{c.date} 정정 — {c.note}</p>)}
 <slot />
 {Content ? <div class="legal-body"><Content /></div> : <p>약관을 준비하고 있어요.</p>}
 

@@ -11,6 +11,8 @@ const version = z.object({
   effective: z.coerce.date(),
   summary: z.string(),
   status: z.enum(['draft', 'published']),
+  // 권리 · 의무 변경 없는 오탈자 정정 기록(오너 D-267, 방송 #933). 있으면 페이지에 「날짜 정정 — 내용」을 보이고, 버전 불변 검사가 이 기록이 늘어난 교체만 허락합니다.
+  corrections: z.array(z.object({ date: z.string(), note: z.string() })).optional(),
 });
 // src/content/legal/beta/<문서>.md(v0.9, 이미 게시돼 고정) 와 beta/<문서>/<버전>.md(v0.10~) → 베타 적용판.
 // /legal/beta/<문서>/ 는 최신 게시 버전, /legal/beta/<문서>/<버전>/ 은 버전별 고정 주소. 게시(published)할 때는 공고일·시행일이 있어야 합니다.
