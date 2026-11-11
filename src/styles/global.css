@@ -226,12 +226,14 @@ th { background: var(--color-surface-inset); }
 .site-header.over nav a:not(.button):hover { background: rgba(255, 255, 255, 0.7); }
 .h2-hero { position: relative; height: clamp(640px, 100svh, 960px); overflow: hidden; background: var(--color-bg); }
 .h2-hero-bg { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 62%; object-fit: cover; object-position: 50% 100%; }
-/* 첫 화면 가운데(오너 D-266, 방송 #932): 영상 · 영상 스크립트(예외 6)를 지우고 스토어 01 생애지도 폰 그림(640 × 1391)으로 바꿈. 폭 600 이하는 작게 오른쪽 아래, 그 위는 화면 폭에 따라 184 ~ 300 */
-.h2-hero-phone { position: absolute; z-index: 1; right: 24px; bottom: 36px; width: clamp(140px, 38vw, 170px); height: auto; border-radius: 22px; box-shadow: 0 2px 4px rgba(28, 33, 30, 0.08), 0 16px 40px rgba(28, 33, 30, 0.18); }
-@media (min-width: 601px) {
-  .h2-hero-phone { right: clamp(24px, 8vw, 150px); bottom: 64px; width: clamp(184px, 24vw, 300px); border-radius: clamp(22px, 2.4vw, 34px); }
-}
+/* 첫 화면 배경 영상 하나(오너 D-290, 방송 #950): 같은 칸(.h2-hero-bg)에 정지 그림 위로 영상을 겹침. 영상은 스크립트가 재생에 성공한 뒤에만 보임(.on) — 막힌 영상 위 재생 버튼이 보일 틈이 없음. 막히면 스크립트가 영상 대신 움직이는 그림(WebP)을 불러옴. 동작 줄이기 = 정지 그림 */
+.h2-hero-video { visibility: hidden; }
+.h2-hero-video.on { visibility: visible; }
+.h2-hero-video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
+.h2-hero-video::-webkit-media-controls { display: none !important; }
 .h2-hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: linear-gradient(to bottom, var(--color-bg), rgba(255, 249, 243, 0) 22%); pointer-events: none; }
+/* 폰 세로(600 이하): 영상 칸을 낮게(46%) 해서 가로가 덜 잘리고 강아지가 끝까지 보임. 위쪽은 같은 크림 바탕이라 이음매가 없음 */
+@media (max-width: 600px) { .h2-hero-bg, .h2-hero::after { height: 46%; } }
 .h2-hero-text { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: clamp(88px, 9vw, 128px) clamp(16px, 3vw, 48px) 0; }
 .h2-hero-text > * { max-width: 720px; }
 .h2-hero-text h1 { font-size: clamp(2.25rem, 5.2vw, 4.75rem); font-weight: 900; line-height: 1.14; letter-spacing: -0.03em; margin: 12px 0 0; text-wrap: balance; }
